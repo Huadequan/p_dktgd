@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://6ctaayzkoegw8r" designImageAlpha="0" designImageLayer="1">
+  <controller name="state" exported="true" pages="0,,1,change,2,oppo" selected="2"/>
+  <displayList>
+    <graph id="n0_bl1a" name="img_bg" xy="0,0" size="750,1334" type="rect" lineSize="0" fillColor="#cc000000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <image id="n2_x4fg" name="n2" src="oegw87" fileName="img/sp_bg0.png" xy="100,308">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <loader id="n3_x4fg" name="img_display" xy="0,179" size="750,519" align="center" vAlign="middle">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </loader>
+    <component id="n6_x4fg" name="view" src="oegw88" fileName="comp/try_view.xml" xy="93,28">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n4_x4fg" name="btn_no" src="oegw8g" fileName="comp/btn_next_2.xml" xy="202,853" size="345,124">
+      <gearDisplay controller="state" pages="0,1"/>
+      <gearXY controller="state" pages="0,1,2" values="202,916|202,776|202,853"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <property target="bg" propertyId="1" value="ui://6ctaayzkoegw8i"/>
+    </component>
+    <component id="n5_x4fg" name="btn_try" src="oegw8j" fileName="comp/btn_get.xml" xy="200,774" size="345,124">
+      <gearXY controller="state" pages="0,1,2" values="203,777|203,916|200,774"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button icon="ui://6ctaayzkoegw8o"/>
+      <property target="bg" propertyId="1" value="ui://6ctaayzkoegw8p"/>
+    </component>
+    <graph id="n7_xiho" name="__nativeinpage" xy="55,941" size="640,360" customData="3" type="rect">
+      <gearDisplay controller="state" pages="2"/>
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </graph>
+    <image id="n8_o6hl" name="n8" src="oegw8q" fileName="img/sp_pifushiyong.png" xy="186,215">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+    <component id="n9_oegw" name="btn_close" src="oegw5d" fileName="comp/btn_close_01.xml" xy="43,160">
+      <gearDisplay controller="state" pages="2"/>
+      <relation target="" sidePair="left-left,top-top"/>
+    </component>
+  </displayList>
+</component>

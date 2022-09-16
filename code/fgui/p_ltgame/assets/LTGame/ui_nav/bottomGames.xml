@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,225" designImage="ui://75kiu87kw3j1j7" designImageOffsetY="-1110">
+  <displayList>
+    <graph id="n3_kvo6" name="n3" xy="0,0" size="750,225" type="rect" lineSize="0" lineColor="#ff333333">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <list id="n0_kvo6" name="list" xy="0,70" size="750,144" layout="row" overflow="scroll" scroll="horizontal" scrollBarFlags="32" lineGap="13" colGap="50" defaultItem="ui://75kiu87kt3oybl" align="center" autoClearItems="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <item controllers="text_color,1"/>
+      <item controllers="text_color,1"/>
+      <item controllers="text_color,1"/>
+      <item controllers="text_color,1"/>
+      <item controllers="text_color,1"/>
+      <item controllers="text_color,1"/>
+      <item controllers="text_color,1"/>
+      <item controllers="text_color,1"/>
+    </list>
+    <image id="n6_w3j1" name="ad" src="w3j1j9" fileName="img/wx导流/ad.png" xy="14,12"/>
+  </displayList>
+</component>

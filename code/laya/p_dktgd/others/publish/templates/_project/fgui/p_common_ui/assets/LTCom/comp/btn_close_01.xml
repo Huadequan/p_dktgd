@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="67,71" extention="Button">
+  <displayList>
+    <image id="n7_8gel" name="n7" src="oegw5e" fileName="img/新转盘/btn_guanbi.png" xy="-11,-9">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </image>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>

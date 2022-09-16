@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="550,550" designImage="ui://6ctaayzkoegw57" designImageOffsetX="-99" designImageOffsetY="-248">
+  <displayList>
+    <image id="n2_8gel" name="n2" src="oegw53" fileName="img/新转盘/bg.png" xy="-35,-35"/>
+    <component id="n15_8gel" name="item_01" src="oegw54" fileName="cmp/item_view_roll.xml" xy="276,274" pivot="0.5,1" anchor="true" size="150,225"/>
+    <component id="n18_8gel" name="item_02" src="oegw54" fileName="cmp/item_view_roll.xml" xy="276,274" pivot="0.5,1" anchor="true" size="150,225" rotation="60"/>
+    <component id="n19_8gel" name="item_03" src="oegw54" fileName="cmp/item_view_roll.xml" xy="276,274" pivot="0.5,1" anchor="true" size="150,225" rotation="120"/>
+    <component id="n20_8gel" name="item_04" src="oegw54" fileName="cmp/item_view_roll.xml" xy="276,274" pivot="0.5,1" anchor="true" size="150,225" rotation="180"/>
+    <component id="n21_8gel" name="item_05" src="oegw54" fileName="cmp/item_view_roll.xml" xy="276,274" pivot="0.5,1" anchor="true" size="150,225" rotation="240"/>
+    <component id="n22_8gel" name="item_06" src="oegw54" fileName="cmp/item_view_roll.xml" xy="276,274" pivot="0.5,1" anchor="true" size="150,225" rotation="-60"/>
+  </displayList>
+</component>

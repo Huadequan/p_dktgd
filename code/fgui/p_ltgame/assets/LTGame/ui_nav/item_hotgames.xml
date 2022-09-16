@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="120,131">
+  <displayList>
+    <component id="n2_mdx8" name="icon" src="mdx8ix" fileName="ui_nav/hotgameicon.xml" xy="10,0"/>
+    <text id="n4_mdx8" name="txt_name" xy="0,103" size="120,27" fontSize="20" align="center" autoSize="shrink" text="微生物大作战"/>
+    <image id="n5_mdx8" name="n5" src="mdx8ir" fileName="img/主页底部/sp_youxibgbian.png" xy="8,1"/>
+  </displayList>
+</component>

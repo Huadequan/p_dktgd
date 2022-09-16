@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="658,942" designImage="ui://6ctaayzkoegw7m" designImageOffsetX="-46" designImageOffsetY="-199" designImageAlpha="0" designImageLayer="1">
+  <controller name="state" exported="true" pages="0,tosign,1,signed" selected="0"/>
+  <displayList>
+    <image id="n1_uo3l" name="n1" src="oegw6t" fileName="img/new/新签到/di_1.png" xy="0,0" size="658,900"/>
+    <image id="n2_uo3l" name="n2" src="oegw6u" fileName="img/new/新签到/七日签到/tittle.png" xy="183,-52"/>
+    <component id="n4_uo3l" name="day_1" src="oegw6v" fileName="img/new/新签到/view_item_sign_01.xml" xy="19,53">
+      <property target="text_day" propertyId="0" value="d1t"/>
+    </component>
+    <component id="n28_gz83" name="day_2" src="oegw6v" fileName="img/new/新签到/view_item_sign_01.xml" xy="234,53" controller="mode,1">
+      <property target="text_day" propertyId="0" value="d2t"/>
+    </component>
+    <component id="n33_gz83" name="day_3" src="oegw6v" fileName="img/new/新签到/view_item_sign_01.xml" xy="445,53">
+      <property target="text_day" propertyId="0" value="d3t"/>
+    </component>
+    <component id="n29_gz83" name="day_4" src="oegw6v" fileName="img/new/新签到/view_item_sign_01.xml" xy="19,315">
+      <property target="text_day" propertyId="0" value="d4t"/>
+    </component>
+    <component id="n30_gz83" name="day_5" src="oegw6v" fileName="img/new/新签到/view_item_sign_01.xml" xy="234,315">
+      <property target="text_day" propertyId="0" value="d5t"/>
+    </component>
+    <component id="n31_gz83" name="day_6" src="oegw6v" fileName="img/new/新签到/view_item_sign_01.xml" xy="445,315">
+      <property target="text_day" propertyId="0" value="d6t"/>
+    </component>
+    <component id="n17_uo3l" name="day_7" src="oegw7n" fileName="img/new/新签到/view_item_sign_07.xml" xy="24,567"/>
+    <text id="n18_uo3l" name="text_signed" xy="211,785" size="236,79" fontSize="32" color="#ffffff" align="center" vAlign="middle" bold="true" text="今日已领取&#xA;欢迎明天再来！">
+      <gearDisplay controller="state" pages="1"/>
+    </text>
+    <component id="n19_uo3l" name="btn_normal" src="oegw5u" fileName="cmp/video/normal_btn.xml" xy="174,902" size="310,104">
+      <gearDisplay controller="state" pages="0"/>
+      <property target="bg" propertyId="1" value="ui://6ctaayzkoegw7o"/>
+      <property target="icon" propertyId="1" value="ui://6ctaayzkoegw7p"/>
+    </component>
+    <component id="n26_i8ti" name="btn_watchad" src="oegw7q" fileName="img/new/新签到/normal_btn_ad.xml" xy="329,825" size="312,116">
+      <gearDisplay controller="state" pages="0"/>
+      <property target="bg" propertyId="1" value="ui://6ctaayzkoegw7s"/>
+      <property target="icon" propertyId="1" value="ui://6ctaayzkoegw7t"/>
+    </component>
+  </displayList>
+</component>

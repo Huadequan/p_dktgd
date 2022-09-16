@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="355,42" extention="ProgressBar">
+  <displayList>
+    <image id="n7_8gel" name="n7" src="oegw59" fileName="img/新转盘/sp_wupinjindubg.png" xy="0,0" size="355,42"/>
+    <image id="n8_8gel" name="bar" src="oegw5a" fileName="img/新转盘/sp_wupinjindutiao.png" xy="0,0" size="355,42" fillMethod="hz"/>
+  </displayList>
+  <ProgressBar/>
+</component>

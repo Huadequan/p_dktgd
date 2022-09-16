@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="465,39">
+  <displayList>
+    <graph id="n19_t09g" name="n19" xy="0,0" size="465,39" type="rect" lineSize="0" fillColor="#ff999999" corner="5"/>
+    <text id="n16_t09g" name="txt_nickname" xy="77,0" size="313,39" fontSize="26" vAlign="middle" autoSize="none" text="昵称8个字"/>
+    <text id="n17_t09g" name="txt_rank" xy="0,0" size="68,39" fontSize="26" align="center" vAlign="middle" autoSize="none" text=">999"/>
+    <text id="n18_t09g" name="txt_score" xy="391,0" size="74,39" fontSize="26" align="right" vAlign="middle" autoSize="none" text="99"/>
+  </displayList>
+</component>

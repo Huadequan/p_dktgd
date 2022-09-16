@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334" designImage="ui://6ctaayzkoegw57">
+  <displayList>
+    <component id="n2_8gel" name="view_roll" src="oegw52" fileName="comp/view_roll_panel.xml" xy="375,478" pivot="0.5,0.5" anchor="true">
+      <relation target="" sidePair="center-center,middle-middle"/>
+    </component>
+    <component id="n7_8gel" name="progress_supper" src="oegw58" fileName="comp/progress_02.xml" xy="153,817">
+      <ProgressBar value="100" max="100"/>
+    </component>
+    <image id="n6_8gel" name="n6" src="oegw5b" fileName="img/新转盘/sp_liwu.png" xy="460,768"/>
+    <text id="n14_8gel" name="text_notice" xy="165,859" size="313,45" fontSize="36" color="#ffffff" text="4次后必得特殊奖励"/>
+    <image id="n15_q0de" name="n15" src="oegw5c" fileName="img/新转盘/sp_xinyuanzhuanpan.png" xy="136,69"/>
+  </displayList>
+  <transition name="anim_special">
+    <item time="0" type="Visible" target="n6_8gel" value="false"/>
+    <item time="6" type="Visible" target="n6_8gel" value="true"/>
+    <item time="12" type="Visible" target="n6_8gel" value="false"/>
+    <item time="18" type="Visible" target="n6_8gel" value="true"/>
+    <item time="24" type="Visible" target="n6_8gel" value="false"/>
+    <item time="30" type="Visible" target="n6_8gel" value="true"/>
+  </transition>
+</component>

@@ -1,0 +1,2 @@
+"undefined" != typeof swan && "undefined" != typeof swanGlobal ? (require("swan-game-adapter.js"), require("libs/laya.bdmini.js")) : "undefined" != typeof gamebox && (require("weapp-adapter.js"), require("libs/laya.wxmini.js")), window.loadLib = require, require("index.js");
+//gamebox.login()

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="104,94" extention="Button" mask="n2_mdx8">
+  <displayList>
+    <image id="n2_mdx8" name="n2" src="mdx8iq" fileName="img/主页底部/sp_youxibg.png" xy="2,2">
+      <relation target="" sidePair="width-width,height-height"/>
+    </image>
+    <loader id="n4_mdx8" name="icon" xy="2,2" size="100,90" align="center" vAlign="middle" fill="scaleFree">
+      <relation target="" sidePair="width-width,height-height"/>
+    </loader>
+  </displayList>
+  <Button downEffect="dark" downEffectValue="0.80"/>
+</component>
