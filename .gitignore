@@ -1,3 +1,5 @@
 .svn/
 Library/
 Temp/
+obj/
+.vs/

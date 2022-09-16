@@ -17,7 +17,7 @@ namespace LTGame
         {
             get
             {
-                return new string[] { "int[][]" };
+                return new string[] { "number[][]" };
             }
         }
 

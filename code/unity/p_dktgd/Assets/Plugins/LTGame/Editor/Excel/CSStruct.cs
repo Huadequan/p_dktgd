@@ -146,6 +146,10 @@ namespace LTGame
             {
                 wrapType = "number[]";
             }
+            else if (wrapType == "int[][]")
+            {
+                wrapType = "number[][]";
+            }
             return string.Format(TS_FORMAT, region, name, wrapType);
         }
 
