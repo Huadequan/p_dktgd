@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<component size="432,45" extention="ProgressBar">
-  <displayList>
-    <image id="n3_m8kn" name="n3" src="m785f" fileName="img/sp_jiazaibg.png" xy="0,0"/>
-    <image id="n1_tjpp" name="bar" src="m785d" fileName="img/sp_jiazaijindu.png" xy="4,3"/>
-  </displayList>
-  <ProgressBar/>
-</component>
