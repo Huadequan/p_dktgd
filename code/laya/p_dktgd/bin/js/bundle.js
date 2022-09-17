@@ -16944,13 +16944,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_EffectConfig__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config/EffectConfig */ "./src/script/config/EffectConfig.ts");
 /* harmony import */ var _config_EggConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/EggConfig */ "./src/script/config/EggConfig.ts");
 /* harmony import */ var _config_GameConst__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/GameConst */ "./src/script/config/GameConst.ts");
-/* harmony import */ var _config_PackConst__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../config/PackConst */ "./src/script/config/PackConst.ts");
-/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
-/* harmony import */ var _config_PushConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/PushConfig */ "./src/script/config/PushConfig.ts");
-/* harmony import */ var _config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config/RewardCodeConfig */ "./src/script/config/RewardCodeConfig.ts");
-/* harmony import */ var _config_RollConfig__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../config/RollConfig */ "./src/script/config/RollConfig.ts");
-/* harmony import */ var _config_SignConfig__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../config/SignConfig */ "./src/script/config/SignConfig.ts");
-/* harmony import */ var _config_TryItemConfig__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../config/TryItemConfig */ "./src/script/config/TryItemConfig.ts");
+/* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
+/* harmony import */ var _config_PackConst__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/PackConst */ "./src/script/config/PackConst.ts");
+/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
+/* harmony import */ var _config_PushConfig__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config/PushConfig */ "./src/script/config/PushConfig.ts");
+/* harmony import */ var _config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../config/RewardCodeConfig */ "./src/script/config/RewardCodeConfig.ts");
+/* harmony import */ var _config_RollConfig__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../config/RollConfig */ "./src/script/config/RollConfig.ts");
+/* harmony import */ var _config_SignConfig__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../config/SignConfig */ "./src/script/config/SignConfig.ts");
+/* harmony import */ var _config_TryItemConfig__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../config/TryItemConfig */ "./src/script/config/TryItemConfig.ts");
+
 
 
 
@@ -16972,13 +16974,14 @@ class AutoConfigSetter {
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_EffectConfig__WEBPACK_IMPORTED_MODULE_3__["EffectConfig"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_EggConfig__WEBPACK_IMPORTED_MODULE_4__["EggConfig"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_GameConst__WEBPACK_IMPORTED_MODULE_5__["GameConst"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PackConst__WEBPACK_IMPORTED_MODULE_6__["PackConst"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PlayerConfig__WEBPACK_IMPORTED_MODULE_7__["PlayerConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PushConfig__WEBPACK_IMPORTED_MODULE_8__["PushConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_9__["RewardCodeConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RollConfig__WEBPACK_IMPORTED_MODULE_10__["RollConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_SignConfig__WEBPACK_IMPORTED_MODULE_11__["SignConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_TryItemConfig__WEBPACK_IMPORTED_MODULE_12__["TryItemConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_LevelConfig__WEBPACK_IMPORTED_MODULE_6__["LevelConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PackConst__WEBPACK_IMPORTED_MODULE_7__["PackConst"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PlayerConfig__WEBPACK_IMPORTED_MODULE_8__["PlayerConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PushConfig__WEBPACK_IMPORTED_MODULE_9__["PushConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_10__["RewardCodeConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RollConfig__WEBPACK_IMPORTED_MODULE_11__["RollConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_SignConfig__WEBPACK_IMPORTED_MODULE_12__["SignConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_TryItemConfig__WEBPACK_IMPORTED_MODULE_13__["TryItemConfig"]);
     }
 }
 
@@ -17061,6 +17064,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GlobalUnit; });
 /* harmony import */ var _manager_DataManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../manager/DataManager */ "./src/script/manager/DataManager.ts");
 /* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
+/* harmony import */ var _manager_GameManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../manager/GameManager */ "./src/script/manager/GameManager.ts");
+
 
 
 class GlobalUnit {
@@ -17069,6 +17074,8 @@ class GlobalUnit {
         window['s3d'] = this.s3d;
         this.dataManager = new _manager_DataManager__WEBPACK_IMPORTED_MODULE_0__["DataManager"]();
         this.dataManager.InitData();
+        this.game = new _manager_GameManager__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        this.game.PreLoad(urls);
         window['GlobalUnit'] = this;
     }
     static ResetScene(scene) {
@@ -17083,6 +17090,7 @@ class GlobalUnit {
     }
     static FirstCreate() {
         return __awaiter(this, void 0, void 0, function* () {
+            this.game.CreateGame();
         });
     }
 }
@@ -17228,6 +17236,28 @@ var GameConst;
     GameConst.isConst = true;
     GameConst.path = "res/config/GameConst.json";
 })(GameConst || (GameConst = {}));
+
+
+/***/ }),
+
+/***/ "./src/script/config/LevelConfig.ts":
+/*!******************************************!*\
+  !*** ./src/script/config/LevelConfig.ts ***!
+  \******************************************/
+/*! exports provided: LevelConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LevelConfig", function() { return LevelConfig; });
+var LevelConfig;
+(function (LevelConfig) {
+    class config {
+    }
+    LevelConfig.config = config;
+    LevelConfig.isConst = false;
+    LevelConfig.path = "res/config/LevelConfig.json";
+})(LevelConfig || (LevelConfig = {}));
 
 
 /***/ }),
@@ -17382,6 +17412,40 @@ var TryItemConfig;
     TryItemConfig.isConst = false;
     TryItemConfig.path = "res/config/TryItemConfig.json";
 })(TryItemConfig || (TryItemConfig = {}));
+
+
+/***/ }),
+
+/***/ "./src/script/logic/level/ViewLevel.ts":
+/*!*********************************************!*\
+  !*** ./src/script/logic/level/ViewLevel.ts ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewLevel; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
+
+
+
+
+class ViewLevel {
+    SetLevelId(id) {
+        this.config = _config_LevelConfig__WEBPACK_IMPORTED_MODULE_3__["LevelConfig"].data[id];
+    }
+    PreLoad(urls) {
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixScene(this.config.model_path));
+    }
+    CreateLevel() {
+        let s3d = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixScene(this.config.model_path));
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].ResetScene(s3d);
+    }
+}
 
 
 /***/ }),
@@ -17734,6 +17798,44 @@ class EffectShowData {
          */
         this.parent = null;
         this.effectId = effectId;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/manager/GameManager.ts":
+/*!*******************************************!*\
+  !*** ./src/script/manager/GameManager.ts ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameManager; });
+/* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
+/* harmony import */ var _common_GameData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GameData */ "./src/script/common/GameData.ts");
+/* harmony import */ var _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../logic/level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
+
+
+
+class GameManager {
+    constructor() {
+        this.level = new _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        this.level.SetLevelId(_common_GameData__WEBPACK_IMPORTED_MODULE_1__["default"].instance.levelId);
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].Update, this, this._LogicUpdate);
+        _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].LateUpdate, this, this._LateUpdate);
+    }
+    PreLoad(urls) {
+        this.level.PreLoad(urls);
+    }
+    CreateGame() {
+        this.level.CreateLevel();
+    }
+    _LogicUpdate(dt) {
+    }
+    _LateUpdate(dt) {
     }
 }
 

@@ -2,6 +2,7 @@ export namespace PlayerConfig {
     export class config {
         /** 序号 */ readonly id: number;
         /** 人物模型 */ readonly model_path: string;
+        /** 皮肤挂点 */ readonly skin_path: string;
         /** 帧动画配置 */ readonly anim_id: number;
     }
     export var isConst: boolean = false;

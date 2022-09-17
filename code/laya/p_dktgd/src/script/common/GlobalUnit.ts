@@ -1,11 +1,14 @@
 import { DataManager } from "../manager/DataManager";
 import { EffectManager } from "../manager/EffectManager";
+import GameManager from "../manager/GameManager";
 
 export default class GlobalUnit {
 
     static s3d: Laya.Scene3D;
 
     static dataManager: DataManager;
+
+    static game: GameManager;
 
     static InitAll(urls: string[]) {
         this.s3d = Laya.stage.addChildAt(new Laya.Scene3D(), 0) as Laya.Scene3D;
@@ -14,6 +17,8 @@ export default class GlobalUnit {
         this.dataManager = new DataManager();
         this.dataManager.InitData();
 
+        this.game = new GameManager();
+        this.game.PreLoad(urls);
         window['GlobalUnit'] = this;
     }
 
@@ -29,7 +34,7 @@ export default class GlobalUnit {
     }
 
     static async FirstCreate() {
-
+        this.game.CreateGame();
     }
 
 }

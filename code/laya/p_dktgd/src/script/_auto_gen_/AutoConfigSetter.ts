@@ -4,6 +4,7 @@ import { AudioConfig } from "../config/AudioConfig";
 import { EffectConfig } from "../config/EffectConfig";
 import { EggConfig } from "../config/EggConfig";
 import { GameConst } from "../config/GameConst";
+import { LevelConfig } from "../config/LevelConfig";
 import { PackConst } from "../config/PackConst";
 import { PlayerConfig } from "../config/PlayerConfig";
 import { PushConfig } from "../config/PushConfig";
@@ -22,6 +23,7 @@ export class AutoConfigSetter {
         ConfigManager.AddConfig(EffectConfig);
         ConfigManager.AddConfig(EggConfig);
         ConfigManager.AddConfig(GameConst);
+        ConfigManager.AddConfig(LevelConfig);
         ConfigManager.AddConfig(PackConst);
         ConfigManager.AddConfig(PlayerConfig);
         ConfigManager.AddConfig(PushConfig);
