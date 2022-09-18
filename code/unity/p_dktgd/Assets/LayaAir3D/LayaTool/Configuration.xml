@@ -2,7 +2,7 @@
 <LayaExportSetting>
   <config>1</config>
   <config1>
-    <FirstlevelMenu>0</FirstlevelMenu>
+    <FirstlevelMenu>1</FirstlevelMenu>
     <Scenes>False</Scenes>
     <ScenesDir>
     </ScenesDir>
@@ -35,7 +35,7 @@
     <Android>False</Android>
     <Conventional>True</Conventional>
     <SavePath>/../../../laya/p_dktgd/bin/res</SavePath>
-    <ScrollPositionY>60</ScrollPositionY>
+    <ScrollPositionY>30.28842</ScrollPositionY>
   </config1>
   <config2>
     <FirstlevelMenu>0</FirstlevelMenu>

@@ -16988,6 +16988,68 @@ class AutoConfigSetter {
 
 /***/ }),
 
+/***/ "./src/script/common/AnimComponent.ts":
+/*!********************************************!*\
+  !*** ./src/script/common/AnimComponent.ts ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return AnimComponent; });
+class AnimComponent extends Laya.Script {
+    constructor(skin, config) {
+        super();
+        this.config = config;
+        this._cacheVec4 = new Laya.Vector4();
+        this._cacheFrameTime = 0;
+        this._frameIndex = 0;
+        this._material = skin.meshRenderer.sharedMaterial;
+        this.play(0);
+    }
+    play(index = 0) {
+        if (this._playIndex == index)
+            return;
+        if (!this.config.act_indexes[index]) {
+            console.error("*********无效动作**********");
+            return;
+        }
+        this._playIndex = index;
+        this._frameIndex = 0;
+        this._changeAnimFrame();
+    }
+    _changeAnimFrame() {
+        let config = this.config;
+        let indesx = config.act_indexes[this._playIndex];
+        if (this._frameIndex >= indesx.length) {
+            this._frameIndex = 0;
+        }
+        let index = indesx[this._frameIndex];
+        let X = index % config.atlas_grid[0];
+        let y = Math.floor(index / config.atlas_grid[0]);
+        this._cacheVec4.x = 1 / config.atlas_grid[0];
+        this._cacheVec4.y = 1 / config.atlas_grid[1];
+        this._cacheVec4.z = X * this._cacheVec4.x;
+        this._cacheVec4.w = 1 - this._cacheVec4.y;
+        this._material.tilingOffset = this._cacheVec4;
+        this._cacheFrameTime = 0;
+        this._frameIndex++;
+    }
+    onUpdate() {
+        let dt = Laya.timer.delta * 0.001;
+        this._cacheFrameTime += dt;
+        let config = this.config;
+        let frameTime = 1 / config.sampling_speed[this._playIndex];
+        if (this._cacheFrameTime >= frameTime) {
+            this._changeAnimFrame();
+        }
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/common/GameData.ts":
 /*!***************************************!*\
   !*** ./src/script/common/GameData.ts ***!
@@ -17017,6 +17079,7 @@ class SaveData {
          * 排行榜分数
          */
         this.maxScore = 0;
+        this.playerId = 1;
     }
 }
 class GameData {
@@ -17416,6 +17479,43 @@ var TryItemConfig;
 
 /***/ }),
 
+/***/ "./src/script/logic/ModelBase.ts":
+/*!***************************************!*\
+  !*** ./src/script/logic/ModelBase.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ModelBase; });
+/* harmony import */ var _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/AnimComponent */ "./src/script/common/AnimComponent.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../config/AnimFrameConfig */ "./src/script/config/AnimFrameConfig.ts");
+/* harmony import */ var _manager_LayerManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../manager/LayerManager */ "./src/script/manager/LayerManager.ts");
+
+
+
+
+class ModelBase {
+    constructor() {
+        this.layerIndex = 1;
+    }
+    get depth() {
+        return this.layerObj.transform.position.y;
+    }
+    Inited(id) {
+        let config = _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__["AnimFrameConfig"].data[id];
+        this.animCmp = new _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__["default"](this.skin, config);
+        this.skin.addComponentIntance(this.animCmp);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.level.layerObj.addChild(this.root);
+        _manager_LayerManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.PushModel(this);
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/logic/level/ViewLevel.ts":
 /*!*********************************************!*\
   !*** ./src/script/logic/level/ViewLevel.ts ***!
@@ -17447,6 +17547,49 @@ class ViewLevel {
         let layer = new Laya.Sprite3D("layerContent");
         s3d.addChild(layer);
         this.layerObj = layer;
+        let start = s3d.getChildByName("__start__");
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.player.CreatePlayer(start);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/player/ViewPlayer.ts":
+/*!***********************************************!*\
+  !*** ./src/script/logic/player/ViewPlayer.ts ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewPlayer; });
+/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/LTUtils/TransformEx */ "./src/LTGame/LTUtils/TransformEx.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
+/* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
+
+
+
+
+
+
+class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_5__["default"] {
+    SetPlayerId(id) {
+        this.config = _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_4__["PlayerConfig"].data[id];
+    }
+    PreLoad(urls) {
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(this.config.model_path));
+    }
+    CreatePlayer(point) {
+        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(this.config.model_path));
+        this.skin = _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__["LTUtils"].FindChild(this.root, this.config.skin_path);
+        this.layerObj = this.root.getChildByName("__layerSign__");
+        _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_1__["TransformEx"].CopyTrans(this.root.transform, point.transform);
+        this.Inited(this.config.id);
     }
 }
 
@@ -17820,25 +17963,78 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
 /* harmony import */ var _common_GameData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GameData */ "./src/script/common/GameData.ts");
 /* harmony import */ var _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../logic/level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
+/* harmony import */ var _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../logic/player/ViewPlayer */ "./src/script/logic/player/ViewPlayer.ts");
+/* harmony import */ var _LayerManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./LayerManager */ "./src/script/manager/LayerManager.ts");
+
+
 
 
 
 class GameManager {
     constructor() {
         this.level = new _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        this.player = new _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_3__["default"]();
         this.level.SetLevelId(_common_GameData__WEBPACK_IMPORTED_MODULE_1__["default"].instance.levelId);
+        this.player.SetPlayerId(_common_GameData__WEBPACK_IMPORTED_MODULE_1__["default"].instance.playerId);
         _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].Update, this, this._LogicUpdate);
         _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].LateUpdate, this, this._LateUpdate);
     }
     PreLoad(urls) {
         this.level.PreLoad(urls);
+        this.player.PreLoad(urls);
     }
     CreateGame() {
+        _LayerManager__WEBPACK_IMPORTED_MODULE_4__["default"].instance.InitLayer();
         this.level.CreateLevel();
     }
     _LogicUpdate(dt) {
     }
     _LateUpdate(dt) {
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/manager/LayerManager.ts":
+/*!********************************************!*\
+  !*** ./src/script/manager/LayerManager.ts ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LayerManager; });
+class LayerManager {
+    static get instance() {
+        if (!this._instance) {
+            this._instance = new LayerManager();
+        }
+        return this._instance;
+    }
+    InitLayer() {
+        this.list = [];
+    }
+    PushModel(model) {
+        this.list.push(model);
+    }
+    _AnalyseLayerIndex() {
+        let array = this.list;
+        let len = this.list.length;
+        for (let i = 0; i < len - 1; ++i) {
+            for (let j = i + 1; j < len - 1 - i; j++) {
+                if (array[j].depth > array[j + 1].depth) {
+                    let temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                    array[j].layerIndex = j;
+                }
+            }
+        }
+    }
+    OnUpdate(dt) {
+        this._AnalyseLayerIndex();
     }
 }
 

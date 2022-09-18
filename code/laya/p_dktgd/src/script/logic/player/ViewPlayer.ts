@@ -1,3 +1,5 @@
+import { LTUtils } from "../../../LTGame/LTUtils/LTUtils";
+import { TransformEx } from "../../../LTGame/LTUtils/TransformEx";
 import LTRes from "../../../LTGame/Res/LTRes";
 import GlobalUnit from "../../common/GlobalUnit";
 import ResDefine from "../../common/ResDefine";
@@ -16,6 +18,9 @@ export default class ViewPlayer extends ModelBase{
 
     public CreatePlayer(point: Laya.Sprite3D) {
         this.root = LTRes.Get(ResDefine.FixPath(this.config.model_path));
-        
+        this.skin = LTUtils.FindChild(this.root, this.config.skin_path) as Laya.MeshSprite3D;
+        this.layerObj = this.root.getChildByName("__layerSign__") as Laya.Sprite3D;  
+        TransformEx.CopyTrans(this.root.transform, point.transform);
+        this.Inited(this.config.id);
     }
 }

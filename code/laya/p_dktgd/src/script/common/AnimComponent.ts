@@ -47,7 +47,7 @@ export default class AnimComponent extends Laya.Script{
         this._cacheVec4.x = 1 / config.atlas_grid[0];
         this._cacheVec4.y = 1 / config.atlas_grid[1];
         this._cacheVec4.z = X * this._cacheVec4.x;
-        this._cacheVec4.w = (y + 1)* this._cacheVec4.y % 1;
+        this._cacheVec4.w = 1 - this._cacheVec4.y;
 
         this._material.tilingOffset = this._cacheVec4;
 

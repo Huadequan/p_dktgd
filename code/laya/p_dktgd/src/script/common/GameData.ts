@@ -15,7 +15,7 @@ export class SaveData {
      * 排行榜分数
      */
     public maxScore: number = 0;
-
+    public playerId: number = 1;
 }
 
 export default class GameData {
