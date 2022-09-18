@@ -17444,6 +17444,9 @@ class ViewLevel {
     CreateLevel() {
         let s3d = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixScene(this.config.model_path));
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].ResetScene(s3d);
+        let layer = new Laya.Sprite3D("layerContent");
+        s3d.addChild(layer);
+        this.layerObj = layer;
     }
 }
 

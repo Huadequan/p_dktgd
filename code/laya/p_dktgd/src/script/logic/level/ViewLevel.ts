@@ -13,9 +13,12 @@ export default class ViewLevel{
         urls.push(ResDefine.FixScene(this.config.model_path));
     }
 
+    public layerObj: Laya.Sprite3D;
     public CreateLevel() {
         let s3d = LTRes.Get(ResDefine.FixScene(this.config.model_path));
         GlobalUnit.ResetScene(s3d);
-
+        let layer = new Laya.Sprite3D("layerContent");
+        s3d.addChild(layer);
+        this.layerObj = layer;
     }
 }

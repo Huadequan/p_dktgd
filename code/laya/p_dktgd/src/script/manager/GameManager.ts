@@ -4,7 +4,7 @@ import ViewLevel from "../logic/level/ViewLevel";
 
 export default class GameManager {
     level: ViewLevel;
-
+    
     constructor() {
         this.level = new ViewLevel();
         this.level.SetLevelId(GameData.instance.levelId);
