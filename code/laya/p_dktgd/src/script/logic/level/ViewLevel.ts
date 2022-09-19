@@ -21,6 +21,9 @@ export default class ViewLevel{
         s3d.addChild(layer);
         this.layerObj = layer;
 
+        let camera = s3d.getChildByName("camera_obj") as Laya.Sprite3D;
+        GlobalUnit.game.camera.InitCamera(camera);
+
         let start = s3d.getChildByName("__start__") as Laya.Sprite3D;
         GlobalUnit.game.player.CreatePlayer(start);
     }

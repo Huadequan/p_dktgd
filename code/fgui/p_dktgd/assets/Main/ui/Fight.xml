@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="750,1334">
+  <displayList>
+    <graph id="n9_r0x7" name="img_bg" xy="0,0" size="750,1334" alpha="0" type="rect">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n8_r0x7" name="com_joy" src="r0x75" fileName="cmp/com_joystick.xml" xy="375,949" pivot="0.5,0.5" anchor="true" touchable="false"/>
+  </displayList>
+</component>

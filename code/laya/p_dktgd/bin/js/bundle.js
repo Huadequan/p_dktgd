@@ -2572,6 +2572,61 @@ class TransformEx {
 
 /***/ }),
 
+/***/ "./src/LTGame/LTUtils/Vector2Ex.ts":
+/*!*****************************************!*\
+  !*** ./src/LTGame/LTUtils/Vector2Ex.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Vector2Ex; });
+/* harmony import */ var _MathEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+
+class Vector2Ex {
+    static get up() { return new Laya.Vector2(0, 1); }
+    static get s_up() {
+        return this._up;
+    }
+    static Dot(left, right) {
+        return left.x * right.x + left.y * right.y;
+    }
+    static Angle(from, to) {
+        let num = Math.sqrt((this.MagnitudeSqrt(from) * this.MagnitudeSqrt(to)));
+        let flag = num < 1E-15;
+        if (flag) {
+            return 0;
+        }
+        else {
+            let num2 = _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Clamp(this.Dot(from, to) / num, -1, 1);
+            return Math.acos(num2) * _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Rad2Deg;
+        }
+    }
+    static SignedAngle(from, to) {
+        let num = this.Angle(from, to);
+        let num2 = _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Sign(from.x * to.y - from.y * to.x);
+        return num * num2;
+    }
+    static MagnitudeSqrt(vec) {
+        return vec.x * vec.x + vec.y * vec.y;
+    }
+    static Magnitude(vec) {
+        return Math.sqrt(this.MagnitudeSqrt(vec));
+    }
+    static Lerp(from, to, progress) {
+        return new Laya.Vector2(_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Lerp(from.x, to.x, progress), _MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Lerp(from.y, to.y, progress));
+    }
+    static IsSame(v1, v2) {
+        return v1.x == v2.x && v1.y == v2.y;
+    }
+}
+Vector2Ex.cacheVec = new Laya.Vector2();
+Vector2Ex._up = new Laya.Vector2(0, 1);
+
+
+/***/ }),
+
 /***/ "./src/LTGame/LTUtils/Vector3Ex.ts":
 /*!*****************************************!*\
   !*** ./src/LTGame/LTUtils/Vector3Ex.ts ***!
@@ -10062,6 +10117,95 @@ class LTStart {
 
 /***/ }),
 
+/***/ "./src/LTGame/UIExt/Cmp/CmpJoystick.ts":
+/*!*********************************************!*\
+  !*** ./src/LTGame/UIExt/Cmp/CmpJoystick.ts ***!
+  \*********************************************/
+/*! exports provided: CmpJoystick */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CmpJoystick", function() { return CmpJoystick; });
+/* harmony import */ var _LTUtils_Vector2Ex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTUtils/Vector2Ex */ "./src/LTGame/LTUtils/Vector2Ex.ts");
+
+class CmpJoystick {
+    constructor(imgBg, handleBg, handleFront) {
+        this._imgBg = imgBg;
+        this._imgHandleBg = handleBg;
+        this._imgHandleFront = handleFront;
+        this.dirVec2 = new Laya.Vector2();
+        this._cacheVec2 = new Laya.Vector2();
+        this._isPressed = false;
+        this._isDragged = false;
+        this.radius = this._imgHandleBg.width / 2;
+        this._imgBg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
+        Laya.stage.on(Laya.Event.MOUSE_MOVE, this, this._OnMouseMove);
+        Laya.stage.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
+        Laya.stage.on(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
+        this._ResetPos();
+    }
+    get isPressed() {
+        return this._isPressed;
+    }
+    get isDragged() {
+        return this._isDragged;
+    }
+    _ResetPos() {
+        let x = Laya.stage.width / 2;
+        let y = Laya.stage.height / 2 + 400;
+        this._imgHandleBg.setXY(x, y);
+        this._SetHandlePos(0, 0);
+    }
+    _OnMouseDown(event) {
+        if (this.isPressed)
+            return;
+        this._isPressed = true;
+        this._cacheTouchId = event.touchId;
+        this._imgHandleBg.setXY(event.stageX, event.stageY);
+        this._isDragged = false;
+        this._imgHandleBg.visible = true;
+        this._imgHandleFront.visible = true;
+    }
+    _OnMouseMove(event) {
+        if (!this.isPressed)
+            return;
+        if (this._cacheTouchId != event.touchId)
+            return;
+        this._cacheVec2.setValue(event.stageX - this._imgHandleBg.x, event.stageY - this._imgHandleBg.y);
+        let distance = _LTUtils_Vector2Ex__WEBPACK_IMPORTED_MODULE_0__["default"].Magnitude(this._cacheVec2);
+        Laya.Vector2.normalize(this._cacheVec2, this.dirVec2);
+        if (distance > this.radius) {
+            Laya.Vector2.scale(this.dirVec2, this.radius, this._cacheVec2);
+        }
+        this._SetHandlePos(this._cacheVec2.x, this._cacheVec2.y);
+        if (distance > 0) {
+            this._isDragged = true;
+        }
+    }
+    _SetHandlePos(x, y) {
+        this._imgHandleFront.setXY(x + this._imgHandleBg.width / 2, y + this._imgHandleBg.height / 2);
+    }
+    _OnMouseUp(event) {
+        if (!this.isPressed)
+            return;
+        if (this._cacheTouchId != event.touchId)
+            return;
+        this._isPressed = false;
+        this._isDragged = false;
+        this._ResetPos();
+    }
+    Dispose() {
+        this._imgBg.off(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
+        Laya.stage.off(Laya.Event.MOUSE_MOVE, this, this._OnMouseMove);
+        Laya.stage.off(Laya.Event.MOUSE_UP, this, this._OnMouseUp);
+        Laya.stage.off(Laya.Event.MOUSE_OUT, this, this._OnMouseUp);
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/LTGame/UIExt/DefaultUI/Cmp/View_BottomGames.ts":
 /*!************************************************************!*\
   !*** ./src/LTGame/UIExt/DefaultUI/Cmp/View_BottomGames.ts ***!
@@ -17008,7 +17152,10 @@ class AnimComponent extends Laya.Script {
         this._material = skin.meshRenderer.sharedMaterial;
         this.play(0);
     }
-    play(index = 0) {
+    play(index = 0, isLoop = true, complete = null) {
+        this._isLoop = isLoop;
+        this._played = false;
+        this._completeCallBack = complete;
         if (this._playIndex == index)
             return;
         if (!this.config.act_indexes[index]) {
@@ -17023,7 +17170,8 @@ class AnimComponent extends Laya.Script {
         let config = this.config;
         let indesx = config.act_indexes[this._playIndex];
         if (this._frameIndex >= indesx.length) {
-            this._frameIndex = 0;
+            this._OnCompleteOnce();
+            return;
         }
         let index = indesx[this._frameIndex];
         let X = index % config.atlas_grid[0];
@@ -17031,12 +17179,25 @@ class AnimComponent extends Laya.Script {
         this._cacheVec4.x = 1 / config.atlas_grid[0];
         this._cacheVec4.y = 1 / config.atlas_grid[1];
         this._cacheVec4.z = X * this._cacheVec4.x;
-        this._cacheVec4.w = 1 - this._cacheVec4.y;
+        this._cacheVec4.w = 1 - (1 + y) / config.atlas_grid[1];
         this._material.tilingOffset = this._cacheVec4;
         this._cacheFrameTime = 0;
         this._frameIndex++;
     }
+    _OnCompleteOnce() {
+        this._frameIndex = 0;
+        if (this._completeCallBack) {
+            this._completeCallBack.run();
+        }
+        if (!this._isLoop) {
+            this._played = true;
+            return;
+        }
+        this._changeAnimFrame();
+    }
     onUpdate() {
+        if (this._played)
+            return;
         let dt = Laya.timer.delta * 0.001;
         this._cacheFrameTime += dt;
         let config = this.config;
@@ -17046,6 +17207,26 @@ class AnimComponent extends Laya.Script {
         }
     }
 }
+
+
+/***/ }),
+
+/***/ "./src/script/common/EGameState.ts":
+/*!*****************************************!*\
+  !*** ./src/script/common/EGameState.ts ***!
+  \*****************************************/
+/*! exports provided: EGameState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EGameState", function() { return EGameState; });
+var EGameState;
+(function (EGameState) {
+    EGameState[EGameState["Ready"] = 0] = "Ready";
+    EGameState[EGameState["Fight"] = 1] = "Fight";
+    EGameState[EGameState["Fighted"] = 2] = "Fighted";
+})(EGameState || (EGameState = {}));
 
 
 /***/ }),
@@ -17479,6 +17660,38 @@ var TryItemConfig;
 
 /***/ }),
 
+/***/ "./src/script/logic/CameraControl.ts":
+/*!*******************************************!*\
+  !*** ./src/script/logic/CameraControl.ts ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CameraControl; });
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+
+class CameraControl {
+    InitCamera(root) {
+        this._rootObj = root;
+        this.camera = root.getChildAt(0);
+    }
+    followPlayer() {
+        let old = this._rootObj.transform.position;
+        let target = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_0__["default"].game.player.pos;
+        old.x = target.x;
+        old.y = target.y;
+        this._rootObj.transform.position = old;
+    }
+    LateUpdate() {
+        this.followPlayer();
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/logic/ModelBase.ts":
 /*!***************************************!*\
   !*** ./src/script/logic/ModelBase.ts ***!
@@ -17500,6 +17713,8 @@ __webpack_require__.r(__webpack_exports__);
 class ModelBase {
     constructor() {
         this.layerIndex = 1;
+        this.dirVec = new Laya.Vector2();
+        this.linearVelocity = 0;
     }
     get depth() {
         return this.layerObj.transform.position.y;
@@ -17510,6 +17725,13 @@ class ModelBase {
         this.skin.addComponentIntance(this.animCmp);
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.level.layerObj.addChild(this.root);
         _manager_LayerManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.PushModel(this);
+    }
+    OnUpdate(dt) {
+        if (this.root.destroyed)
+            return;
+        this.DoUpdate(dt);
+    }
+    DoUpdate(dt) {
     }
 }
 
@@ -17547,6 +17769,8 @@ class ViewLevel {
         let layer = new Laya.Sprite3D("layerContent");
         s3d.addChild(layer);
         this.layerObj = layer;
+        let camera = s3d.getChildByName("camera_obj");
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.camera.InitCamera(camera);
         let start = s3d.getChildByName("__start__");
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.player.CreatePlayer(start);
     }
@@ -17570,14 +17794,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
 /* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
-/* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
 
 
 
 
 
 
-class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_5__["default"] {
+
+class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_6__["default"] {
+    get pos() {
+        return this.root.transform.position;
+    }
     SetPlayerId(id) {
         this.config = _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_4__["PlayerConfig"].data[id];
     }
@@ -17590,6 +17819,28 @@ class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_5__["default"] {
         this.layerObj = this.root.getChildByName("__layerSign__");
         _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_1__["TransformEx"].CopyTrans(this.root.transform, point.transform);
         this.Inited(this.config.id);
+    }
+    DoMove(dt) {
+        let CmpJoy = _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_5__["UI_FightMediator"].instance.CmpJoy;
+        this.dirVec = CmpJoy.dirVec2;
+        this.linearVelocity = this.config.move_speed * dt;
+        this.pos.x -= this.dirVec.x * this.linearVelocity;
+        this.pos.y -= this.dirVec.y * this.linearVelocity;
+        this.root.transform.position = this.pos;
+    }
+    UpdateActor() {
+        if (this.dirVec.x > 0) {
+            this.root.transform.localScaleX = 1;
+        }
+        else if (this.dirVec.x < 0) {
+            this.root.transform.localScaleX = -1;
+        }
+    }
+    DoUpdate(dt) {
+        if (_ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_5__["UI_FightMediator"].instance.CmpJoy.isPressed) {
+            this.DoMove(dt);
+        }
+        this.UpdateActor();
     }
 }
 
@@ -17961,10 +18212,18 @@ class EffectShowData {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameManager; });
 /* harmony import */ var _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/LTUtils/MonoHelper */ "./src/LTGame/LTUtils/MonoHelper.ts");
-/* harmony import */ var _common_GameData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GameData */ "./src/script/common/GameData.ts");
-/* harmony import */ var _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../logic/level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
-/* harmony import */ var _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../logic/player/ViewPlayer */ "./src/script/logic/player/ViewPlayer.ts");
-/* harmony import */ var _LayerManager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./LayerManager */ "./src/script/manager/LayerManager.ts");
+/* harmony import */ var _common_EGameState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/EGameState */ "./src/script/common/EGameState.ts");
+/* harmony import */ var _common_GameData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GameData */ "./src/script/common/GameData.ts");
+/* harmony import */ var _logic_CameraControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../logic/CameraControl */ "./src/script/logic/CameraControl.ts");
+/* harmony import */ var _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../logic/level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
+/* harmony import */ var _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../logic/player/ViewPlayer */ "./src/script/logic/player/ViewPlayer.ts");
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _LayerManager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./LayerManager */ "./src/script/manager/LayerManager.ts");
+
+
+
+
 
 
 
@@ -17972,10 +18231,11 @@ __webpack_require__.r(__webpack_exports__);
 
 class GameManager {
     constructor() {
-        this.level = new _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_2__["default"]();
-        this.player = new _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        this.level.SetLevelId(_common_GameData__WEBPACK_IMPORTED_MODULE_1__["default"].instance.levelId);
-        this.player.SetPlayerId(_common_GameData__WEBPACK_IMPORTED_MODULE_1__["default"].instance.playerId);
+        this.level = new _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        this.player = new _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_5__["default"]();
+        this.camera = new _logic_CameraControl__WEBPACK_IMPORTED_MODULE_3__["default"]();
+        this.level.SetLevelId(_common_GameData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.levelId);
+        this.player.SetPlayerId(_common_GameData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.playerId);
         _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].Update, this, this._LogicUpdate);
         _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].LateUpdate, this, this._LateUpdate);
     }
@@ -17984,12 +18244,32 @@ class GameManager {
         this.player.PreLoad(urls);
     }
     CreateGame() {
-        _LayerManager__WEBPACK_IMPORTED_MODULE_4__["default"].instance.InitLayer();
+        this.state = _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready;
+        _LayerManager__WEBPACK_IMPORTED_MODULE_8__["default"].instance.InitLayer();
         this.level.CreateLevel();
     }
+    StartGame() {
+        _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_7__["UI_MainMediator"].instance.Hide();
+        _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__["UI_FightMediator"].instance.Show();
+        this.state = _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Fight;
+    }
     _LogicUpdate(dt) {
+        switch (this.state) {
+            case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready:
+                break;
+            case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Fight:
+                this.player.OnUpdate(dt);
+                break;
+        }
     }
     _LateUpdate(dt) {
+        switch (this.state) {
+            case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready:
+                break;
+            case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Fight:
+                this.camera.LateUpdate();
+                break;
+        }
     }
 }
 
@@ -18136,6 +18416,39 @@ class SplashScene extends _LTGame_Start_LTSplashScene__WEBPACK_IMPORTED_MODULE_1
 
 /***/ }),
 
+/***/ "./src/script/ui/UI_FightMediator.ts":
+/*!*******************************************!*\
+  !*** ./src/script/ui/UI_FightMediator.ts ***!
+  \*******************************************/
+/*! exports provided: UI_FightMediator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_FightMediator", function() { return UI_FightMediator; });
+/* harmony import */ var _LTGame_UIExt_Cmp_CmpJoystick__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/Cmp/CmpJoystick */ "./src/LTGame/UIExt/Cmp/CmpJoystick.ts");
+/* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
+/* harmony import */ var _ui_Main_UI_Fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ui/Main/UI_Fight */ "./src/ui/Main/UI_Fight.ts");
+
+
+
+class UI_FightMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_1__["default"] {
+    static get instance() {
+        if (this._instance == null) {
+            this._instance = new UI_FightMediator();
+            this._instance._classDefine = _ui_Main_UI_Fight__WEBPACK_IMPORTED_MODULE_2__["default"];
+        }
+        return this._instance;
+    }
+    _OnShow() {
+        super._OnShow();
+        this.CmpJoy = new _LTGame_UIExt_Cmp_CmpJoystick__WEBPACK_IMPORTED_MODULE_0__["CmpJoystick"](this.ui.m_img_bg, this.ui.m_com_joy, this.ui.m_com_joy.m_handle);
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/ui/UI_MainMediator.ts":
 /*!******************************************!*\
   !*** ./src/script/ui/UI_MainMediator.ts ***!
@@ -18148,6 +18461,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UI_MainMediator", function() { return UI_MainMediator; });
 /* harmony import */ var _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/UIExt/FGui/BaseUIMediator */ "./src/LTGame/UIExt/FGui/BaseUIMediator.ts");
 /* harmony import */ var _ui_Main_UI_Main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Main/UI_Main */ "./src/ui/Main/UI_Main.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+
 
 
 class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTED_MODULE_0__["default"] {
@@ -18160,6 +18475,10 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
     }
     _OnShow() {
         super._OnShow();
+        this.ui.m_btn_start.onClick(this, this.StartGame);
+    }
+    StartGame() {
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.StartGame();
     }
 }
 
@@ -18228,15 +18547,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MainBinder; });
 /* harmony import */ var _UI_Main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UI_Main */ "./src/ui/Main/UI_Main.ts");
 /* harmony import */ var _UI_btn_text_01__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UI_btn_text_01 */ "./src/ui/Main/UI_btn_text_01.ts");
+/* harmony import */ var _UI_Fight__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UI_Fight */ "./src/ui/Main/UI_Fight.ts");
+/* harmony import */ var _UI_com_joystick__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UI_com_joystick */ "./src/ui/Main/UI_com_joystick.ts");
 /** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+
+
 
 
 class MainBinder {
     static bindAll() {
         fgui.UIObjectFactory.setExtension(_UI_Main__WEBPACK_IMPORTED_MODULE_0__["default"].URL, _UI_Main__WEBPACK_IMPORTED_MODULE_0__["default"]);
         fgui.UIObjectFactory.setExtension(_UI_btn_text_01__WEBPACK_IMPORTED_MODULE_1__["default"].URL, _UI_btn_text_01__WEBPACK_IMPORTED_MODULE_1__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_Fight__WEBPACK_IMPORTED_MODULE_2__["default"].URL, _UI_Fight__WEBPACK_IMPORTED_MODULE_2__["default"]);
+        fgui.UIObjectFactory.setExtension(_UI_com_joystick__WEBPACK_IMPORTED_MODULE_3__["default"].URL, _UI_com_joystick__WEBPACK_IMPORTED_MODULE_3__["default"]);
     }
 }
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_Fight.ts":
+/*!*********************************!*\
+  !*** ./src/ui/Main/UI_Fight.ts ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_Fight; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_Fight extends fgui.GComponent {
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "Fight"));
+    }
+    onConstruct() {
+        this.m_img_bg = (this.getChildAt(0));
+        this.m_com_joy = (this.getChildAt(1));
+    }
+}
+UI_Fight.URL = "ui://c6t3i6k8r0x74";
 
 
 /***/ }),
@@ -18290,6 +18640,31 @@ class UI_btn_text_01 extends fgui.GButton {
     }
 }
 UI_btn_text_01.URL = "ui://c6t3i6k8qqmy2";
+
+
+/***/ }),
+
+/***/ "./src/ui/Main/UI_com_joystick.ts":
+/*!****************************************!*\
+  !*** ./src/ui/Main/UI_com_joystick.ts ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UI_com_joystick; });
+/** This is an automatically generated class by FairyGUI. Please do not modify it. **/
+class UI_com_joystick extends fgui.GComponent {
+    static createInstance() {
+        return (fgui.UIPackage.createObject("Main", "com_joystick"));
+    }
+    onConstruct() {
+        this.m_bg = (this.getChildAt(0));
+        this.m_handle = (this.getChildAt(1));
+    }
+}
+UI_com_joystick.URL = "ui://c6t3i6k8r0x75";
 
 
 /***/ })

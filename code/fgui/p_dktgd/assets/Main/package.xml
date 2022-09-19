@@ -5,6 +5,8 @@
     <component id="qqmy1" name="Main.xml" path="/ui/" exported="true"/>
     <component id="qqmy2" name="btn_text_01.xml" path="/cmp/"/>
     <image id="k05e3" name="btn_yinsishengming.png" path="/img/"/>
+    <component id="r0x74" name="Fight.xml" path="/ui/" exported="true"/>
+    <component id="r0x75" name="com_joystick.xml" path="/cmp/"/>
   </resources>
   <publish name="" genCode="true"/>
 </packageDescription>

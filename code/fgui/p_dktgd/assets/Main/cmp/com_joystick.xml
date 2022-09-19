@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="150,150">
+  <displayList>
+    <graph id="n0_r0x7" name="bg" xy="0,0" size="150,150" type="rect"/>
+    <graph id="n1_r0x7" name="handle" xy="0,0" pivot="0.5,0.5" anchor="true" size="50,50" type="rect" fillColor="#ff000000"/>
+  </displayList>
+</component>

@@ -6,17 +6,17 @@
 		"renderStates":[
 			{
 				"cull":2,
-				"blend":0,
-				"srcBlend":1,
-				"dstBlend":0,
-				"depthWrite":true,
+				"blend":1,
+				"srcBlend":770,
+				"dstBlend":771,
+				"depthWrite":false,
 				"depthTest":515
 			}
 		],
 		"enableVertexColor":false,
-		"alphaTest":true,
-		"alphaTestValue":0.23,
-		"renderQueue":2450,
+		"alphaTest":false,
+		"alphaTestValue":0.383,
+		"renderQueue":3000,
 		"albedoIntensity":1,
 		"textures":[
 			{

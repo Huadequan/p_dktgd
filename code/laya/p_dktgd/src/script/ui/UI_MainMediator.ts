@@ -1,5 +1,8 @@
 import BaseUIMediator from "../../LTGame/UIExt/FGui/BaseUIMediator";
 import UI_Main from "../../ui/Main/UI_Main";
+import GlobalUnit from "../common/GlobalUnit";
+import GameManager from "../manager/GameManager";
+import { UI_FightMediator } from "./UI_FightMediator";
 
 export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
@@ -14,6 +17,11 @@ export class UI_MainMediator extends BaseUIMediator<UI_Main> {
 
     _OnShow() {
         super._OnShow();
+
+        this.ui.m_btn_start.onClick(this, this.StartGame);
     }
 
+    StartGame() {
+        GlobalUnit.game.StartGame();
+    }
 }

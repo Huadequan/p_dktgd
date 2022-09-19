@@ -10,12 +10,16 @@ export default class ModelBase {
     public animCmp: AnimComponent;
     public layerIndex: number;
     protected layerObj: Laya.Sprite3D;
+    public dirVec: Laya.Vector2;
+    public linearVelocity: number;
     public get depth() : number {
         return this.layerObj.transform.position.y;
     }
     
     constructor() {
         this.layerIndex = 1;
+        this.dirVec = new Laya.Vector2();
+        this.linearVelocity = 0;
     }
 
     protected Inited(id: number) {
@@ -25,5 +29,14 @@ export default class ModelBase {
         GlobalUnit.game.level.layerObj.addChild(this.root);
 
         LayerManager.instance.PushModel(this);
+    }
+
+    public OnUpdate(dt: number) {
+        if (this.root.destroyed) return;
+        this.DoUpdate(dt);
+    }
+
+    protected DoUpdate(dt: number) {
+
     }
 }
