@@ -6,7 +6,7 @@ import ViewLevel from "../logic/level/ViewLevel";
 import ViewPlayer from "../logic/player/ViewPlayer";
 import { UI_FightMediator } from "../ui/UI_FightMediator";
 import { UI_MainMediator } from "../ui/UI_MainMediator";
-import LayerManager from "./LayerManager";
+import AgentManager from "./AgentManager";
 
 export default class GameManager {
     level: ViewLevel;
@@ -31,7 +31,7 @@ export default class GameManager {
 
     public CreateGame() {
         this.state = EGameState.Ready;
-        LayerManager.instance.InitLayer();
+        AgentManager.instance.InitLayer();
         this.level.CreateLevel();
     }
 
@@ -48,6 +48,7 @@ export default class GameManager {
             case EGameState.Fight:
 
                 this.player.OnUpdate(dt);
+                AgentManager.instance.OnUpdate(dt);
                 break;
         }
     }

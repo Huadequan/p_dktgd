@@ -2,9 +2,9 @@ import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import AnimComponent from "../common/AnimComponent";
 import GlobalUnit from "../common/GlobalUnit";
 import { AnimFrameConfig } from "../config/AnimFrameConfig";
-import LayerManager from "../manager/LayerManager";
+import AgentManager from "../manager/AgentManager";
 
-export default class ModelBase {
+export default class Agent {
     protected root: Laya.Sprite3D;
     protected skin: Laya.MeshSprite3D;
     public animCmp: AnimComponent;
@@ -28,7 +28,7 @@ export default class ModelBase {
         this.skin.addComponentIntance(this.animCmp);
         GlobalUnit.game.level.layerObj.addChild(this.root);
 
-        LayerManager.instance.PushModel(this);
+        AgentManager.instance.PushModel(this);
     }
 
     public OnUpdate(dt: number) {

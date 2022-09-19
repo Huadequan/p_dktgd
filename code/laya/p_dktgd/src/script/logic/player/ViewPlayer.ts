@@ -5,9 +5,9 @@ import GlobalUnit from "../../common/GlobalUnit";
 import ResDefine from "../../common/ResDefine";
 import { PlayerConfig } from "../../config/PlayerConfig";
 import { UI_FightMediator } from "../../ui/UI_FightMediator";
-import ModelBase from "../ModelBase";
+import Agent from "../Agent";
 
-export default class ViewPlayer extends ModelBase{
+export default class ViewPlayer extends Agent{
     protected config: PlayerConfig.config;
     
     public get pos(): Laya.Vector3 {
@@ -52,8 +52,10 @@ export default class ViewPlayer extends ModelBase{
     protected DoUpdate(dt: number): void {
         if(UI_FightMediator.instance.CmpJoy.isPressed) {
             this.DoMove(dt);
+        } else {
+            this.linearVelocity = 0;
         }
-        
+
         this.UpdateActor();
     }
 }

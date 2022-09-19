@@ -1,24 +1,22 @@
-import LTList from "../../LTGame/LTUtils/LTList";
-import ModelBase from "../logic/ModelBase";
+import Agent from "../logic/Agent";
 
-export default class LayerManager {
-    private static _instance: LayerManager;
+export default class AgentManager {
+    private static _instance: AgentManager;
     
-    public static get instance() : LayerManager {
+    public static get instance() : AgentManager {
         if (!this._instance) {
-            this._instance = new LayerManager();
+            this._instance = new AgentManager();
         }
         return this._instance; 
     }
 
-    protected list: ModelBase[];
+    protected list: Agent[];
     public InitLayer(){
         this.list = []; 
     }
     
-    public PushModel(model: ModelBase) {
+    public PushModel(model: Agent) {
         this.list.push(model);
-        
     }
 
     private _AnalyseLayerIndex(){
@@ -34,8 +32,6 @@ export default class LayerManager {
                 }
             }
         }
-
-
     }
 
     public OnUpdate(dt: number) {
