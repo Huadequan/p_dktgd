@@ -19162,7 +19162,7 @@ class RVO_test {
         console.log("================================================");
         this.simulator = new _Simulator__WEBPACK_IMPORTED_MODULE_0__["default"]();
         let simulator = this.simulator;
-        simulator.setTimeStep(0.5);
+        simulator.setTimeStep(1);
         simulator.setAgentDefaults(
         //在寻找周围邻居的搜索距离，这个值设置越大，会让小球在越远距离做出避障行为
         80, // neighbor distance (min = radius * radius)
