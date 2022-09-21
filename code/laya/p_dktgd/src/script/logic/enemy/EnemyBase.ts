@@ -1,5 +1,5 @@
-import Agent from "../Agent";
+import ModelBase from "../ModelBase";
 
-export default class EnemyBase extends Agent  {
+export default class EnemyBase extends ModelBase  {
     
 }

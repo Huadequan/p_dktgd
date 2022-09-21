@@ -17142,6 +17142,8 @@ class AutoConfigSetter {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return AnimComponent; });
+/* harmony import */ var _GlobalUnit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+
 class AnimComponent extends Laya.Script {
     constructor(skin, config) {
         super();
@@ -17196,6 +17198,8 @@ class AnimComponent extends Laya.Script {
         this._changeAnimFrame();
     }
     onUpdate() {
+        if (_GlobalUnit__WEBPACK_IMPORTED_MODULE_0__["default"].game.pause)
+            return;
         if (this._played)
             return;
         let dt = Laya.timer.delta * 0.001;
@@ -17306,9 +17310,11 @@ GameData.SAVE_NAME = 'p_game01.sav';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GlobalUnit; });
-/* harmony import */ var _manager_DataManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../manager/DataManager */ "./src/script/manager/DataManager.ts");
-/* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
-/* harmony import */ var _manager_GameManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../manager/GameManager */ "./src/script/manager/GameManager.ts");
+/* harmony import */ var _logic_rvo_RVO_test__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../logic/rvo/RVO_test */ "./src/script/logic/rvo/RVO_test.ts");
+/* harmony import */ var _manager_DataManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../manager/DataManager */ "./src/script/manager/DataManager.ts");
+/* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
+/* harmony import */ var _manager_GameManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../manager/GameManager */ "./src/script/manager/GameManager.ts");
+
 
 
 
@@ -17316,25 +17322,26 @@ class GlobalUnit {
     static InitAll(urls) {
         this.s3d = Laya.stage.addChildAt(new Laya.Scene3D(), 0);
         window['s3d'] = this.s3d;
-        this.dataManager = new _manager_DataManager__WEBPACK_IMPORTED_MODULE_0__["DataManager"]();
+        this.dataManager = new _manager_DataManager__WEBPACK_IMPORTED_MODULE_1__["DataManager"]();
         this.dataManager.InitData();
-        this.game = new _manager_GameManager__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        this.game = new _manager_GameManager__WEBPACK_IMPORTED_MODULE_3__["default"]();
         this.game.PreLoad(urls);
         window['GlobalUnit'] = this;
     }
     static ResetScene(scene) {
         if (this.s3d != null && !this.s3d.destroyed) {
-            _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__["EffectManager"].instance.UnloadScene();
+            _manager_EffectManager__WEBPACK_IMPORTED_MODULE_2__["EffectManager"].instance.UnloadScene();
             this.s3d.destroy();
         }
         this.s3d = scene;
         Laya.stage.addChildAt(this.s3d, 0);
-        _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__["EffectManager"].instance.ReAddScene();
+        _manager_EffectManager__WEBPACK_IMPORTED_MODULE_2__["EffectManager"].instance.ReAddScene();
         window['s3d'] = this.s3d;
     }
     static FirstCreate() {
         return __awaiter(this, void 0, void 0, function* () {
             this.game.CreateGame();
+            new _logic_rvo_RVO_test__WEBPACK_IMPORTED_MODULE_0__["default"]();
         });
     }
 }
@@ -17660,52 +17667,6 @@ var TryItemConfig;
 
 /***/ }),
 
-/***/ "./src/script/logic/Agent.ts":
-/*!***********************************!*\
-  !*** ./src/script/logic/Agent.ts ***!
-  \***********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Agent; });
-/* harmony import */ var _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/AnimComponent */ "./src/script/common/AnimComponent.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../config/AnimFrameConfig */ "./src/script/config/AnimFrameConfig.ts");
-/* harmony import */ var _manager_AgentManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../manager/AgentManager */ "./src/script/manager/AgentManager.ts");
-
-
-
-
-class Agent {
-    constructor() {
-        this.layerIndex = 1;
-        this.dirVec = new Laya.Vector2();
-        this.linearVelocity = 0;
-    }
-    get depth() {
-        return this.layerObj.transform.position.y;
-    }
-    Inited(id) {
-        let config = _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__["AnimFrameConfig"].data[id];
-        this.animCmp = new _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__["default"](this.skin, config);
-        this.skin.addComponentIntance(this.animCmp);
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.level.layerObj.addChild(this.root);
-        _manager_AgentManager__WEBPACK_IMPORTED_MODULE_3__["default"].instance.PushModel(this);
-    }
-    OnUpdate(dt) {
-        if (this.root.destroyed)
-            return;
-        this.DoUpdate(dt);
-    }
-    DoUpdate(dt) {
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/script/logic/CameraControl.ts":
 /*!*******************************************!*\
   !*** ./src/script/logic/CameraControl.ts ***!
@@ -17738,6 +17699,168 @@ class CameraControl {
 
 /***/ }),
 
+/***/ "./src/script/logic/MapControl.ts":
+/*!****************************************!*\
+  !*** ./src/script/logic/MapControl.ts ***!
+  \****************************************/
+/*! exports provided: MapData, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MapData", function() { return MapData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MapControl; });
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+
+
+class MapData {
+}
+class MapControl {
+    constructor() {
+        this._rect = new Laya.Vector2();
+        this._mapList = {};
+        this._blockPool = [];
+    }
+    InitMapData(content, mapPath) {
+        this._mapContent = content;
+        this._mapPath = mapPath;
+        let block = this._GetBlock();
+        let rect = block.getChildByName("__rect__");
+        this._rect.setValue(rect.transform.localScaleX, rect.transform.localScaleY);
+        this._blockPool.push(block);
+        this._RefreshMap();
+    }
+    _GetBlock() {
+        let item = this._blockPool.pop();
+        if (!item) {
+            item = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Get(this._mapPath);
+        }
+        return item;
+    }
+    _RefreshMap() {
+        let pos = this._GetMapPos();
+        let x = pos[0];
+        let y = pos[1];
+        let initMap = [
+            [x, y],
+            [x - 1, y],
+            [x + 1, y],
+            [x, y + 1],
+            [x - 1, y + 1],
+            [x + 1, y + 1],
+            [x, y - 1],
+            [x - 1, y - 1],
+            [x + 1, y - 1],
+        ];
+        for (let i = 0; i < initMap.length; i++) {
+            let data = initMap[i];
+            let strPos = data[0] + "_" + data[1];
+            let mapData = this._mapList[strPos];
+            if (!mapData || !mapData.enable) {
+                this._AddMap(data[0], data[1]);
+            }
+        }
+    }
+    _GetMapPos() {
+        let pos = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.player.pos;
+        let x = Math.floor(Math.abs(pos.x) / this._rect.x) * (pos.x < 0 ? -1 : 1);
+        let y = Math.floor(Math.abs(pos.y) / this._rect.y) * (pos.y < 0 ? -1 : 1);
+        return [x, y];
+    }
+    _AddMap(x, y) {
+        let strPos = x + "_" + y;
+        let mapData = this._mapList[strPos];
+        if (!mapData) {
+            mapData = new MapData();
+            this._mapList[strPos] = mapData;
+            mapData.strPos = strPos;
+            mapData.pos = new Laya.Vector2(x, y);
+        }
+        let block = this._GetBlock();
+        mapData.block = block;
+        mapData.enable = true;
+        this._mapContent.addChild(block);
+        let old = block.transform.position;
+        old.z = 0;
+        old.x = x * this._rect.x;
+        old.y = y * this._rect.y;
+        block.transform.position = old;
+    }
+    _RemoveMap(map) {
+        let strPos = map.strPos;
+        let mapData = this._mapList[strPos];
+        mapData.enable = false;
+        let block = mapData.block;
+        mapData.block.removeSelf();
+        mapData.block = null;
+        this._blockPool.push(block);
+    }
+    UpdateMap() {
+        let data = this._GetMapPos();
+        for (let k in this._mapList) {
+            let mapData = this._mapList[k];
+            if (!this._mapList[k].enable)
+                continue;
+            let x = mapData.pos.x;
+            let y = mapData.pos.y;
+            if (x > data[0] + 1 ||
+                x < data[0] - 1 ||
+                y > data[1] + 1 ||
+                y < data[1] - 1) {
+                this._RemoveMap(mapData);
+            }
+        }
+        this._RefreshMap();
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/ModelBase.ts":
+/*!***************************************!*\
+  !*** ./src/script/logic/ModelBase.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ModelBase; });
+/* harmony import */ var _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/AnimComponent */ "./src/script/common/AnimComponent.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../config/AnimFrameConfig */ "./src/script/config/AnimFrameConfig.ts");
+
+
+
+class ModelBase {
+    constructor() {
+        this.layerIndex = 1;
+        this.dirVec = new Laya.Vector2();
+        this.linearVelocity = 0;
+    }
+    get depth() {
+        return this.layerObj.transform.position.y;
+    }
+    Inited(id) {
+        let config = _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__["AnimFrameConfig"].data[id];
+        this.animCmp = new _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__["default"](this.skin, config);
+        this.skin.addComponentIntance(this.animCmp);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.level.layerObj.addChild(this.root);
+    }
+    OnUpdate(dt) {
+        if (this.root.destroyed)
+            return;
+        this.DoUpdate(dt);
+    }
+    DoUpdate(dt) {
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/script/logic/level/ViewLevel.ts":
 /*!*********************************************!*\
   !*** ./src/script/logic/level/ViewLevel.ts ***!
@@ -17762,6 +17885,7 @@ class ViewLevel {
     }
     PreLoad(urls) {
         urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixScene(this.config.model_path));
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixPath(this.config.map_path));
     }
     CreateLevel() {
         let s3d = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixScene(this.config.model_path));
@@ -17773,6 +17897,140 @@ class ViewLevel {
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.camera.InitCamera(camera);
         let start = s3d.getChildByName("__start__");
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.player.CreatePlayer(start);
+        let map = s3d.getChildByName("__map__");
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.map.InitMapData(map, _common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixPath(this.config.map_path));
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/player/EPlayerState.ts":
+/*!*************************************************!*\
+  !*** ./src/script/logic/player/EPlayerState.ts ***!
+  \*************************************************/
+/*! exports provided: EPlayerState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EPlayerState", function() { return EPlayerState; });
+var EPlayerState;
+(function (EPlayerState) {
+    EPlayerState[EPlayerState["Idle"] = 0] = "Idle";
+    EPlayerState[EPlayerState["Move"] = 1] = "Move";
+    EPlayerState[EPlayerState["Dead"] = 2] = "Dead";
+})(EPlayerState || (EPlayerState = {}));
+
+
+/***/ }),
+
+/***/ "./src/script/logic/player/PlayerBaseState.ts":
+/*!****************************************************!*\
+  !*** ./src/script/logic/player/PlayerBaseState.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayerBaseState; });
+/* harmony import */ var _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/Fsm/BaseState */ "./src/LTGame/Fsm/BaseState.ts");
+
+class PlayerBaseState extends _LTGame_Fsm_BaseState__WEBPACK_IMPORTED_MODULE_0__["default"] {
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/player/PlayerStateDead.ts":
+/*!****************************************************!*\
+  !*** ./src/script/logic/player/PlayerStateDead.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayerStateDead; });
+/* harmony import */ var _EPlayerState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EPlayerState */ "./src/script/logic/player/EPlayerState.ts");
+/* harmony import */ var _PlayerBaseState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayerBaseState */ "./src/script/logic/player/PlayerBaseState.ts");
+
+
+class PlayerStateDead extends _PlayerBaseState__WEBPACK_IMPORTED_MODULE_1__["default"] {
+    constructor(owner) {
+        super(owner, _EPlayerState__WEBPACK_IMPORTED_MODULE_0__["EPlayerState"].Dead);
+    }
+    _DoEnter(exitStte, param) {
+        this.owner.PlayAnim(2, false, null);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/player/PlayerStateIdle.ts":
+/*!****************************************************!*\
+  !*** ./src/script/logic/player/PlayerStateIdle.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayerStateIdle; });
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _EPlayerState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlayerState */ "./src/script/logic/player/EPlayerState.ts");
+/* harmony import */ var _PlayerBaseState__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PlayerBaseState */ "./src/script/logic/player/PlayerBaseState.ts");
+
+
+
+class PlayerStateIdle extends _PlayerBaseState__WEBPACK_IMPORTED_MODULE_2__["default"] {
+    constructor(owner) {
+        super(owner, _EPlayerState__WEBPACK_IMPORTED_MODULE_1__["EPlayerState"].Idle);
+    }
+    _DoEnter(exitStte, param) {
+        this.owner.PlayAnim(0);
+    }
+    _DoRunning(param) {
+        if (_ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_0__["UI_FightMediator"].instance.CmpJoy.isPressed) {
+            this.owner.fsm.ChangeState(_EPlayerState__WEBPACK_IMPORTED_MODULE_1__["EPlayerState"].Move);
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/player/PlayerStateMove.ts":
+/*!****************************************************!*\
+  !*** ./src/script/logic/player/PlayerStateMove.ts ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PlayerStateMove; });
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _EPlayerState__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EPlayerState */ "./src/script/logic/player/EPlayerState.ts");
+/* harmony import */ var _PlayerBaseState__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PlayerBaseState */ "./src/script/logic/player/PlayerBaseState.ts");
+
+
+
+class PlayerStateMove extends _PlayerBaseState__WEBPACK_IMPORTED_MODULE_2__["default"] {
+    constructor(owner) {
+        super(owner, _EPlayerState__WEBPACK_IMPORTED_MODULE_1__["EPlayerState"].Move);
+    }
+    _DoEnter(exitStte, param) {
+        this.owner.PlayAnim(1);
+    }
+    _DoRunning(param) {
+        if (!_ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_0__["UI_FightMediator"].instance.CmpJoy.isPressed) {
+            this.owner.fsm.ChangeState(_EPlayerState__WEBPACK_IMPORTED_MODULE_1__["EPlayerState"].Idle);
+            return;
+        }
+        this.owner.DoMove(this.deltaTime);
     }
 }
 
@@ -17789,13 +18047,18 @@ class ViewLevel {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewPlayer; });
-/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
-/* harmony import */ var _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/LTUtils/TransformEx */ "./src/LTGame/LTUtils/TransformEx.ts");
-/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
-/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
-/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
-/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
-/* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Agent */ "./src/script/logic/Agent.ts");
+/* harmony import */ var _LTGame_Fsm_StateMachine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/Fsm/StateMachine */ "./src/LTGame/Fsm/StateMachine.ts");
+/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/LTUtils/TransformEx */ "./src/LTGame/LTUtils/TransformEx.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
+/* harmony import */ var _EPlayerState__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./EPlayerState */ "./src/script/logic/player/EPlayerState.ts");
+/* harmony import */ var _PlayerStateDead__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PlayerStateDead */ "./src/script/logic/player/PlayerStateDead.ts");
+/* harmony import */ var _PlayerStateIdle__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PlayerStateIdle */ "./src/script/logic/player/PlayerStateIdle.ts");
+/* harmony import */ var _PlayerStateMove__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./PlayerStateMove */ "./src/script/logic/player/PlayerStateMove.ts");
 
 
 
@@ -17803,30 +18066,47 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ViewPlayer extends _Agent__WEBPACK_IMPORTED_MODULE_6__["default"] {
+
+
+
+
+
+class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_7__["default"] {
+    get fsm() {
+        return this._fsm;
+    }
     get pos() {
         return this.root.transform.position;
     }
     SetPlayerId(id) {
-        this.config = _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_4__["PlayerConfig"].data[id];
+        this.config = _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_5__["PlayerConfig"].data[id];
     }
     PreLoad(urls) {
-        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(this.config.model_path));
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath(this.config.model_path));
     }
     CreatePlayer(point) {
-        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(this.config.model_path));
-        this.skin = _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__["LTUtils"].FindChild(this.root, this.config.skin_path);
+        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath(this.config.model_path));
+        this.skin = _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_1__["LTUtils"].FindChild(this.root, this.config.skin_path);
         this.layerObj = this.root.getChildByName("__layerSign__");
-        _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_1__["TransformEx"].CopyTrans(this.root.transform, point.transform);
+        _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_2__["TransformEx"].CopyTrans(this.root.transform, point.transform);
         this.Inited(this.config.id);
+        this._InitState();
+    }
+    _InitState() {
+        this._fsm = new _LTGame_Fsm_StateMachine__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        this._fsm.Add(new _PlayerStateIdle__WEBPACK_IMPORTED_MODULE_10__["default"](this));
+        this._fsm.Add(new _PlayerStateMove__WEBPACK_IMPORTED_MODULE_11__["default"](this));
+        this._fsm.Add(new _PlayerStateDead__WEBPACK_IMPORTED_MODULE_9__["default"](this));
+        this._fsm.ChangeState(_EPlayerState__WEBPACK_IMPORTED_MODULE_8__["EPlayerState"].Idle);
     }
     DoMove(dt) {
-        let CmpJoy = _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_5__["UI_FightMediator"].instance.CmpJoy;
+        let CmpJoy = _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__["UI_FightMediator"].instance.CmpJoy;
         this.dirVec = CmpJoy.dirVec2;
         this.linearVelocity = this.config.move_speed * dt;
         this.pos.x -= this.dirVec.x * this.linearVelocity;
         this.pos.y -= this.dirVec.y * this.linearVelocity;
         this.root.transform.position = this.pos;
+        this.UpdateActor();
     }
     UpdateActor() {
         if (this.dirVec.x > 0) {
@@ -17836,61 +18116,1398 @@ class ViewPlayer extends _Agent__WEBPACK_IMPORTED_MODULE_6__["default"] {
             this.root.transform.localScaleX = -1;
         }
     }
+    PlayAnim(index, isLoop = true, complete = null) {
+        this.animCmp.play(index, isLoop, complete);
+    }
     DoUpdate(dt) {
-        if (_ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_5__["UI_FightMediator"].instance.CmpJoy.isPressed) {
-            this.DoMove(dt);
-        }
-        else {
-            this.linearVelocity = 0;
-        }
-        this.UpdateActor();
+        this._fsm.LogicUpdate(dt);
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/script/manager/AgentManager.ts":
-/*!********************************************!*\
-  !*** ./src/script/manager/AgentManager.ts ***!
-  \********************************************/
+/***/ "./src/script/logic/rvo/Agent.ts":
+/*!***************************************!*\
+  !*** ./src/script/logic/rvo/Agent.ts ***!
+  \***************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return AgentManager; });
-class AgentManager {
-    static get instance() {
-        if (!this._instance) {
-            this._instance = new AgentManager();
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Agent; });
+/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
+/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+/* harmony import */ var _Line__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Line */ "./src/script/logic/rvo/Line.ts");
+
+
+
+class Agent {
+    constructor() {
+        this.id = 0;
+        this.agentNeighbors = []; //  new List<KeyValuePair<float, Agent>>()
+        this.maxNeighbors = 0;
+        this.maxSpeed = 0.0;
+        this.neighborDist = 0.0;
+        this.obstaclNeighbors = []; // new List<KeyValuePair<float, Obstacle>>()
+        this.orcaLines = [];
+        this.radius = 0.0;
+        this.timeHorizon = 0.0;
+        this.timeHorizonObst = 0.0;
+    }
+    computeNeighbors() {
+        this.obstaclNeighbors = [];
+        var rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.timeHorizonObst * this.maxSpeed + this.radius);
+        this.simulator.kdTree.computeObstacleNeighbors(this, rangeSq);
+        this.agentNeighbors = [];
+        if (this.maxNeighbors > 0) {
+            rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.neighborDist);
+            this.simulator.kdTree.computeAgentNeighbors(this, rangeSq);
         }
-        return this._instance;
     }
-    InitLayer() {
-        this.list = [];
+    /* Search for the best new velocity. */
+    computeNewVelocity() {
+        this.orcaLines.length = 0;
+        let orcaLines = this.orcaLines;
+        const invTimeHorizonObst = 1.0 / this.timeHorizonObst;
+        /* Create obstacle ORCA lines. */
+        for (var i = 0; i < this.obstaclNeighbors.length; ++i) {
+            let obstacle1 = this.obstaclNeighbors[i].value;
+            let obstacle2 = obstacle1.next;
+            let relativePosition1 = obstacle1.point.minus(this.position);
+            let relativePosition2 = obstacle2.point.minus(this.position);
+            /*
+             * Check if velocity obstacle of obstacle is already taken care of by
+             * previously constructed obstacle ORCA lines.
+             */
+            let alreadyCovered = false;
+            for (var j = 0; j < orcaLines.length; ++j) {
+                if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition1.scale(invTimeHorizonObst).minus(orcaLines[j].point), orcaLines[j].direction) - invTimeHorizonObst * this.radius >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition2.scale(invTimeHorizonObst).minus(orcaLines[j].point), orcaLines[j].direction) - invTimeHorizonObst * this.radius >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                    alreadyCovered = true;
+                    break;
+                }
+            }
+            if (alreadyCovered) {
+                continue;
+            }
+            /* Not yet covered. Check for collisions. */
+            let distSq1 = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition1);
+            let distSq2 = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition2);
+            let radiusSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.radius);
+            let obstacleVector = obstacle2.point.minus(obstacle1.point);
+            let s = relativePosition1.scale(-1).multiply(obstacleVector) / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(obstacleVector); //  (-relativePosition1 * obstacleVector) / RVOMath.absSq(obstacleVector)
+            let distSqLine = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition1.scale(-1).minus(obstacleVector.scale(s))); // RVOMath.absSq(-relativePosition1 - s * obstacleVector)
+            var line = new _Line__WEBPACK_IMPORTED_MODULE_2__["default"]();
+            if (s < 0 && distSq1 <= radiusSq) {
+                /* Collision with left vertex. Ignore if non-convex. */
+                if (obstacle1.isConvex) {
+                    line.point = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
+                    line.direction = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-relativePosition1.y, relativePosition1.x));
+                    orcaLines.push(line);
+                }
+                continue;
+            }
+            else if (s > 1 && distSq2 <= radiusSq) {
+                /* Collision with right vertex. Ignore if non-convex
+                 * or if it will be taken care of by neighoring obstace */
+                if (obstacle2.isConvex && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition2, obstacle2.unitDir) >= 0) {
+                    line.point = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
+                    line.direction = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-relativePosition2.y, relativePosition2.x));
+                    orcaLines.push(line);
+                }
+                continue;
+            }
+            else if (s >= 0 && s < 1 && distSqLine <= radiusSq) {
+                /* Collision with obstacle segment. */
+                line.point = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
+                line.direction = obstacle1.unitDir.scale(-1);
+                orcaLines.push(line);
+                continue;
+            }
+            /*
+             * No collision.
+             * Compute legs. When obliquely viewed, both legs can come from a single
+             * vertex. Legs extend cut-off line when nonconvex vertex.
+             */
+            var leftLegDirection, rightLegDirection;
+            if (s < 0 && distSqLine <= radiusSq) {
+                /*
+                 * Obstacle viewed obliquely so that left vertex
+                 * defines velocity obstacle.
+                 */
+                if (!obstacle1.isConvex) {
+                    /* Ignore obstacle. */
+                    continue;
+                }
+                obstacle2 = obstacle1;
+                let leg1 = Math.sqrt(distSq1 - radiusSq);
+                leftLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition1.x * leg1 - relativePosition1.y * this.radius, relativePosition1.x * this.radius + relativePosition1.y * leg1)).scale(1 / distSq1);
+                rightLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition1.x * leg1 + relativePosition1.y * this.radius, -relativePosition1.x * this.radius + relativePosition1.y * leg1)).scale(1 / distSq1);
+            }
+            else if (s > 1 && distSqLine <= radiusSq) {
+                /*
+                 * Obstacle viewed obliquely so that
+                 * right vertex defines velocity obstacle.
+                 */
+                if (!obstacle2.isConvex) {
+                    /* Ignore obstacle. */
+                    continue;
+                }
+                obstacle1 = obstacle2;
+                let leg2 = Math.sqrt(distSq2 - radiusSq);
+                leftLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition2.x * leg2 - relativePosition2.y * this.radius, relativePosition2.x * this.radius + relativePosition2.y * leg2)).scale(1 / distSq2);
+                rightLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition2.x * leg2 + relativePosition2.y * this.radius, -relativePosition2.x * this.radius + relativePosition2.y * leg2)).scale(1 / distSq2);
+            }
+            else {
+                /* Usual situation. */
+                if (obstacle1.isConvex) {
+                    let leg1 = Math.sqrt(distSq1 - radiusSq);
+                    leftLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition1.x * leg1 - relativePosition1.y * this.radius, relativePosition1.x * this.radius + relativePosition1.y * leg1)).scale(1 / distSq1);
+                }
+                else {
+                    /* Left vertex non-convex; left leg extends cut-off line. */
+                    leftLegDirection = obstacle1.unitDir.scale(-1);
+                }
+                if (obstacle2.isConvex) {
+                    let leg2 = Math.sqrt(distSq2 - radiusSq);
+                    rightLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition2.x * leg2 + relativePosition2.y * this.radius, -relativePosition2.x * this.radius + relativePosition2.y * leg2)).scale(1 / distSq2);
+                }
+                else {
+                    /* Right vertex non-convex; right leg extends cut-off line. */
+                    rightLegDirection = obstacle1.unitDir;
+                }
+            }
+            /*
+             * Legs can never point into neighboring edge when convex vertex,
+             * take cutoff-line of neighboring edge instead. If velocity projected on
+             * "foreign" leg, no constraint is added.
+             */
+            let leftNeighbor = obstacle1.previous;
+            let isLeftLegForeign = false;
+            let isRightLegForeign = false;
+            if (obstacle1.isConvex && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(leftLegDirection, leftNeighbor.unitDir.scale(-1)) >= 0.0) {
+                /* Left leg points into obstacle. */
+                leftLegDirection = leftNeighbor.unitDir.scale(-1);
+                isLeftLegForeign = true;
+            }
+            if (obstacle2.isConvex && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(rightLegDirection, obstacle2.unitDir) <= 0.0) {
+                /* Right leg points into obstacle. */
+                rightLegDirection = obstacle2.unitDir;
+                isRightLegForeign = true;
+            }
+            /* Compute cut-off centers. */
+            let leftCutoff = obstacle1.point.minus(this.position).scale(invTimeHorizonObst);
+            let rightCutoff = obstacle2.point.minus(this.position).scale(invTimeHorizonObst);
+            let cutoffVec = rightCutoff.minus(leftCutoff);
+            /* Project current velocity on velocity obstacle. */
+            /* Check if current velocity is projected on cutoff circles. */
+            let t = obstacle1 == obstacle2 ? 0.5 : this.velocity.minus(leftCutoff).multiply(cutoffVec) / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(cutoffVec);
+            let tLeft = this.velocity.minus(leftCutoff).multiply(leftLegDirection);
+            let tRight = this.velocity.minus(rightCutoff).multiply(rightLegDirection);
+            if ((t < 0.0 && tLeft < 0.0) || (obstacle1 == obstacle2 && tLeft < 0.0 && tRight < 0.0)) {
+                /* Project on left cut-off circle. */
+                let unitW = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(this.velocity.minus(leftCutoff));
+                line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
+                line.point = leftCutoff.plus(unitW.scale(this.radius * invTimeHorizonObst));
+                orcaLines.push(line);
+                continue;
+            }
+            else if (t > 1.0 && tRight < 0.0) {
+                /* Project on right cut-off circle. */
+                let unitW = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(this.velocity.minus(rightCutoff));
+                line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
+                line.point = rightCutoff.plus(unitW.scale(this.radius * invTimeHorizonObst));
+                orcaLines.push(line);
+                continue;
+            }
+            /*
+             * Project on left leg, right leg, or cut-off line, whichever is closest
+             * to velocity.
+             */
+            let distSqCutoff = ((t < 0.0 || t > 1.0 || obstacle1 == obstacle2) ? Infinity : _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.velocity.minus(cutoffVec.scale(t).plus(leftCutoff))));
+            let distSqLeft = ((tLeft < 0.0) ? Infinity : _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.velocity.minus(leftLegDirection.scale(tLeft).plus(leftCutoff))));
+            let distSqRight = ((tRight < 0.0) ? Infinity : _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.velocity.minus(rightLegDirection.scale(tRight).plus(rightCutoff))));
+            if (distSqCutoff <= distSqLeft && distSqCutoff <= distSqRight) {
+                /* Project on cut-off line. */
+                line.direction = obstacle1.unitDir.scale(-1);
+                var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-line.direction.y, line.direction.x);
+                line.point = aux.scale(this.radius * invTimeHorizonObst).plus(leftCutoff);
+                orcaLines.push(line);
+                continue;
+            }
+            else if (distSqLeft <= distSqRight) {
+                /* Project on left leg. */
+                if (isLeftLegForeign) {
+                    continue;
+                }
+                line.direction = leftLegDirection;
+                var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-line.direction.y, line.direction.x);
+                line.point = aux.scale(this.radius * invTimeHorizonObst).plus(leftCutoff);
+                orcaLines.push(line);
+                continue;
+            }
+            else {
+                /* Project on right leg. */
+                if (isRightLegForeign) {
+                    continue;
+                }
+                line.direction = rightLegDirection.scale(-1);
+                var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-line.direction.y, line.direction.x);
+                line.point = aux.scale(this.radius * invTimeHorizonObst).plus(leftCutoff);
+                orcaLines.push(line);
+                continue;
+            }
+        }
+        var numObstLines = orcaLines.length;
+        var invTimeHorizon = 1.0 / this.timeHorizon;
+        /* Create agent ORCA lines. */
+        for (var i = 0; i < this.agentNeighbors.length; ++i) {
+            var other = this.agentNeighbors[i].value;
+            let relativePosition = other.position.minus(this.position);
+            let relativeVelocity = this.velocity.minus(other.velocity);
+            let distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition);
+            let combinedRadius = this.radius + other.radius;
+            let combinedRadiusSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(combinedRadius);
+            var line = new _Line__WEBPACK_IMPORTED_MODULE_2__["default"](); // Line
+            var u;
+            if (distSq > combinedRadiusSq) {
+                /* No collision. */
+                let w = relativeVelocity.minus(relativePosition.scale(invTimeHorizon));
+                ; // Vector
+                /* Vector from cutoff center to relative velocity. */
+                let wLengthSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(w);
+                let dotProduct1 = w.multiply(relativePosition);
+                if (dotProduct1 < 0.0 && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(dotProduct1) > combinedRadiusSq * wLengthSq) {
+                    /* Project on cut-off circle. */
+                    let wLength = Math.sqrt(wLengthSq);
+                    let unitW = w.scale(1 / wLength);
+                    line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
+                    u = unitW.scale(combinedRadius * invTimeHorizon - wLength);
+                }
+                else {
+                    /* Project on legs. */
+                    let leg = Math.sqrt(distSq - combinedRadiusSq);
+                    if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition, w) > 0.0) {
+                        /* Project on left leg. */
+                        var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition.x * leg - relativePosition.y * combinedRadius, relativePosition.x * combinedRadius + relativePosition.y * leg);
+                        line.direction = aux.scale(1 / distSq);
+                    }
+                    else {
+                        /* Project on right leg. */
+                        var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition.x * leg + relativePosition.y * combinedRadius, -relativePosition.x * combinedRadius + relativePosition.y * leg);
+                        line.direction = aux.scale(-1 / distSq);
+                    }
+                    let dotProduct2 = relativeVelocity.multiply(line.direction);
+                    u = line.direction.scale(dotProduct2).minus(relativeVelocity);
+                }
+            }
+            else {
+                /* Collision. Project on cut-off circle of time timeStep. */
+                let invTimeStep = 1.0 / this.simulator.timeStep;
+                /* Vector from cutoff center to relative velocity. */
+                const w = relativeVelocity.minus(relativePosition.scale(invTimeStep));
+                let wLength = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].abs(w);
+                let unitW = w.scale(1 / wLength);
+                line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
+                u = unitW.scale(combinedRadius * invTimeStep - wLength);
+            }
+            line.point = u.scale(0.5).plus(this.velocity);
+            orcaLines.push(line);
+        }
+        let lineFail = this._linearProgram2(orcaLines, this.maxSpeed, this.prefVelocity, false);
+        if (lineFail < orcaLines.length) {
+            this._linearProgram3(orcaLines, numObstLines, lineFail, this.maxSpeed);
+        }
     }
-    PushModel(model) {
-        this.list.push(model);
-    }
-    _AnalyseLayerIndex() {
-        let array = this.list;
-        let len = this.list.length;
-        for (let i = 0; i < len - 1; ++i) {
-            for (let j = i + 1; j < len - 1 - i; j++) {
-                if (array[j].depth > array[j + 1].depth) {
-                    let temp = array[j];
-                    array[j] = array[j + 1];
-                    array[j + 1] = temp;
-                    array[j].layerIndex = j;
+    insertAgentNeighbor(agent, rangeSq) {
+        if (this != agent) {
+            var distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.position.minus(agent.position));
+            if (distSq < rangeSq) {
+                if (this.agentNeighbors.length < this.maxNeighbors) {
+                    this.agentNeighbors.push(new KeyValuePair(distSq, agent));
+                }
+                var i = this.agentNeighbors.length - 1;
+                while (i != 0 && distSq < this.agentNeighbors[i - 1].key) {
+                    this.agentNeighbors[i] = this.agentNeighbors[i - 1];
+                    --i;
+                }
+                this.agentNeighbors[i] = new KeyValuePair(distSq, agent);
+                if (this.agentNeighbors.length == this.maxNeighbors) {
+                    rangeSq = this.agentNeighbors[this.agentNeighbors.length - 1].key;
                 }
             }
         }
     }
-    OnUpdate(dt) {
-        this._AnalyseLayerIndex();
+    insertObstacleNeighbor(obstacle, rangeSq) {
+        let nextObstacle = obstacle.next;
+        let distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].distSqPointLineSegment(obstacle.point, nextObstacle.point, this.position);
+        if (distSq < rangeSq) {
+            this.obstaclNeighbors.push(new KeyValuePair(distSq, obstacle));
+            let i = this.obstaclNeighbors.length - 1;
+            while (i != 0 && distSq < this.obstaclNeighbors[i - 1].key) {
+                this.obstaclNeighbors[i] = this.obstaclNeighbors[i - 1];
+                --i;
+            }
+            this.obstaclNeighbors[i] = new KeyValuePair(distSq, obstacle);
+        }
+    }
+    update() {
+        // var rnd = new Vector2D(Math.random() * 0.1 - 0.05, Math.random() * 0.1 - 0.05)
+        // this.velocity = this.newVelocity.plus(rnd)
+        this.velocity = this._newVelocity;
+        this.position = this.position.plus(this._newVelocity.scale(this.simulator.timeStep));
+    }
+    _linearProgram1(lines, lineNo, radius, optVelocity, directionOpt) {
+        var dotProduct = lines[lineNo].point.multiply(lines[lineNo].direction);
+        var discriminant = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(dotProduct) + _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius) - _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(lines[lineNo].point);
+        if (discriminant < 0.0) {
+            /* Max speed circle fully invalidates line lineNo. */
+            return false;
+        }
+        var sqrtDiscriminant = Math.sqrt(discriminant);
+        var tLeft = -dotProduct - sqrtDiscriminant;
+        var tRight = -dotProduct + sqrtDiscriminant;
+        for (var i = 0; i < lineNo; ++i) {
+            var denominator = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[lineNo].direction, lines[i].direction);
+            var numerator = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[lineNo].point.minus(lines[i].point));
+            if (Math.abs(denominator) <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                /* Lines lineNo and i are (almost) parallel. */
+                if (numerator < 0.0) {
+                    return false;
+                }
+                else {
+                    continue;
+                }
+            }
+            var t = numerator / denominator;
+            if (denominator >= 0.0) {
+                /* Line i bounds line lineNo on the right. */
+                tRight = Math.min(tRight, t);
+            }
+            else {
+                /* Line i bounds line lineNo on the left. */
+                tLeft = Math.max(tLeft, t);
+            }
+            if (tLeft > tRight) {
+                return false;
+            }
+        }
+        if (directionOpt) {
+            if (optVelocity.multiply(lines[lineNo].direction) > 0.0) {
+                // Take right extreme
+                this._newVelocity = lines[lineNo].direction.scale(tRight).plus(lines[lineNo].point);
+            }
+            else {
+                // Take left extreme.
+                this._newVelocity = lines[lineNo].direction.scale(tLeft).plus(lines[lineNo].point);
+            }
+        }
+        else {
+            // Optimize closest point
+            t = lines[lineNo].direction.multiply(optVelocity.minus(lines[lineNo].point));
+            if (t < tLeft) {
+                this._newVelocity = lines[lineNo].direction.scale(tLeft).plus(lines[lineNo].point);
+            }
+            else if (t > tRight) {
+                this._newVelocity = lines[lineNo].direction.scale(tRight).plus(lines[lineNo].point);
+            }
+            else {
+                this._newVelocity = lines[lineNo].direction.scale(t).plus(lines[lineNo].point);
+            }
+        }
+        // TODO ugly hack by palmerabollo
+        if (isNaN(this._newVelocity.x) || isNaN(this._newVelocity.y)) {
+            return false;
+        }
+        return true;
+    }
+    _linearProgram2(lines, radius, optVelocity, directionOpt) {
+        if (directionOpt) {
+            /*
+             * Optimize direction. Note that the optimization velocity is of unit
+             * length in this case.
+             */
+            this._newVelocity = optVelocity.scale(radius);
+        }
+        else if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(optVelocity) > _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)) {
+            /* Optimize closest point and outside circle. */
+            this._newVelocity = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(optVelocity).scale(radius);
+        }
+        else {
+            /* Optimize closest point and inside circle. */
+            this._newVelocity = optVelocity;
+        }
+        for (var i = 0; i < lines.length; ++i) {
+            if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[i].point.minus(this._newVelocity)) > 0.0) {
+                /* Result does not satisfy constraint i. Compute new optimal result. */
+                var tempResult = this._newVelocity;
+                if (!this._linearProgram1(lines, i, this.radius, optVelocity, directionOpt)) {
+                    this._newVelocity = tempResult;
+                    return i;
+                }
+            }
+        }
+        return lines.length;
+    }
+    _linearProgram3(lines, numObstLines, beginLine, radius) {
+        var distance = 0.0;
+        for (var i = beginLine; i < lines.length; ++i) {
+            if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[i].point.minus(this._newVelocity)) > distance) {
+                /* Result does not satisfy constraint of line i. */
+                //std::vector<Line> projLines(lines.begin(), lines.begin() + numObstLines)
+                let projLines = []; // new List<Line>()
+                for (var ii = 0; ii < numObstLines; ++ii) {
+                    projLines.push(lines[ii]);
+                }
+                for (var j = numObstLines; j < i; ++j) {
+                    var line = new _Line__WEBPACK_IMPORTED_MODULE_2__["default"]();
+                    let determinant = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[j].direction);
+                    if (Math.abs(determinant) <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                        /* Line i and line j are parallel. */
+                        if (lines[i].direction.multiply(lines[j].direction) > 0.0) {
+                            /* Line i and line j point in the same direction. */
+                            continue;
+                        }
+                        else {
+                            /* Line i and line j point in opposite direction. */
+                            line.point = lines[i].point.plus(lines[j].point).scale(0.5);
+                        }
+                    }
+                    else {
+                        var aux = lines[i].direction.scale(_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[j].direction, lines[i].point.minus(lines[j].point)) / determinant);
+                        line.point = lines[i].point.plus(aux);
+                    }
+                    line.direction = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(lines[j].direction.minus(lines[i].direction));
+                    projLines.push(line);
+                }
+                var tempResult = this._newVelocity;
+                if (this._linearProgram2(projLines, radius, new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-lines[i].direction.y, lines[i].direction.x), true) < projLines.length) {
+                    /* This should in principle not happen.  The result is by definition
+                     * already in the feasible region of this linear program. If it fails,
+                     * it is due to small floating point error, and the current result is
+                     * kept.
+                     */
+                    this._newVelocity = tempResult;
+                }
+                distance = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[i].point.minus(this._newVelocity));
+            }
+        }
     }
 }
+class KeyValuePair {
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/KdTree.ts":
+/*!****************************************!*\
+  !*** ./src/script/logic/rvo/KdTree.ts ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return KdTree; });
+/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
+/* harmony import */ var _Obstacle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Obstacle */ "./src/script/logic/rvo/Obstacle.ts");
+
+
+class KdTree {
+    constructor() {
+        this.MAXLEAF_SIZE = 100;
+        this.agents = [];
+        this.agentTree = [];
+        this.obstacleTree = new ObstacleTreeNode();
+    }
+    buildAgentTree() {
+        if (this.agents.length != this.simulator.getNumAgents()) {
+            this.agents = this.simulator.agents;
+            for (var i = 0, len = 2 * this.agents.length; i < len; i++) {
+                this.agentTree.push(new AgentTreeNode());
+            }
+        }
+        if (this.agents.length > 0) {
+            this._buildAgentTreeRecursive(0, this.agents.length, 0);
+        }
+    }
+    _buildAgentTreeRecursive(begin, end, node) {
+        this.agentTree[node].begin = begin;
+        this.agentTree[node].end = end;
+        this.agentTree[node].minX = this.agentTree[node].maxX = this.agents[begin].position.x;
+        this.agentTree[node].minY = this.agentTree[node].maxY = this.agents[begin].position.y;
+        for (var i = begin + 1; i < end; ++i) {
+            this.agentTree[node].maxX = Math.max(this.agentTree[node].maxX, this.agents[i].position.x);
+            this.agentTree[node].minX = Math.max(this.agentTree[node].minX, this.agents[i].position.x);
+            this.agentTree[node].maxY = Math.max(this.agentTree[node].maxX, this.agents[i].position.y);
+            this.agentTree[node].minY = Math.max(this.agentTree[node].minY, this.agents[i].position.y);
+        }
+        if (end - begin > this.MAXLEAF_SIZE) {
+            // no leaf node
+            var isVertical = this.agentTree[node].maxX - this.agentTree[node].minX > this.agentTree[node].maxY - this.agentTree[node].minY;
+            var splitValue = isVertical ? 0.5 * (this.agentTree[node].maxX + this.agentTree[node].minX) : 0.5 * (this.agentTree[node].maxY + this.agentTree[node].minY);
+            var left = begin;
+            var right = end;
+            while (left < right) {
+                while (left < right && (isVertical ? this.agents[left].position.x : this.agents[left].position.y) < splitValue) {
+                    ++left;
+                }
+                while (right > left && (isVertical ? this.agents[right - 1].position.x : this.agents[right - 1].position.y) >= splitValue) {
+                    --right;
+                }
+                if (left < right) {
+                    var tmp = this.agents[left];
+                    this.agents[left] = this.agents[right - 1];
+                    this.agents[right - 1] = tmp;
+                    ++left;
+                    --right;
+                }
+            }
+            var leftSize = left - begin;
+            if (leftSize == 0) {
+                ++leftSize;
+                ++left;
+                ++right;
+            }
+            this.agentTree[node].left = node + 1;
+            this.agentTree[node].right = node + 1 + (2 * leftSize - 1);
+            this._buildAgentTreeRecursive(begin, left, this.agentTree[node].left);
+            this._buildAgentTreeRecursive(left, end, this.agentTree[node].right);
+        }
+    }
+    buildObstacleTree() {
+        var obstacles = this.simulator.obstacles;
+        this.obstacleTree = this._buildObstacleTreeRecursive(obstacles);
+    }
+    _buildObstacleTreeRecursive(obstacles) {
+        if (obstacles.length == 0) {
+            return null;
+        }
+        else {
+            var node = new ObstacleTreeNode();
+            var optimalSplit = 0;
+            let minLeft = obstacles.length;
+            let minRight = obstacles.length;
+            for (let i = 0, len = obstacles.length; i < len; ++i) {
+                let leftSize = 0;
+                let rightSize = 0;
+                let obstacleI1 = obstacles[i];
+                let obstacleI2 = obstacleI1.next;
+                for (let j = 0; j < obstacles.length; j++) {
+                    if (i == j) {
+                        continue;
+                    }
+                    let obstacleJ1 = obstacles[j];
+                    let obstacleJ2 = obstacleJ1.next;
+                    let j1LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ1.point);
+                    let j2LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ2.point);
+                    if (j1LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                        ++leftSize;
+                    }
+                    else if (j1LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                        ++rightSize;
+                    }
+                    else {
+                        ++leftSize;
+                        ++rightSize;
+                    }
+                    var fp1 = new FloatPair(Math.max(leftSize, rightSize), Math.min(leftSize, rightSize));
+                    var fp2 = new FloatPair(Math.max(minLeft, minRight), Math.min(minLeft, minRight));
+                    if (fp1._get(fp2)) {
+                        break;
+                    }
+                }
+                var fp1 = new FloatPair(Math.max(leftSize, rightSize), Math.min(leftSize, rightSize));
+                var fp2 = new FloatPair(Math.max(minLeft, minRight), Math.min(minLeft, minRight));
+                if (fp1._mt(fp2)) {
+                    minLeft = leftSize;
+                    minRight = rightSize;
+                    optimalSplit = i;
+                }
+            }
+            {
+                /* Build split node. */
+                let leftObstacles = [];
+                for (var n = 0; n < minLeft; ++n)
+                    leftObstacles.push(null);
+                let rightObstacles = [];
+                for (var n = 0; n < minRight; ++n)
+                    rightObstacles.push(null);
+                let leftCounter = 0;
+                let rightCounter = 0;
+                let i = optimalSplit;
+                let obstacleI1 = obstacles[i];
+                let obstacleI2 = obstacleI1.next;
+                for (var j = 0; j < obstacles.length; ++j) {
+                    if (i == j) {
+                        continue;
+                    }
+                    let obstacleJ1 = obstacles[j];
+                    let obstacleJ2 = obstacleJ1.next;
+                    let j1LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ1.point);
+                    let j2LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ2.point);
+                    if (j1LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                        leftObstacles[leftCounter++] = obstacles[j];
+                    }
+                    else if (j1LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                        rightObstacles[rightCounter++] = obstacles[j];
+                    }
+                    else {
+                        /* Split obstacle j. */
+                        let t = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(obstacleI2.point.minus(obstacleI1.point), obstacleJ1.point.minus(obstacleI1.point)) /
+                            _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(obstacleI2.point.minus(obstacleI1.point), obstacleJ1.point.minus(obstacleJ2.point));
+                        var splitpoint = obstacleJ1.point.plus((obstacleJ2.point.minus(obstacleJ1.point)).scale(t));
+                        var newObstacle = new _Obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]();
+                        newObstacle.point = splitpoint;
+                        newObstacle.previous = obstacleJ1;
+                        newObstacle.next = obstacleJ2;
+                        newObstacle.isConvex = true;
+                        newObstacle.unitDir = obstacleJ1.unitDir;
+                        newObstacle.id = this.simulator.obstacles.length;
+                        this.simulator.obstacles.push(newObstacle);
+                        obstacleJ1.next = newObstacle;
+                        obstacleJ2.previous = newObstacle;
+                        if (j1LeftOfI > 0.0) {
+                            leftObstacles[leftCounter++] = obstacleJ1;
+                            rightObstacles[rightCounter++] = newObstacle;
+                        }
+                        else {
+                            rightObstacles[rightCounter++] = obstacleJ1;
+                            leftObstacles[leftCounter++] = newObstacle;
+                        }
+                    }
+                }
+                node.obstacle = obstacleI1;
+                node.left = this._buildObstacleTreeRecursive(leftObstacles);
+                node.right = this._buildObstacleTreeRecursive(rightObstacles);
+                return node;
+            }
+        }
+    }
+    computeAgentNeighbors(agent, rangeSq) {
+        this._queryAgentTreeRecursive(agent, rangeSq, 0);
+    }
+    computeObstacleNeighbors(agent, rangeSq) {
+        this._queryObstacleTreeRecursive(agent, rangeSq, this.obstacleTree);
+    }
+    _queryAgentTreeRecursive(agent, rangeSq, node) {
+        let agentTree = this.agentTree;
+        if (agentTree[node].end - agentTree[node].begin <= this.MAXLEAF_SIZE) {
+            for (var i = agentTree[node].begin; i < agentTree[node].end; ++i) {
+                agent.insertAgentNeighbor(this.agents[i], rangeSq);
+            }
+        }
+        else {
+            let distSqLeft = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].left].minX - agent.position.x)) +
+                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.x - agentTree[agentTree[node].left].maxX)) +
+                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].left].minY - agent.position.y)) +
+                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.y - agentTree[agentTree[node].left].maxY));
+            let distSqRight = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].right].minX - agent.position.x)) +
+                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.x - agentTree[agentTree[node].right].maxX)) +
+                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].right].minY - agent.position.y)) +
+                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.y - agentTree[agentTree[node].right].maxY));
+            if (distSqLeft < distSqRight) {
+                if (distSqLeft < rangeSq) {
+                    this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].left);
+                    if (distSqRight < rangeSq) {
+                        this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].right);
+                    }
+                }
+            }
+            else {
+                if (distSqRight < rangeSq) {
+                    this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].right);
+                    if (distSqLeft < rangeSq) {
+                        this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].left);
+                    }
+                }
+            }
+        }
+    }
+    // pass ref range
+    _queryObstacleTreeRecursive(agent, rangeSq, node) {
+        if (node == null) {
+            return;
+        }
+        else {
+            let obstacle1 = node.obstacle;
+            let obstacle2 = obstacle1.next;
+            let agentLeftOfLine = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacle1.point, obstacle2.point, agent.position);
+            this._queryObstacleTreeRecursive(agent, rangeSq, (agentLeftOfLine >= 0 ? node.left : node.right));
+            let distSqLine = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(agentLeftOfLine) / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(obstacle2.point.minus(obstacle1.point));
+            if (distSqLine < rangeSq) {
+                if (agentLeftOfLine < 0) {
+                    /*
+                     * Try obstacle at this node only if is on right side of
+                     * obstacle (and can see obstacle).
+                     */
+                    agent.insertObstacleNeighbor(node.obstacle, rangeSq);
+                }
+                /* Try other side of line. */
+                this._queryObstacleTreeRecursive(agent, rangeSq, (agentLeftOfLine >= 0 ? node.right : node.left));
+            }
+        }
+    }
+    queryVisibility(q1, q2, radius) {
+        return this._queryVisibilityRecursive(q1, q2, radius, this.obstacleTree);
+    }
+    _queryVisibilityRecursive(q1, q2, radius, node) {
+        if (node == null) {
+            return true;
+        }
+        else {
+            var obstacle1 = node.obstacle;
+            var obstacle2 = obstacle1.next;
+            var q1LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacle1.point, obstacle2.point, q1);
+            var q2LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacle1.point, obstacle2.point, q2);
+            var invLengthI = 1.0 / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(obstacle2.point.minus(obstacle1.point));
+            if (q1LeftOfI >= 0 && q2LeftOfI >= 0) {
+                return this._queryVisibilityRecursive(q1, q2, radius, node.left)
+                    && ((_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q1LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
+                        && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q2LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius))
+                        || this._queryVisibilityRecursive(q1, q2, radius, node.right));
+            }
+            else if (q1LeftOfI <= 0 && q2LeftOfI <= 0) {
+                return this._queryVisibilityRecursive(q1, q2, radius, node.right)
+                    && ((_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q1LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
+                        && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q2LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius))
+                        || this._queryVisibilityRecursive(q1, q2, radius, node.left));
+            }
+            else if (q1LeftOfI >= 0 && q2LeftOfI <= 0) {
+                /* One can see through obstacle from left to right. */
+                return this._queryVisibilityRecursive(q1, q2, radius, node.left)
+                    && this._queryVisibilityRecursive(q1, q2, radius, node.right);
+            }
+            else {
+                var point1LeftOfQ = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(q1, q2, obstacle1.point);
+                var point2LeftOfQ = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(q1, q2, obstacle2.point);
+                var invLengthQ = 1.0 / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(q2.minus(q1));
+                return (point1LeftOfQ * point2LeftOfQ >= 0
+                    && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(point1LeftOfQ) * invLengthQ > _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
+                    && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(point2LeftOfQ) * invLengthQ > _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
+                    && this._queryVisibilityRecursive(q1, q2, radius, node.left)
+                    && this._queryVisibilityRecursive(q1, q2, radius, node.right));
+            }
+        }
+    }
+}
+class FloatPair {
+    constructor(a = 0, b = 0) {
+        this.a = 0;
+        this.b = 0;
+        this.a = a;
+        this.b = b;
+    }
+    _mt(rhs) {
+        return this.a < rhs.a || !(rhs.a < this.a) && this.b < rhs.b;
+    }
+    _met(rhs) {
+        return (this.a == rhs.a && this.b == rhs.b) || this._mt(rhs);
+    }
+    //greater-than
+    _gt(rhs) {
+        return !this._met(rhs);
+    }
+    //greater-or-equal-than
+    _get(rhs) {
+        return !this._mt(rhs);
+    }
+}
+class AgentTreeNode {
+    constructor() {
+        this.begin = 0;
+        this.end = 0;
+        this.left = 0;
+        this.maxX = 0;
+        this.maxY = 0;
+        this.minX = 0;
+        this.minY = 0;
+        this.right = 0;
+    }
+}
+class ObstacleTreeNode {
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/Line.ts":
+/*!**************************************!*\
+  !*** ./src/script/logic/rvo/Line.ts ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Line; });
+/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+
+class Line {
+    /**
+     * Constructs and initializes a directed line with the specified point and
+     * direction.
+     *
+     * @param point     A point on the directed line.
+     * @param direction The direction of the directed line.
+     */
+    constructor(point = null, direction = null) {
+        /**
+         * The direction of this directed line.
+         */
+        this.direction = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
+        /**
+         * A point on this directed line.
+         */
+        this.point = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
+        this.direction = direction;
+        this.point = point;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/Obstacle.ts":
+/*!******************************************!*\
+  !*** ./src/script/logic/rvo/Obstacle.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Obstacle; });
+/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+
+class Obstacle {
+    constructor() {
+        this.point = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
+        this.unitDir = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
+        this.isConvex = false;
+        this.id = 0;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/RVODebug.ts":
+/*!******************************************!*\
+  !*** ./src/script/logic/rvo/RVODebug.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVODebug; });
+class RVODebug {
+    static get ins() {
+        if (!this._ins) {
+            this._ins = new RVODebug();
+        }
+        return this._ins;
+    }
+    start(simulaor) {
+        this.simulaor = simulaor;
+        let sprite = new Laya.Sprite();
+        Laya.stage.addChild(sprite);
+        this.sprite = sprite;
+        this.sprite.width = Laya.stage.width;
+        this.sprite.height = Laya.stage.height;
+        this.sprite.graphics.drawRect(0, 0, Laya.stage.width, Laya.stage.height, "#006666");
+        let temp = new Laya.Sprite();
+        this.sprite.addChild(temp);
+        temp.width = Laya.stage.width;
+        temp.height = Laya.stage.height;
+        this.graphics = temp.graphics;
+        this.sprite.on(Laya.Event.MOUSE_DOWN, this, this.ClickStart);
+        this.sprite.on(Laya.Event.CLICK, this, this.ClickOver);
+        this.sprite.on(Laya.Event.MOUSE_MOVE, this, this.ClickMove);
+    }
+    ClickStart(event) {
+        console.log("点击");
+        for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
+            // let goal = new Vector2D(100, 100);
+            this.simulaor.setAgentGoal(i, event.stageX, event.stageY);
+        }
+    }
+    ClickMove(event) {
+        for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
+            // let goal = new Vector2D(100, 100);
+            this.simulaor.setAgentGoal(i, event.stageX, event.stageY);
+        }
+    }
+    ClickOver(event) {
+        console.log("松开");
+        for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
+            // this.simulaor.setAgentPrefVelocity(i, 0,0);
+            let goal = this.simulaor.getAgentPosition(i);
+            this.simulaor.setAgentGoal(i, goal.x, goal.y);
+        }
+    }
+    Draw() {
+        this.graphics.clear();
+        let color = "#99CC33";
+        for (let i = 0; i < this.simulaor.getNumAgents(); ++i) {
+            let pos = this.simulaor.getAgentPosition(i);
+            let radius = this.simulaor.getAgentRadius(i);
+            this.graphics.drawCircle(pos.x, pos.y, radius, color, color, 2);
+        }
+        let obstacles = this.simulaor.getObstacles();
+        let convexs = [];
+        let rect = [];
+        for (let i = 0; i < obstacles.length; ++i) {
+            let obstacle = obstacles[i];
+            rect.push(obstacle.point.x);
+            rect.push(obstacle.point.y);
+            let next = obstacle.next;
+            if (next.id < obstacle.id) {
+                rect.push(next.point.x);
+                rect.push(next.point.y);
+                convexs.push(rect);
+                rect = [];
+            }
+        }
+        for (let i = 0; i < convexs.length; ++i) {
+            let rect = convexs[i];
+            this.graphics.drawPoly(0, 0, rect, color, color, 2);
+            // this.sprite.graphics.drawLines(0, 0, rect, color, 2);
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/RVOMath.ts":
+/*!*****************************************!*\
+  !*** ./src/script/logic/rvo/RVOMath.ts ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVOMath; });
+class RVOMath {
+    static absSq(v) {
+        return v.multiply(v);
+    }
+    static normalize(v) {
+        return v.scale(1 / RVOMath.abs(v)); // v / abs(v)
+    }
+    static distSqPointLineSegment(a, b, c) {
+        var aux1 = c.minus(a);
+        var aux2 = b.minus(a);
+        // r = ((c - a) * (b - a)) / absSq(b - a)
+        var r = aux1.multiply(aux2) / RVOMath.absSq(aux2);
+        if (r < 0) {
+            return RVOMath.absSq(aux1); // absSq(c - a)
+        }
+        else if (r > 1) {
+            return RVOMath.absSq(aux2); // absSq(c - b)
+        }
+        else {
+            return RVOMath.absSq(c.minus(a.plus(aux2.scale(r)))); // absSq(c - (a + r * (b - a)))
+        }
+    }
+    static sqr(p) {
+        return p * p;
+    }
+    static det(v1, v2) {
+        return v1.x * v2.y - v1.y * v2.x;
+    }
+    static abs(v) {
+        return Math.sqrt(RVOMath.absSq(v));
+    }
+    static leftOf(a, b, c) {
+        return RVOMath.det(a.minus(c), b.minus(a));
+    }
+}
+RVOMath.RVO_EPSILON = 0.2;
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/RVO_test.ts":
+/*!******************************************!*\
+  !*** ./src/script/logic/rvo/RVO_test.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVO_test; });
+/* harmony import */ var _Simulator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Simulator */ "./src/script/logic/rvo/Simulator.ts");
+/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
+/* harmony import */ var _RVODebug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RVODebug */ "./src/script/logic/rvo/RVODebug.ts");
+/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+
+
+
+
+class RVO_test {
+    constructor() {
+        console.log("================================================");
+        console.log("RVO_test");
+        console.log("================================================");
+        this.simulator = new _Simulator__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        let simulator = this.simulator;
+        simulator.setTimeStep(0.5);
+        simulator.setAgentDefaults(
+        //在寻找周围邻居的搜索距离，这个值设置越大，会让小球在越远距离做出避障行为
+        80, // neighbor distance (min = radius * radius)
+        //寻找周围邻居的最大数目，这个值设置越大，最终计算的速度越 精确，但会加大计算量
+        10, // max neighbors
+        //计算动态的物体时的时间窗口
+        100, // time horizon
+        //代表计算静态的物体时的时间窗口，比如在RTS游戏中，小兵 向城墙移动时，没必要做出避障，这个值需要设置的很
+        1, // time horizon obstacles
+        //代表计算ORCA时的小球的半径，这个值不一定与小球实际显示的半径 一样，偏小有利于小球移动顺畅
+        5, // agent radius
+        //小球最大速度值
+        2);
+        let counts = 100;
+        for (let i = 0; i < counts; i++) {
+            let x = 30 * Math.round(i / 5) - 50;
+            if (i < counts >> 1) {
+                x -= 100;
+            }
+            else {
+                x += 100;
+            }
+            let y = 30 * (i % 10) - 50;
+            y += Laya.stage.height / 2;
+            simulator.addAgent();
+            simulator.setAgentPosition(i, x, y);
+        }
+        for (let i = 0; i < simulator.getNumAgents(); i++) {
+            let goal = simulator.getAgentPosition(i).clone(); //.scale(-1);
+            if (i < counts >> 1) {
+                goal.x += 300;
+            }
+            else {
+                goal.x -= 300;
+            }
+            // let goal = new Vector2D(100, 100);
+            simulator.setAgentGoal(i, goal.x, goal.y);
+        }
+        let obstacle1 = [];
+        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-10, 40));
+        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-80, 40));
+        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-80, 10));
+        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-10, 10));
+        for (let i = 0; i < obstacle1.length; i++) {
+            let pos = obstacle1[i];
+            pos.x += 300;
+            pos.y += 500;
+        }
+        simulator.addObstacle(obstacle1);
+        // let obstacle2: Vector2D[] = [];
+        // obstacle2.push(new Vector2D(50.0, 60));
+        // obstacle2.push(new Vector2D(30.0, 30));
+        // obstacle2.push(new Vector2D(50.0, -10));
+        // obstacle2.push(new Vector2D(80.0, 20));
+        // obstacle2.push(new Vector2D(70.0, 60));
+        // for (let i = 0; i < obstacle2.length; i++) {
+        //     let pos = obstacle2[i];
+        //     pos.x += 300;
+        //     pos.y += 800
+        // }
+        // simulator.addObstacle(obstacle2);
+        Laya.timer.once(2000, this, () => {
+            let obstacle3 = [];
+            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](100.0, -60.0));
+            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](40.0, -60.0));
+            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](40.0, -100.0));
+            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](100.0, -100.0));
+            for (let i = 0; i < obstacle3.length; i++) {
+                let pos = obstacle3[i];
+                pos.x += 300;
+                pos.y += 800;
+            }
+            simulator.addObstacle(obstacle3);
+            simulator.processObstacles();
+        });
+        // let obstacle4: Vector2D[] = [];
+        // obstacle4.push(new Vector2D(-100.0, -60.0));
+        // obstacle4.push(new Vector2D(-100.0, -100.0));
+        // obstacle4.push(new Vector2D(-40.0, -100.0));
+        // obstacle4.push(new Vector2D(-40.0, -60.0));
+        // simulator.addObstacle(obstacle4);
+        simulator.processObstacles();
+        console.log(simulator);
+        _RVODebug__WEBPACK_IMPORTED_MODULE_2__["default"].ins.start(simulator);
+        Laya.timer.frameLoop(1, this, this.step);
+    }
+    step() {
+        let simulator = this.simulator;
+        for (let i = 0; i < simulator.getNumAgents(); ++i) {
+            if (_RVOMath__WEBPACK_IMPORTED_MODULE_1__["default"].absSq(simulator.getGoal(i).minus(simulator.getAgentPosition(i))) < _RVOMath__WEBPACK_IMPORTED_MODULE_1__["default"].RVO_EPSILON) {
+                // Agent is within one radius of its goal, set preferred velocity to zero
+                simulator.setAgentPrefVelocity(i, 0.0, 0.0);
+                // console.log('finish ' + i);
+            }
+            else {
+                // Agent is far away from its goal, set preferred velocity as unit vector towards agent's goal.
+                let v = _RVOMath__WEBPACK_IMPORTED_MODULE_1__["default"].normalize(simulator.getGoal(i).minus(simulator.getAgentPosition(i))).scale(simulator.agents[i].maxSpeed);
+                // let v = RVOMath.normalize(simulator.getGoal(i).minus(simulator.getAgentPosition(i))).scale(2);
+                simulator.setAgentPrefVelocity(i, v.x, v.y);
+            }
+        }
+        simulator.run();
+        _RVODebug__WEBPACK_IMPORTED_MODULE_2__["default"].ins.Draw();
+        // console.log(simulator)
+        if (simulator.reachedGoal()) {
+            Laya.timer.clear(this, this.step);
+            console.log('finish');
+        }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/Simulator.ts":
+/*!*******************************************!*\
+  !*** ./src/script/logic/rvo/Simulator.ts ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Simulator; });
+/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+/* harmony import */ var _Obstacle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Obstacle */ "./src/script/logic/rvo/Obstacle.ts");
+/* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Agent */ "./src/script/logic/rvo/Agent.ts");
+/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
+/* harmony import */ var _KdTree__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./KdTree */ "./src/script/logic/rvo/KdTree.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+
+
+
+
+
+
+class Simulator {
+    constructor() {
+        this.agents = [];
+        this.obstacles = [];
+        this.goals = [];
+        this.kdTree = new _KdTree__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        this.timeStep = 0.25;
+        this.time = 0;
+        this.kdTree.simulator = this;
+        this.kdTree.MAXLEAF_SIZE = 1000;
+    }
+    getGlobalTime() {
+        return this.time;
+    }
+    getNumAgents() {
+        return this.agents.length;
+    }
+    getTimeStep() {
+        return this.timeStep;
+    }
+    setAgentPrefVelocity(i, vx, vy) {
+        this.agents[i].prefVelocity.setXY(vx, vy);
+    }
+    setAgentPosition(i, x, y) {
+        this.agents[i].position.setXY(x, y);
+    }
+    setAgentGoal(i, x, y) {
+        this.goals[i].setXY(x, y);
+    }
+    setTimeStep(timeStep) {
+        this.timeStep = timeStep;
+    }
+    setAgentMoveSpeed(i, speed) {
+        this.agents[i].maxSpeed = speed;
+    }
+    getAgentPosition(i) {
+        return this.agents[i].position;
+    }
+    getAgentPrefVelocity(i) {
+        return this.agents[i].prefVelocity;
+    }
+    getAgentVelocity(i) {
+        return this.agents[i].velocity;
+    }
+    getAgentRadius(i) {
+        return this.agents[i].radius;
+    }
+    getAgentOrcaLines(i) {
+        return this.agents[i].orcaLines;
+    }
+    getAgentMoveSpeed(i) {
+        return this.agents[i].maxSpeed;
+    }
+    addAgent(position = new _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"]()) {
+        if (!this.defaultAgent) {
+            throw new Error("no default agent");
+        }
+        var agent = new _Agent__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        agent.prefVelocity = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO.clone();
+        agent.position = position;
+        agent.maxNeighbors = this.defaultAgent.maxNeighbors;
+        agent.radius = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(5, 10);
+        // agent.radius = this.defaultAgent.radius;
+        agent.maxSpeed = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(2, 5);
+        // agent.maxSpeed = this.defaultAgent.maxSpeed;
+        agent.neighborDist = this.defaultAgent.neighborDist;
+        agent.timeHorizon = this.defaultAgent.timeHorizon;
+        agent.timeHorizonObst = this.defaultAgent.timeHorizonObst;
+        agent.velocity = this.defaultAgent.velocity;
+        agent.simulator = this;
+        agent.id = this.agents.length;
+        this.agents.push(agent);
+        this.goals.push(position.clone());
+        return this.agents.length - 1;
+    }
+    //  /** float */ neighborDist, /** int */ maxNeighbors, /** float */ timeHorizon, /** float */ timeHorizonObst, /** float */ radius, /** float*/ maxSpeed, /** Vector2 */ velocity)
+    setAgentDefaults(neighborDist, maxNeighbors, timeHorizon, timeHorizonObst, radius, maxSpeed, velocityX = 0, velocityY = 0) {
+        if (!this.defaultAgent) {
+            this.defaultAgent = new _Agent__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        }
+        this.defaultAgent.maxNeighbors = maxNeighbors;
+        // this.defaultAgent.maxSpeed = MathEx.Random(2,5);
+        this.defaultAgent.maxSpeed = maxSpeed;
+        this.defaultAgent.neighborDist = neighborDist;
+        this.defaultAgent.radius = radius;
+        this.defaultAgent.timeHorizon = timeHorizon;
+        this.defaultAgent.timeHorizonObst = timeHorizonObst;
+        this.defaultAgent.velocity = new _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"](velocityX, velocityY);
+        this.defaultAgent.simulator = this;
+    }
+    run() {
+        this.kdTree.buildAgentTree();
+        for (var i = 0; i < this.getNumAgents(); i++) {
+            this.agents[i].computeNeighbors();
+            this.agents[i].computeNewVelocity();
+            this.agents[i].update();
+        }
+        this.time += this.timeStep;
+    }
+    reachedGoal() {
+        let pos;
+        for (var i = 0, len = this.getNumAgents(); i < len; ++i) {
+            pos = this.getAgentPosition(i);
+            if (_RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].absSq(this.goals[i].minus(pos)) > _RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].RVO_EPSILON) {
+                return false;
+            }
+        }
+        return true;
+    }
+    addGoals(goals) {
+        this.goals = goals;
+    }
+    getGoal(goalNo) {
+        return this.goals[goalNo];
+    }
+    /** 添加障碍 */
+    addObstacle(vertices) {
+        if (vertices.length < 2) {
+            return -1;
+        }
+        var obstacleNo = this.obstacles.length;
+        for (var i = 0, len = vertices.length; i < len; ++i) {
+            var obstacle = new _Obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]();
+            obstacle.point = vertices[i];
+            if (i != 0) {
+                obstacle.previous = this.obstacles[this.obstacles.length - 1];
+                obstacle.previous.next = obstacle;
+            }
+            if (i == vertices.length - 1) {
+                obstacle.next = this.obstacles[obstacleNo];
+                obstacle.next.previous = obstacle;
+            }
+            obstacle.unitDir = _RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].normalize(vertices[(i == vertices.length - 1 ? 0 : i + 1)].minus(vertices[i]));
+            if (vertices.length == 2) {
+                obstacle.isConvex = true;
+            }
+            else {
+                obstacle.isConvex = (_RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].leftOf(vertices[(i == 0 ? vertices.length - 1 : i - 1)], vertices[i], vertices[(i == vertices.length - 1 ? 0 : i + 1)]) >= 0);
+            }
+            obstacle.id = this.obstacles.length;
+            this.obstacles.push(obstacle);
+        }
+        return obstacleNo;
+    }
+    removeObstacle(obstacleNo) {
+    }
+    /** 更新障碍树 */
+    processObstacles() {
+        this.kdTree.buildObstacleTree();
+    }
+    queryVisibility(point1, point2, radius) {
+        return this.kdTree.queryVisibility(point1, point2, radius);
+    }
+    getObstacles() {
+        return this.obstacles;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/Vector2D.ts":
+/*!******************************************!*\
+  !*** ./src/script/logic/rvo/Vector2D.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Vector2D; });
+class Vector2D {
+    constructor(x = 0, y = 0) {
+        this.x = 0;
+        this.y = 0;
+        this.x = x;
+        this.y = y;
+    }
+    plus(vector) {
+        return new Vector2D(this.x + vector.x, this.y + vector.y);
+    }
+    //subtract
+    minus(vector) {
+        return new Vector2D(this.x - vector.x, this.y - vector.y);
+    }
+    multiply(vector) {
+        return this.x * vector.x + this.y * vector.y;
+    }
+    scale(k) {
+        return new Vector2D(this.x * k, this.y * k);
+    }
+    normalize() {
+        return this.scale(1 / this.abs());
+    }
+    absSq() {
+        return this.multiply(this);
+    }
+    abs() {
+        return Math.sqrt(this.absSq());
+    }
+    clone() {
+        return new Vector2D(this.x, this.y);
+    }
+    setXY(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+Vector2D.ZERO = new Vector2D();
 
 
 /***/ }),
@@ -18264,10 +19881,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_GameData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../common/GameData */ "./src/script/common/GameData.ts");
 /* harmony import */ var _logic_CameraControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../logic/CameraControl */ "./src/script/logic/CameraControl.ts");
 /* harmony import */ var _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../logic/level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
-/* harmony import */ var _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../logic/player/ViewPlayer */ "./src/script/logic/player/ViewPlayer.ts");
-/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
-/* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
-/* harmony import */ var _AgentManager__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./AgentManager */ "./src/script/manager/AgentManager.ts");
+/* harmony import */ var _logic_MapControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../logic/MapControl */ "./src/script/logic/MapControl.ts");
+/* harmony import */ var _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../logic/player/ViewPlayer */ "./src/script/logic/player/ViewPlayer.ts");
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _LayerMgr__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./LayerMgr */ "./src/script/manager/LayerMgr.ts");
+
 
 
 
@@ -18279,13 +19898,21 @@ __webpack_require__.r(__webpack_exports__);
 
 class GameManager {
     constructor() {
+        this._pause = false;
         this.level = new _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_4__["default"]();
-        this.player = new _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_5__["default"]();
+        this.player = new _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_6__["default"]();
         this.camera = new _logic_CameraControl__WEBPACK_IMPORTED_MODULE_3__["default"]();
+        this.map = new _logic_MapControl__WEBPACK_IMPORTED_MODULE_5__["default"]();
         this.level.SetLevelId(_common_GameData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.levelId);
         this.player.SetPlayerId(_common_GameData__WEBPACK_IMPORTED_MODULE_2__["default"].instance.playerId);
         _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].Update, this, this._LogicUpdate);
         _LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["default"].instance.AddAction(_LTGame_LTUtils_MonoHelper__WEBPACK_IMPORTED_MODULE_0__["EActionType"].LateUpdate, this, this._LateUpdate);
+    }
+    get pause() {
+        return this._pause;
+    }
+    set pause(v) {
+        this._pause = v;
     }
     PreLoad(urls) {
         this.level.PreLoad(urls);
@@ -18293,25 +19920,30 @@ class GameManager {
     }
     CreateGame() {
         this.state = _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready;
-        _AgentManager__WEBPACK_IMPORTED_MODULE_8__["default"].instance.InitLayer();
+        _LayerMgr__WEBPACK_IMPORTED_MODULE_9__["default"].instance.InitLayer();
         this.level.CreateLevel();
     }
     StartGame() {
-        _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_7__["UI_MainMediator"].instance.Hide();
-        _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__["UI_FightMediator"].instance.Show();
+        _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_8__["UI_MainMediator"].instance.Hide();
+        _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_7__["UI_FightMediator"].instance.Show();
         this.state = _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Fight;
     }
     _LogicUpdate(dt) {
+        if (this.pause)
+            return;
         switch (this.state) {
             case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready:
                 break;
             case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Fight:
                 this.player.OnUpdate(dt);
-                _AgentManager__WEBPACK_IMPORTED_MODULE_8__["default"].instance.OnUpdate(dt);
+                _LayerMgr__WEBPACK_IMPORTED_MODULE_9__["default"].instance.OnUpdate(dt);
+                this.map.UpdateMap();
                 break;
         }
     }
     _LateUpdate(dt) {
+        if (this.pause)
+            return;
         switch (this.state) {
             case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready:
                 break;
@@ -18319,6 +19951,51 @@ class GameManager {
                 this.camera.LateUpdate();
                 break;
         }
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/manager/LayerMgr.ts":
+/*!****************************************!*\
+  !*** ./src/script/manager/LayerMgr.ts ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LayerMgr; });
+class LayerMgr {
+    static get instance() {
+        if (!this._instance) {
+            this._instance = new LayerMgr();
+        }
+        return this._instance;
+    }
+    InitLayer() {
+        this.list = [];
+    }
+    PushModel(model) {
+        this.list.push(model);
+    }
+    _AnalyseLayerIndex() {
+        let array = this.list;
+        let len = this.list.length;
+        for (let i = 0; i < len - 1; ++i) {
+            for (let j = i + 1; j < len - 1 - i; j++) {
+                if (array[j].depth > array[j + 1].depth) {
+                    let temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                    array[j].layerIndex = j;
+                }
+            }
+        }
+    }
+    OnUpdate(dt) {
+        this._AnalyseLayerIndex();
     }
 }
 
@@ -18612,11 +20289,6 @@ class UI_Main extends fgui.GComponent {
     }
     onConstruct() {
         this.m_btn_start = (this.getChildAt(1));
-        this.m_btn_shop = (this.getChildAt(2));
-        this.m_btn_roll = (this.getChildAt(3));
-        this.m_btn_sign = (this.getChildAt(4));
-        this.m_btn_addshortcut = (this.getChildAt(5));
-        this.m_btn_statement = (this.getChildAt(6));
     }
 }
 UI_Main.URL = "ui://c6t3i6k8qqmy1";

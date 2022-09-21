@@ -2,7 +2,7 @@
 	"version":"LAYAHIERARCHY:02",
 	"data":{
 		"type":"Sprite3D",
-		"instanceID":5,
+		"instanceID":4,
 		"props":{
 			"name":"player_02",
 			"active":true,
@@ -29,15 +29,15 @@
 		"child":[
 			{
 				"type":"Sprite3D",
-				"instanceID":6,
+				"instanceID":5,
 				"props":{
-					"name":"collider",
+					"name":"colliders",
 					"active":true,
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						0.025,
-						-0.011,
+						0,
+						0.301,
 						0
 					],
 					"rotation":[
@@ -47,9 +47,9 @@
 						-1
 					],
 					"scale":[
-						0.4218505,
-						0.4218505,
-						0.4218505
+						0.5134599,
+						0.5134599,
+						0.5134599
 					]
 				},
 				"components":[
@@ -76,43 +76,15 @@
 			},
 			{
 				"type":"Sprite3D",
-				"instanceID":7,
-				"props":{
-					"name":"_layerSign_",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0,
-						-0.309,
-						0
-					],
-					"rotation":[
-						0,
-						0,
-						0,
-						-1
-					],
-					"scale":[
-						1,
-						1,
-						1
-					]
-				},
-				"components":[],
-				"child":[]
-			},
-			{
-				"type":"Sprite3D",
-				"instanceID":8,
+				"instanceID":6,
 				"props":{
 					"name":"guaiwu_01",
 					"active":true,
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						-0.036,
-						0.036,
+						-0.047,
+						0.337,
 						0
 					],
 					"rotation":[
@@ -131,7 +103,7 @@
 				"child":[
 					{
 						"type":"MeshSprite3D",
-						"instanceID":9,
+						"instanceID":7,
 						"props":{
 							"name":"Quad",
 							"active":true,

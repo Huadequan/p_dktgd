@@ -1,3 +1,4 @@
+import RVO_test from "../logic/rvo/RVO_test";
 import { DataManager } from "../manager/DataManager";
 import { EffectManager } from "../manager/EffectManager";
 import GameManager from "../manager/GameManager";
@@ -35,6 +36,8 @@ export default class GlobalUnit {
 
     static async FirstCreate() {
         this.game.CreateGame();
+
+        new RVO_test();
     }
 
 }

@@ -11,6 +11,7 @@ export default class ViewLevel{
 
     public PreLoad(urls: string[]) {
         urls.push(ResDefine.FixScene(this.config.model_path));
+        urls.push(ResDefine.FixPath(this.config.map_path));
     }
 
     public layerObj: Laya.Sprite3D;
@@ -26,6 +27,9 @@ export default class ViewLevel{
 
         let start = s3d.getChildByName("__start__") as Laya.Sprite3D;
         GlobalUnit.game.player.CreatePlayer(start);
+
+        let map = s3d.getChildByName("__map__") as Laya.Sprite3D;
+        GlobalUnit.game.map.InitMapData(map, ResDefine.FixPath(this.config.map_path));
     }
 
 }

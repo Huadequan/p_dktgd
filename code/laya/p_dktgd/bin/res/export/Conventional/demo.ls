@@ -169,7 +169,7 @@
 				"type":"Sprite3D",
 				"instanceID":3,
 				"props":{
-					"name":"__level__",
+					"name":"__map__",
 					"active":true,
 					"isStatic":false,
 					"layer":0,
@@ -191,78 +191,11 @@
 					]
 				},
 				"components":[],
-				"child":[
-					{
-						"type":"Sprite3D",
-						"instanceID":4,
-						"props":{
-							"name":"diban_01",
-							"active":true,
-							"isStatic":false,
-							"layer":0,
-							"position":[
-								0,
-								0,
-								0
-							],
-							"rotation":[
-								0,
-								0,
-								0,
-								-1
-							],
-							"scale":[
-								1,
-								1,
-								1
-							]
-						},
-						"components":[],
-						"child":[
-							{
-								"type":"MeshSprite3D",
-								"instanceID":5,
-								"props":{
-									"name":"map_01",
-									"active":true,
-									"isStatic":false,
-									"layer":0,
-									"position":[
-										0,
-										0,
-										0
-									],
-									"rotation":[
-										0.7071068,
-										0,
-										0,
-										-0.7071068
-									],
-									"scale":[
-										1,
-										1,
-										1
-									],
-									"meshPath":"Assets/_res/model/map_01-Plane006.lm",
-									"enableRender":true,
-									"receiveShadows":true,
-									"castShadow":true,
-									"materials":[
-										{
-											"path":"Assets/_res/mat/map_01.lmat"
-										}
-									]
-								},
-								"components":[],
-								"child":[]
-							}
-						]
-					}
-				]
+				"child":[]
 			},
 			{
 				"type":"Sprite3D",
-				"instanceID":6,
+				"instanceID":4,
 				"props":{
 					"name":"__start__",
 					"active":true,

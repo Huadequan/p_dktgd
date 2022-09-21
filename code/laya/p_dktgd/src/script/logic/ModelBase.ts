@@ -1,10 +1,9 @@
-import { LTUtils } from "../../LTGame/LTUtils/LTUtils";
 import AnimComponent from "../common/AnimComponent";
 import GlobalUnit from "../common/GlobalUnit";
 import { AnimFrameConfig } from "../config/AnimFrameConfig";
-import AgentManager from "../manager/AgentManager";
+import Agent from "./rvo/Agent";
 
-export default class Agent {
+export default class ModelBase {
     protected root: Laya.Sprite3D;
     protected skin: Laya.MeshSprite3D;
     public animCmp: AnimComponent;
@@ -12,6 +11,8 @@ export default class Agent {
     protected layerObj: Laya.Sprite3D;
     public dirVec: Laya.Vector2;
     public linearVelocity: number;
+    public agent: Agent;
+    public colliderOffset: Laya.Vector2;
     public get depth() : number {
         return this.layerObj.transform.position.y;
     }
@@ -28,7 +29,7 @@ export default class Agent {
         this.skin.addComponentIntance(this.animCmp);
         GlobalUnit.game.level.layerObj.addChild(this.root);
 
-        AgentManager.instance.PushModel(this);
+       
     }
 
     public OnUpdate(dt: number) {

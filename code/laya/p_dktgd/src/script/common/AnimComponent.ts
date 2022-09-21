@@ -1,4 +1,5 @@
 import { AnimFrameConfig } from "../config/AnimFrameConfig";
+import GlobalUnit from "./GlobalUnit";
 
 export default class AnimComponent extends Laya.Script{
     private _material: Laya.BlinnPhongMaterial;
@@ -78,6 +79,7 @@ export default class AnimComponent extends Laya.Script{
     }
 
     public onUpdate() {
+        if (GlobalUnit.game.pause) return;
         if (this._played) return;
         let dt = Laya.timer.delta * 0.001;
         this._cacheFrameTime += dt;

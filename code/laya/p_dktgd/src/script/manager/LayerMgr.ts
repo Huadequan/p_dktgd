@@ -1,21 +1,21 @@
-import Agent from "../logic/Agent";
+import ModelBase from "../logic/ModelBase";
 
-export default class AgentManager {
-    private static _instance: AgentManager;
+export default class LayerMgr {
+    private static _instance: LayerMgr;
     
-    public static get instance() : AgentManager {
+    public static get instance() : LayerMgr {
         if (!this._instance) {
-            this._instance = new AgentManager();
+            this._instance = new LayerMgr();
         }
         return this._instance; 
     }
 
-    protected list: Agent[];
+    protected list: ModelBase[];
     public InitLayer(){
         this.list = []; 
     }
     
-    public PushModel(model: Agent) {
+    public PushModel(model: ModelBase) {
         this.list.push(model);
     }
 
