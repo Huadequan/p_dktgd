@@ -18481,7 +18481,7 @@ class Agent {
                 }
                 continue;
             }
-            else if (s >= 0 && s < 1 && distSqLine <= radiusSq) {
+            else if (s >= 0 && s <= 1 && distSqLine <= radiusSq) {
                 /* Collision with obstacle segment. */
                 line.point = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
                 line.direction = obstacle1.unitDir.scale(-1);

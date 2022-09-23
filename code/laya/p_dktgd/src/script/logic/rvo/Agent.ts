@@ -103,7 +103,7 @@ export default class Agent {
           orcaLines.push(line)
         }
         continue
-      } else if (s >= 0 && s < 1 && distSqLine <= radiusSq) {
+      } else if (s >= 0 && s <= 1 && distSqLine <= radiusSq) {
         /* Collision with obstacle segment. */
         line.point = new Vector2D(0, 0)
         line.direction = obstacle1.unitDir.scale(-1)
