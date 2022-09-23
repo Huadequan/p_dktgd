@@ -11,7 +11,7 @@ export default class CameraControl {
 
     protected followPlayer() {
         let old = this._rootObj.transform.position;
-        let target = GlobalUnit.game.player.pos;
+        let target = GlobalUnit.game.player.originPos;
         old.x = target.x;
         old.y = target.y;
         this._rootObj.transform.position = old;

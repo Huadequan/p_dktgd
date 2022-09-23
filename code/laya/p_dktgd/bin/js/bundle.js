@@ -10164,8 +10164,8 @@ class CmpJoystick {
         this._cacheTouchId = event.touchId;
         this._imgHandleBg.setXY(event.stageX, event.stageY);
         this._isDragged = false;
-        this._imgHandleBg.visible = true;
-        this._imgHandleFront.visible = true;
+        // this._imgHandleBg.visible = true;
+        // this._imgHandleFront.visible = true;
     }
     _OnMouseMove(event) {
         if (!this.isPressed)
@@ -17087,15 +17087,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_AudioConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../config/AudioConfig */ "./src/script/config/AudioConfig.ts");
 /* harmony import */ var _config_EffectConfig__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../config/EffectConfig */ "./src/script/config/EffectConfig.ts");
 /* harmony import */ var _config_EggConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/EggConfig */ "./src/script/config/EggConfig.ts");
-/* harmony import */ var _config_GameConst__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/GameConst */ "./src/script/config/GameConst.ts");
-/* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
-/* harmony import */ var _config_PackConst__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/PackConst */ "./src/script/config/PackConst.ts");
-/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
-/* harmony import */ var _config_PushConfig__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config/PushConfig */ "./src/script/config/PushConfig.ts");
-/* harmony import */ var _config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../config/RewardCodeConfig */ "./src/script/config/RewardCodeConfig.ts");
-/* harmony import */ var _config_RollConfig__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../config/RollConfig */ "./src/script/config/RollConfig.ts");
-/* harmony import */ var _config_SignConfig__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../config/SignConfig */ "./src/script/config/SignConfig.ts");
-/* harmony import */ var _config_TryItemConfig__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../config/TryItemConfig */ "./src/script/config/TryItemConfig.ts");
+/* harmony import */ var _config_EnemyConfig__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/EnemyConfig */ "./src/script/config/EnemyConfig.ts");
+/* harmony import */ var _config_GameConst__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../config/GameConst */ "./src/script/config/GameConst.ts");
+/* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
+/* harmony import */ var _config_PackConst__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../config/PackConst */ "./src/script/config/PackConst.ts");
+/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
+/* harmony import */ var _config_PushConfig__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../config/PushConfig */ "./src/script/config/PushConfig.ts");
+/* harmony import */ var _config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../config/RewardCodeConfig */ "./src/script/config/RewardCodeConfig.ts");
+/* harmony import */ var _config_RollConfig__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../config/RollConfig */ "./src/script/config/RollConfig.ts");
+/* harmony import */ var _config_SignConfig__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../config/SignConfig */ "./src/script/config/SignConfig.ts");
+/* harmony import */ var _config_TryItemConfig__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../config/TryItemConfig */ "./src/script/config/TryItemConfig.ts");
+
 
 
 
@@ -17117,15 +17119,16 @@ class AutoConfigSetter {
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_AudioConfig__WEBPACK_IMPORTED_MODULE_2__["AudioConfig"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_EffectConfig__WEBPACK_IMPORTED_MODULE_3__["EffectConfig"]);
         _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_EggConfig__WEBPACK_IMPORTED_MODULE_4__["EggConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_GameConst__WEBPACK_IMPORTED_MODULE_5__["GameConst"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_LevelConfig__WEBPACK_IMPORTED_MODULE_6__["LevelConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PackConst__WEBPACK_IMPORTED_MODULE_7__["PackConst"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PlayerConfig__WEBPACK_IMPORTED_MODULE_8__["PlayerConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PushConfig__WEBPACK_IMPORTED_MODULE_9__["PushConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_10__["RewardCodeConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RollConfig__WEBPACK_IMPORTED_MODULE_11__["RollConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_SignConfig__WEBPACK_IMPORTED_MODULE_12__["SignConfig"]);
-        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_TryItemConfig__WEBPACK_IMPORTED_MODULE_13__["TryItemConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_EnemyConfig__WEBPACK_IMPORTED_MODULE_5__["EnemyConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_GameConst__WEBPACK_IMPORTED_MODULE_6__["GameConst"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_LevelConfig__WEBPACK_IMPORTED_MODULE_7__["LevelConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PackConst__WEBPACK_IMPORTED_MODULE_8__["PackConst"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PlayerConfig__WEBPACK_IMPORTED_MODULE_9__["PlayerConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_PushConfig__WEBPACK_IMPORTED_MODULE_10__["PushConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RewardCodeConfig__WEBPACK_IMPORTED_MODULE_11__["RewardCodeConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_RollConfig__WEBPACK_IMPORTED_MODULE_12__["RollConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_SignConfig__WEBPACK_IMPORTED_MODULE_13__["SignConfig"]);
+        _LTGame_Config_ConfigManager__WEBPACK_IMPORTED_MODULE_0__["ConfigManager"].AddConfig(_config_TryItemConfig__WEBPACK_IMPORTED_MODULE_14__["TryItemConfig"]);
     }
 }
 
@@ -17310,11 +17313,9 @@ GameData.SAVE_NAME = 'p_game01.sav';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GlobalUnit; });
-/* harmony import */ var _logic_rvo_RVO_test__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../logic/rvo/RVO_test */ "./src/script/logic/rvo/RVO_test.ts");
-/* harmony import */ var _manager_DataManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../manager/DataManager */ "./src/script/manager/DataManager.ts");
-/* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
-/* harmony import */ var _manager_GameManager__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../manager/GameManager */ "./src/script/manager/GameManager.ts");
-
+/* harmony import */ var _manager_DataManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../manager/DataManager */ "./src/script/manager/DataManager.ts");
+/* harmony import */ var _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../manager/EffectManager */ "./src/script/manager/EffectManager.ts");
+/* harmony import */ var _manager_GameManager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../manager/GameManager */ "./src/script/manager/GameManager.ts");
 
 
 
@@ -17322,29 +17323,48 @@ class GlobalUnit {
     static InitAll(urls) {
         this.s3d = Laya.stage.addChildAt(new Laya.Scene3D(), 0);
         window['s3d'] = this.s3d;
-        this.dataManager = new _manager_DataManager__WEBPACK_IMPORTED_MODULE_1__["DataManager"]();
+        this.dataManager = new _manager_DataManager__WEBPACK_IMPORTED_MODULE_0__["DataManager"]();
         this.dataManager.InitData();
-        this.game = new _manager_GameManager__WEBPACK_IMPORTED_MODULE_3__["default"]();
+        this.game = new _manager_GameManager__WEBPACK_IMPORTED_MODULE_2__["default"]();
         this.game.PreLoad(urls);
         window['GlobalUnit'] = this;
     }
     static ResetScene(scene) {
         if (this.s3d != null && !this.s3d.destroyed) {
-            _manager_EffectManager__WEBPACK_IMPORTED_MODULE_2__["EffectManager"].instance.UnloadScene();
+            _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__["EffectManager"].instance.UnloadScene();
             this.s3d.destroy();
         }
         this.s3d = scene;
         Laya.stage.addChildAt(this.s3d, 0);
-        _manager_EffectManager__WEBPACK_IMPORTED_MODULE_2__["EffectManager"].instance.ReAddScene();
+        _manager_EffectManager__WEBPACK_IMPORTED_MODULE_1__["EffectManager"].instance.ReAddScene();
         window['s3d'] = this.s3d;
     }
     static FirstCreate() {
         return __awaiter(this, void 0, void 0, function* () {
             this.game.CreateGame();
-            new _logic_rvo_RVO_test__WEBPACK_IMPORTED_MODULE_0__["default"]();
+            // new RVO_test();
         });
     }
 }
+
+
+/***/ }),
+
+/***/ "./src/script/common/LayerDefine.ts":
+/*!******************************************!*\
+  !*** ./src/script/common/LayerDefine.ts ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LayerDefine; });
+class LayerDefine {
+}
+LayerDefine.player = Math.pow(2, 1);
+LayerDefine.enemy = Math.pow(2, 2);
+LayerDefine.obstacle = Math.pow(2, 3);
 
 
 /***/ }),
@@ -17375,6 +17395,13 @@ class ResDefine {
             return null;
         }
         return "res/export/Conventional/" + scenePath + ".ls";
+    }
+    static FixRefreshJson(jsonPath) {
+        if (_LTGame_LTUtils_StringEx__WEBPACK_IMPORTED_MODULE_0__["default"].IsNullOrEmpty(jsonPath)) {
+            console.error("传入参数为空");
+            return null;
+        }
+        return "res/json/" + jsonPath + ".json";
     }
 }
 
@@ -17465,6 +17492,28 @@ var EggConfig;
     EggConfig.isConst = false;
     EggConfig.path = "res/config/EggConfig.json";
 })(EggConfig || (EggConfig = {}));
+
+
+/***/ }),
+
+/***/ "./src/script/config/EnemyConfig.ts":
+/*!******************************************!*\
+  !*** ./src/script/config/EnemyConfig.ts ***!
+  \******************************************/
+/*! exports provided: EnemyConfig */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyConfig", function() { return EnemyConfig; });
+var EnemyConfig;
+(function (EnemyConfig) {
+    class config {
+    }
+    EnemyConfig.config = config;
+    EnemyConfig.isConst = false;
+    EnemyConfig.path = "res/config/EnemyConfig.json";
+})(EnemyConfig || (EnemyConfig = {}));
 
 
 /***/ }),
@@ -17686,7 +17735,7 @@ class CameraControl {
     }
     followPlayer() {
         let old = this._rootObj.transform.position;
-        let target = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_0__["default"].game.player.pos;
+        let target = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_0__["default"].game.player.originPos;
         old.x = target.x;
         old.y = target.y;
         this._rootObj.transform.position = old;
@@ -17763,7 +17812,7 @@ class MapControl {
         }
     }
     _GetMapPos() {
-        let pos = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.player.pos;
+        let pos = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.player.originPos;
         let x = Math.floor(Math.abs(pos.x) / this._rect.x) * (pos.x < 0 ? -1 : 1);
         let y = Math.floor(Math.abs(pos.y) / this._rect.y) * (pos.y < 0 ? -1 : 1);
         return [x, y];
@@ -17829,33 +17878,165 @@ class MapControl {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ModelBase; });
 /* harmony import */ var _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/AnimComponent */ "./src/script/common/AnimComponent.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../config/AnimFrameConfig */ "./src/script/config/AnimFrameConfig.ts");
+/* harmony import */ var _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../config/AnimFrameConfig */ "./src/script/config/AnimFrameConfig.ts");
+/* harmony import */ var _manager_LayerMgr__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../manager/LayerMgr */ "./src/script/manager/LayerMgr.ts");
+/* harmony import */ var _rvo_RVOHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./rvo/RVOHelper */ "./src/script/logic/rvo/RVOHelper.ts");
+
 
 
 
 class ModelBase {
     constructor() {
-        this.layerIndex = 1;
-        this.dirVec = new Laya.Vector2();
-        this.linearVelocity = 0;
+        this.layerIndex = 0;
     }
     get depth() {
-        return this.layerObj.transform.position.y;
+        return this.root.transform.position.y;
+    }
+    get originPos() {
+        return this.colliderObj.transform.position;
     }
     Inited(id) {
-        let config = _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_2__["AnimFrameConfig"].data[id];
+        _manager_LayerMgr__WEBPACK_IMPORTED_MODULE_2__["default"].instance.PushModel(this);
+        this.colliderOffset = new Laya.Vector2();
+        let localPos = this.colliderObj.transform.localPosition;
+        this.colliderOffset.setValue(localPos.x, localPos.y);
+        let config = _config_AnimFrameConfig__WEBPACK_IMPORTED_MODULE_1__["AnimFrameConfig"].data[id];
+        this.skin.meshRenderer.sharedMaterial = this.skin.meshRenderer.sharedMaterial.clone();
         this.animCmp = new _common_AnimComponent__WEBPACK_IMPORTED_MODULE_0__["default"](this.skin, config);
         this.skin.addComponentIntance(this.animCmp);
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.level.layerObj.addChild(this.root);
     }
     OnUpdate(dt) {
         if (this.root.destroyed)
             return;
+        // this.UpdateDepth();
         this.DoUpdate(dt);
+    }
+    CreateAgent() {
+        this.agent = _rvo_RVOHelper__WEBPACK_IMPORTED_MODULE_3__["default"].instance.CreateAgent(this.colliderObj);
+    }
+    UpdateDepth() {
+        this.root.transform.localPositionZ = -0.1 * this.layerIndex;
     }
     DoUpdate(dt) {
     }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/enemy/EnemyBase.ts":
+/*!*********************************************!*\
+  !*** ./src/script/logic/enemy/EnemyBase.ts ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EnemyBase; });
+/* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _common_LayerDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/LayerDefine */ "./src/script/common/LayerDefine.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _level_ViewLevel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
+/* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
+/* harmony import */ var _rvo_RVOMath__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../rvo/RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
+/* harmony import */ var _rvo_Vector2D__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../rvo/Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+
+
+
+
+
+
+
+
+
+class EnemyBase extends _ModelBase__WEBPACK_IMPORTED_MODULE_6__["default"] {
+    constructor(config, data) {
+        super();
+        this.config = config;
+        this.refreshData = data;
+        this.CreateModel();
+        this.InitAgent();
+    }
+    InitAgent() {
+        this.CreateAgent();
+        this.agent.maxSpeed = this.config.move_speed;
+        this.agent.colliderGroup = _common_LayerDefine__WEBPACK_IMPORTED_MODULE_3__["default"].enemy;
+        this.agent.colliderMask = _common_LayerDefine__WEBPACK_IMPORTED_MODULE_3__["default"].obstacle;
+    }
+    CreateModel() {
+        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_1__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath(this.config.model_path));
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.level.layerObj.addChild(this.root);
+        this.colliderObj = this.root.getChildByName("colliders");
+        this.skin = _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__["LTUtils"].FindChild(this.root, this.config.skin_path);
+        this.Inited(this.config.anim_id);
+    }
+    SetPos(x, y) {
+        this.agent.position.setXY(x, y);
+        this.SyncPos();
+    }
+    UpdateMoveParames(dt) {
+        let type = this.refreshData.moveType;
+        switch (type) {
+            case _level_ViewLevel__WEBPACK_IMPORTED_MODULE_5__["EMoveType"].ToPlayer:
+                let pos = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.player.originPos;
+                let goal = _rvo_Vector2D__WEBPACK_IMPORTED_MODULE_8__["default"].cacheVec2;
+                goal.setXY(pos.x, pos.y);
+                let v = _rvo_RVOMath__WEBPACK_IMPORTED_MODULE_7__["default"].normalize(goal.minus(this.agent.position));
+                this.agent.prefVelocity.setXY(v.x, v.y);
+                break;
+        }
+    }
+    SyncPos() {
+        let old = this.root.transform.position;
+        let newPos = this.agent.position;
+        this.root.transform.localScaleX = newPos.x > old.x ? -1 : 1;
+        old.x = newPos.x + this.colliderOffset.x;
+        old.y = newPos.y - this.colliderOffset.y;
+        this.root.transform.position = old;
+    }
+    DoUpdate(dt) {
+        this.SyncPos();
+        this.UpdateMoveParames(dt);
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/enemy/EnemyType.ts":
+/*!*********************************************!*\
+  !*** ./src/script/logic/enemy/EnemyType.ts ***!
+  \*********************************************/
+/*! exports provided: EnemyType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyType", function() { return EnemyType; });
+var EnemyType;
+(function (EnemyType) {
+    EnemyType[EnemyType["Default"] = 1] = "Default";
+})(EnemyType || (EnemyType = {}));
+
+
+/***/ }),
+
+/***/ "./src/script/logic/enemy/Enemy_1.ts":
+/*!*******************************************!*\
+  !*** ./src/script/logic/enemy/Enemy_1.ts ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Enemy_1; });
+/* harmony import */ var _EnemyBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EnemyBase */ "./src/script/logic/enemy/EnemyBase.ts");
+
+class Enemy_1 extends _EnemyBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 }
 
 
@@ -17865,40 +18046,119 @@ class ModelBase {
 /*!*********************************************!*\
   !*** ./src/script/logic/level/ViewLevel.ts ***!
   \*********************************************/
-/*! exports provided: default */
+/*! exports provided: ERefreshType, EMoveType, RefreshData, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ERefreshType", function() { return ERefreshType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMoveType", function() { return EMoveType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RefreshData", function() { return RefreshData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewLevel; });
-/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
-/* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _config_EnemyConfig__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../config/EnemyConfig */ "./src/script/config/EnemyConfig.ts");
+/* harmony import */ var _config_LevelConfig__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../config/LevelConfig */ "./src/script/config/LevelConfig.ts");
+/* harmony import */ var _enemy_EnemyType__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../enemy/EnemyType */ "./src/script/logic/enemy/EnemyType.ts");
+/* harmony import */ var _enemy_Enemy_1__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../enemy/Enemy_1 */ "./src/script/logic/enemy/Enemy_1.ts");
 
 
 
 
+
+
+
+
+/** 刷新方式 */
+var ERefreshType;
+(function (ERefreshType) {
+    /** 以玩家为原心 范围内旋转 */
+    ERefreshType[ERefreshType["Player_Circle"] = 0] = "Player_Circle";
+})(ERefreshType || (ERefreshType = {}));
+var EMoveType;
+(function (EMoveType) {
+    EMoveType[EMoveType["ToPlayer"] = 0] = "ToPlayer";
+    EMoveType[EMoveType["ToVec2"] = 1] = "ToVec2";
+})(EMoveType || (EMoveType = {}));
+class RefreshData {
+}
 class ViewLevel {
     SetLevelId(id) {
-        this.config = _config_LevelConfig__WEBPACK_IMPORTED_MODULE_3__["LevelConfig"].data[id];
+        this.config = _config_LevelConfig__WEBPACK_IMPORTED_MODULE_5__["LevelConfig"].data[id];
     }
     PreLoad(urls) {
-        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixScene(this.config.model_path));
-        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixPath(this.config.map_path));
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixRefreshJson(this.config.refresh_path));
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixScene(this.config.model_path));
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(this.config.map_path));
+        for (let i = 0; i < this.config.enemy_list.length; i++) {
+            let enemyConfig = _config_EnemyConfig__WEBPACK_IMPORTED_MODULE_4__["EnemyConfig"].data[this.config.enemy_list[i]];
+            urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(enemyConfig.model_path));
+        }
     }
     CreateLevel() {
-        let s3d = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_0__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixScene(this.config.model_path));
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].ResetScene(s3d);
+        let s3d = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_1__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixScene(this.config.model_path));
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].ResetScene(s3d);
         let layer = new Laya.Sprite3D("layerContent");
         s3d.addChild(layer);
         this.layerObj = layer;
         let camera = s3d.getChildByName("camera_obj");
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.camera.InitCamera(camera);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.camera.InitCamera(camera);
         let start = s3d.getChildByName("__start__");
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.player.CreatePlayer(start);
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.player.CreatePlayer(start);
         let map = s3d.getChildByName("__map__");
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_1__["default"].game.map.InitMapData(map, _common_ResDefine__WEBPACK_IMPORTED_MODULE_2__["default"].FixPath(this.config.map_path));
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.map.InitMapData(map, _common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixPath(this.config.map_path));
+        this._refreshIndex = 0;
+        this.refreshConfig = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_1__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_3__["default"].FixRefreshJson(this.config.refresh_path), true);
+        this._enemyList = [];
+    }
+    _RefreshEnemy() {
+        let config = this.refreshConfig[this._refreshIndex];
+        if (!config)
+            return;
+        let time = config.refreshTime;
+        if (_common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.time >= time) {
+            this._AddEnemyList(config);
+            this._refreshIndex++;
+        }
+    }
+    _AddEnemyList(data) {
+        console.log("刷新敌人: ", data);
+        this._AddEnemy(data, 0);
+    }
+    _AddEnemy(data, count) {
+        let id = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].RandomFromArray(data.enemyIds);
+        let config = _config_EnemyConfig__WEBPACK_IMPORTED_MODULE_4__["EnemyConfig"].data[id];
+        let enemy;
+        switch (config.enemy_type) {
+            case _enemy_EnemyType__WEBPACK_IMPORTED_MODULE_6__["EnemyType"].Default:
+                enemy = new _enemy_Enemy_1__WEBPACK_IMPORTED_MODULE_7__["default"](config, data);
+                break;
+        }
+        this._enemyList.push(enemy);
+        let origin = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.player.originPos;
+        if (data.refreshType == ERefreshType.Player_Circle) {
+            let angle = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Random(0, 360);
+            let radius = 3;
+            let x = origin.x + Math.cos(angle * Math.PI / 180) * radius;
+            let y = origin.z + Math.sin(angle * Math.PI / 180) * radius;
+            enemy.SetPos(x, y);
+        }
+        count++;
+        if (count < data.enemyCount) {
+            let time = data.duration / data.enemyCount;
+            Laya.timer.once(time * 1000, this, this._AddEnemy, [data, count]);
+        }
+    }
+    LogicUpdate(dt) {
+        this._RefreshEnemy();
+        this._UpdateEnemyLogic(dt);
+    }
+    _UpdateEnemyLogic(dt) {
+        for (let i = 0; i < this._enemyList.length; i++) {
+            this._enemyList[i].OnUpdate(dt);
+        }
     }
 }
 
@@ -18051,14 +18311,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
 /* harmony import */ var _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/LTUtils/TransformEx */ "./src/LTGame/LTUtils/TransformEx.ts");
 /* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
-/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
-/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
-/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
-/* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
-/* harmony import */ var _EPlayerState__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./EPlayerState */ "./src/script/logic/player/EPlayerState.ts");
-/* harmony import */ var _PlayerStateDead__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PlayerStateDead */ "./src/script/logic/player/PlayerStateDead.ts");
-/* harmony import */ var _PlayerStateIdle__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PlayerStateIdle */ "./src/script/logic/player/PlayerStateIdle.ts");
-/* harmony import */ var _PlayerStateMove__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./PlayerStateMove */ "./src/script/logic/player/PlayerStateMove.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
+/* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
+/* harmony import */ var _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../config/PlayerConfig */ "./src/script/config/PlayerConfig.ts");
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
+/* harmony import */ var _EPlayerState__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./EPlayerState */ "./src/script/logic/player/EPlayerState.ts");
+/* harmony import */ var _PlayerStateDead__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./PlayerStateDead */ "./src/script/logic/player/PlayerStateDead.ts");
+/* harmony import */ var _PlayerStateIdle__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./PlayerStateIdle */ "./src/script/logic/player/PlayerStateIdle.ts");
+/* harmony import */ var _PlayerStateMove__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./PlayerStateMove */ "./src/script/logic/player/PlayerStateMove.ts");
 
 
 
@@ -18071,41 +18332,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_7__["default"] {
+
+class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_8__["default"] {
     get fsm() {
         return this._fsm;
     }
-    get pos() {
-        return this.root.transform.position;
-    }
     SetPlayerId(id) {
-        this.config = _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_5__["PlayerConfig"].data[id];
+        this.config = _config_PlayerConfig__WEBPACK_IMPORTED_MODULE_6__["PlayerConfig"].data[id];
     }
     PreLoad(urls) {
-        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath(this.config.model_path));
+        urls.push(_common_ResDefine__WEBPACK_IMPORTED_MODULE_5__["default"].FixPath(this.config.model_path));
     }
     CreatePlayer(point) {
-        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath(this.config.model_path));
+        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_3__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_5__["default"].FixPath(this.config.model_path));
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_4__["default"].game.level.layerObj.addChild(this.root);
         this.skin = _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_1__["LTUtils"].FindChild(this.root, this.config.skin_path);
-        this.layerObj = this.root.getChildByName("__layerSign__");
+        this.colliderObj = this.root.getChildByName("colliders");
         _LTGame_LTUtils_TransformEx__WEBPACK_IMPORTED_MODULE_2__["TransformEx"].CopyTrans(this.root.transform, point.transform);
-        this.Inited(this.config.id);
+        this.Inited(this.config.anim_id);
         this._InitState();
     }
     _InitState() {
+        this.dirVec = new Laya.Vector2();
+        this.linearVelocity = 0;
         this._fsm = new _LTGame_Fsm_StateMachine__WEBPACK_IMPORTED_MODULE_0__["default"]();
-        this._fsm.Add(new _PlayerStateIdle__WEBPACK_IMPORTED_MODULE_10__["default"](this));
-        this._fsm.Add(new _PlayerStateMove__WEBPACK_IMPORTED_MODULE_11__["default"](this));
-        this._fsm.Add(new _PlayerStateDead__WEBPACK_IMPORTED_MODULE_9__["default"](this));
-        this._fsm.ChangeState(_EPlayerState__WEBPACK_IMPORTED_MODULE_8__["EPlayerState"].Idle);
+        this._fsm.Add(new _PlayerStateIdle__WEBPACK_IMPORTED_MODULE_11__["default"](this));
+        this._fsm.Add(new _PlayerStateMove__WEBPACK_IMPORTED_MODULE_12__["default"](this));
+        this._fsm.Add(new _PlayerStateDead__WEBPACK_IMPORTED_MODULE_10__["default"](this));
+        this._fsm.ChangeState(_EPlayerState__WEBPACK_IMPORTED_MODULE_9__["EPlayerState"].Idle);
     }
     DoMove(dt) {
-        let CmpJoy = _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_6__["UI_FightMediator"].instance.CmpJoy;
+        let CmpJoy = _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_7__["UI_FightMediator"].instance.CmpJoy;
         this.dirVec = CmpJoy.dirVec2;
         this.linearVelocity = this.config.move_speed * dt;
-        this.pos.x -= this.dirVec.x * this.linearVelocity;
-        this.pos.y -= this.dirVec.y * this.linearVelocity;
-        this.root.transform.position = this.pos;
+        this.root.transform.position.x -= this.dirVec.x * this.linearVelocity;
+        this.root.transform.position.y -= this.dirVec.y * this.linearVelocity;
+        this.root.transform.position = this.root.transform.position;
         this.UpdateActor();
     }
     UpdateActor() {
@@ -18146,21 +18408,21 @@ __webpack_require__.r(__webpack_exports__);
 class Agent {
     constructor() {
         this.id = 0;
-        this.agentNeighbors = []; //  new List<KeyValuePair<float, Agent>>()
+        this._agentNeighbors = []; //  new List<KeyValuePair<float, Agent>>()
         this.maxNeighbors = 0;
-        this.maxSpeed = 0.0;
-        this.neighborDist = 0.0;
+        this.maxSpeed = 0;
+        this.neighborDist = 0;
         this.obstaclNeighbors = []; // new List<KeyValuePair<float, Obstacle>>()
         this.orcaLines = [];
-        this.radius = 0.0;
-        this.timeHorizon = 0.0;
-        this.timeHorizonObst = 0.0;
+        this.radius = 0;
+        this.timeHorizon = 0;
+        this.timeHorizonObst = 0;
     }
     computeNeighbors() {
         this.obstaclNeighbors = [];
         var rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.timeHorizonObst * this.maxSpeed + this.radius);
         this.simulator.kdTree.computeObstacleNeighbors(this, rangeSq);
-        this.agentNeighbors = [];
+        this._agentNeighbors = [];
         if (this.maxNeighbors > 0) {
             rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.neighborDist);
             this.simulator.kdTree.computeAgentNeighbors(this, rangeSq);
@@ -18168,9 +18430,10 @@ class Agent {
     }
     /* Search for the best new velocity. */
     computeNewVelocity() {
-        this.orcaLines.length = 0;
-        let orcaLines = this.orcaLines;
-        const invTimeHorizonObst = 1.0 / this.timeHorizonObst;
+        // this.orcaLines.length = 0;
+        let orcaLines = this.orcaLines = [];
+        // const invTimeHorizonObst = this.timeHorizonObst;
+        const invTimeHorizonObst = 1 / this.timeHorizonObst;
         /* Create obstacle ORCA lines. */
         for (var i = 0; i < this.obstaclNeighbors.length; ++i) {
             let obstacle1 = this.obstaclNeighbors[i].value;
@@ -18360,10 +18623,11 @@ class Agent {
             }
         }
         var numObstLines = orcaLines.length;
+        // var invTimeHorizon = this.timeHorizon
         var invTimeHorizon = 1.0 / this.timeHorizon;
         /* Create agent ORCA lines. */
-        for (var i = 0; i < this.agentNeighbors.length; ++i) {
-            var other = this.agentNeighbors[i].value;
+        for (var i = 0; i < this._agentNeighbors.length; ++i) {
+            var other = this._agentNeighbors[i].value;
             let relativePosition = other.position.minus(this.position);
             let relativeVelocity = this.velocity.minus(other.velocity);
             let distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition);
@@ -18404,7 +18668,8 @@ class Agent {
             }
             else {
                 /* Collision. Project on cut-off circle of time timeStep. */
-                let invTimeStep = 1.0 / this.simulator.timeStep;
+                // let invTimeStep = 1.0 / this.simulator.timeStep;
+                let invTimeStep = this.simulator.timeStep;
                 /* Vector from cutoff center to relative velocity. */
                 const w = relativeVelocity.minus(relativePosition.scale(invTimeStep));
                 let wLength = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].abs(w);
@@ -18424,17 +18689,17 @@ class Agent {
         if (this != agent) {
             var distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.position.minus(agent.position));
             if (distSq < rangeSq) {
-                if (this.agentNeighbors.length < this.maxNeighbors) {
-                    this.agentNeighbors.push(new KeyValuePair(distSq, agent));
+                if (this._agentNeighbors.length < this.maxNeighbors) {
+                    this._agentNeighbors.push(new KeyValuePair(distSq, agent));
                 }
-                var i = this.agentNeighbors.length - 1;
-                while (i != 0 && distSq < this.agentNeighbors[i - 1].key) {
-                    this.agentNeighbors[i] = this.agentNeighbors[i - 1];
+                var i = this._agentNeighbors.length - 1;
+                while (i != 0 && distSq < this._agentNeighbors[i - 1].key) {
+                    this._agentNeighbors[i] = this._agentNeighbors[i - 1];
                     --i;
                 }
-                this.agentNeighbors[i] = new KeyValuePair(distSq, agent);
-                if (this.agentNeighbors.length == this.maxNeighbors) {
-                    rangeSq = this.agentNeighbors[this.agentNeighbors.length - 1].key;
+                this._agentNeighbors[i] = new KeyValuePair(distSq, agent);
+                if (this._agentNeighbors.length == this.maxNeighbors) {
+                    rangeSq = this._agentNeighbors[this._agentNeighbors.length - 1].key;
                 }
             }
         }
@@ -18454,8 +18719,10 @@ class Agent {
     }
     update() {
         // var rnd = new Vector2D(Math.random() * 0.1 - 0.05, Math.random() * 0.1 - 0.05)
+        var rnd = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
         // this.velocity = this.newVelocity.plus(rnd)
-        this.velocity = this._newVelocity;
+        this.velocity = this._newVelocity.plus(rnd);
+        // this.position = this.position.plus(this.velocity.scale(this.maxSpeed * this.simulator.timeStep));
         this.position = this.position.plus(this._newVelocity.scale(this.simulator.timeStep));
     }
     _linearProgram1(lines, lineNo, radius, optVelocity, directionOpt) {
@@ -18565,7 +18832,7 @@ class Agent {
                     let determinant = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[j].direction);
                     if (Math.abs(determinant) <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
                         /* Line i and line j are parallel. */
-                        if (lines[i].direction.multiply(lines[j].direction) > 0.0) {
+                        if (lines[i].direction.multiply(lines[j].direction) > 0) {
                             /* Line i and line j point in the same direction. */
                             continue;
                         }
@@ -18624,7 +18891,6 @@ class KdTree {
         this.MAXLEAF_SIZE = 100;
         this.agents = [];
         this.agentTree = [];
-        this.obstacleTree = new ObstacleTreeNode();
     }
     buildAgentTree() {
         if (this.agents.length != this.simulator.getNumAgents()) {
@@ -18998,89 +19264,78 @@ class Obstacle {
 
 /***/ }),
 
-/***/ "./src/script/logic/rvo/RVODebug.ts":
-/*!******************************************!*\
-  !*** ./src/script/logic/rvo/RVODebug.ts ***!
-  \******************************************/
+/***/ "./src/script/logic/rvo/RVOHelper.ts":
+/*!*******************************************!*\
+  !*** ./src/script/logic/rvo/RVOHelper.ts ***!
+  \*******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVODebug; });
-class RVODebug {
-    static get ins() {
-        if (!this._ins) {
-            this._ins = new RVODebug();
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVOHelper; });
+/* harmony import */ var _Simulator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Simulator */ "./src/script/logic/rvo/Simulator.ts");
+/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+
+
+class RVOHelper {
+    static get instance() {
+        if (!this._instance) {
+            this._instance = new RVOHelper();
         }
-        return this._ins;
+        return this._instance;
     }
-    start(simulaor) {
-        this.simulaor = simulaor;
-        let sprite = new Laya.Sprite();
-        Laya.stage.addChild(sprite);
-        this.sprite = sprite;
-        this.sprite.width = Laya.stage.width;
-        this.sprite.height = Laya.stage.height;
-        this.sprite.graphics.drawRect(0, 0, Laya.stage.width, Laya.stage.height, "#006666");
-        let temp = new Laya.Sprite();
-        this.sprite.addChild(temp);
-        temp.width = Laya.stage.width;
-        temp.height = Laya.stage.height;
-        this.graphics = temp.graphics;
-        this.sprite.on(Laya.Event.MOUSE_DOWN, this, this.ClickStart);
-        this.sprite.on(Laya.Event.CLICK, this, this.ClickOver);
-        this.sprite.on(Laya.Event.MOUSE_MOVE, this, this.ClickMove);
+    InitRVO() {
+        this._simulator = new _Simulator__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        this._simulator.setTimeStep(1);
+        this._simulator.setAgentDefaults(
+        //在寻找周围邻居的搜索距离，这个值设置越大，会让小球在越远距离做出避障行为
+        0.6, // neighbor distance (min = radius * radius)
+        //寻找周围邻居的最大数目，这个值设置越大，最终计算的速度越 精确，但会加大计算量
+        100, // max neighbors
+        //计算动态的物体时的时间窗口
+        1, // time horizon
+        //代表计算静态的物体时的时间窗口，比如在RTS游戏中，小兵 向城墙移动时，没必要做出避障，这个值需要设置的很
+        1);
     }
-    ClickStart(event) {
-        console.log("点击");
-        for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
-            // let goal = new Vector2D(100, 100);
-            this.simulaor.setAgentGoal(i, event.stageX, event.stageY);
+    CreateAgent(colliderObj) {
+        let cmp = colliderObj.getComponent(Laya.PhysicsCollider);
+        if (!cmp) {
+            console.error("碰撞体错误");
+            return;
         }
+        let shape = cmp.colliderShape;
+        let radius = colliderObj.transform.localScale.x * shape.radius;
+        let pos = colliderObj.transform.position;
+        let vec2 = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](pos.x, pos.z);
+        return this._simulator.addAgent(vec2, radius);
     }
-    ClickMove(event) {
-        for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
-            // let goal = new Vector2D(100, 100);
-            this.simulaor.setAgentGoal(i, event.stageX, event.stageY);
-        }
+    CreateObstacle() {
     }
-    ClickOver(event) {
-        console.log("松开");
-        for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
-            // this.simulaor.setAgentPrefVelocity(i, 0,0);
-            let goal = this.simulaor.getAgentPosition(i);
-            this.simulaor.setAgentGoal(i, goal.x, goal.y);
+    Step(dt) {
+        let simulator = this._simulator;
+        simulator.timeStep = dt;
+        for (let i = 0; i < simulator.getNumAgents(); ++i) {
+            let agent = simulator.getAgent(i);
         }
-    }
-    Draw() {
-        this.graphics.clear();
-        let color = "#99CC33";
-        for (let i = 0; i < this.simulaor.getNumAgents(); ++i) {
-            let pos = this.simulaor.getAgentPosition(i);
-            let radius = this.simulaor.getAgentRadius(i);
-            this.graphics.drawCircle(pos.x, pos.y, radius, color, color, 2);
-        }
-        let obstacles = this.simulaor.getObstacles();
-        let convexs = [];
-        let rect = [];
-        for (let i = 0; i < obstacles.length; ++i) {
-            let obstacle = obstacles[i];
-            rect.push(obstacle.point.x);
-            rect.push(obstacle.point.y);
-            let next = obstacle.next;
-            if (next.id < obstacle.id) {
-                rect.push(next.point.x);
-                rect.push(next.point.y);
-                convexs.push(rect);
-                rect = [];
-            }
-        }
-        for (let i = 0; i < convexs.length; ++i) {
-            let rect = convexs[i];
-            this.graphics.drawPoly(0, 0, rect, color, color, 2);
-            // this.sprite.graphics.drawLines(0, 0, rect, color, 2);
-        }
+        // for (let i = 0; i < simulator.getNumAgents(); ++i) {
+        //     let agent = simulator.getAgent(i);
+        //     let goal = agent.goal;
+        //     if (RVOMath.distance(goal, agent.position) < RVOMath.RVO_EPSILON) {
+        //         // Agent is within one radius of its goal, set preferred velocity to zero
+        //         // simulator.setAgentPrefVelocity(i, 0, 0);
+        //         agent.prefVelocity.setXY(0,0);
+        //     } else {
+        //         // Agent is far away from its goal, set preferred velocity as unit vector towards agent's goal.
+        //         let v = RVOMath.normalize(goal.minus(agent.position)).scale(agent.maxSpeed);
+        //         // simulator.setAgentPrefVelocity(i, v.x, v.y);
+        //         agent.prefVelocity.setXY(v.x , v.y);
+        //     }
+        // }
+        simulator.run();
+        // if (simulator.reachedGoal()) {
+        //     console.log('finish')
+        // }
     }
 }
 
@@ -19119,6 +19374,9 @@ class RVOMath {
             return RVOMath.absSq(c.minus(a.plus(aux2.scale(r)))); // absSq(c - (a + r * (b - a)))
         }
     }
+    static distance(a, b) {
+        return RVOMath.absSq(a.minus(b));
+    }
     static sqr(p) {
         return p * p;
     }
@@ -19132,147 +19390,7 @@ class RVOMath {
         return RVOMath.det(a.minus(c), b.minus(a));
     }
 }
-RVOMath.RVO_EPSILON = 0.2;
-
-
-/***/ }),
-
-/***/ "./src/script/logic/rvo/RVO_test.ts":
-/*!******************************************!*\
-  !*** ./src/script/logic/rvo/RVO_test.ts ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVO_test; });
-/* harmony import */ var _Simulator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Simulator */ "./src/script/logic/rvo/Simulator.ts");
-/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
-/* harmony import */ var _RVODebug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RVODebug */ "./src/script/logic/rvo/RVODebug.ts");
-/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
-
-
-
-
-class RVO_test {
-    constructor() {
-        console.log("================================================");
-        console.log("RVO_test");
-        console.log("================================================");
-        this.simulator = new _Simulator__WEBPACK_IMPORTED_MODULE_0__["default"]();
-        let simulator = this.simulator;
-        simulator.setTimeStep(1);
-        simulator.setAgentDefaults(
-        //在寻找周围邻居的搜索距离，这个值设置越大，会让小球在越远距离做出避障行为
-        80, // neighbor distance (min = radius * radius)
-        //寻找周围邻居的最大数目，这个值设置越大，最终计算的速度越 精确，但会加大计算量
-        10, // max neighbors
-        //计算动态的物体时的时间窗口
-        100, // time horizon
-        //代表计算静态的物体时的时间窗口，比如在RTS游戏中，小兵 向城墙移动时，没必要做出避障，这个值需要设置的很
-        1, // time horizon obstacles
-        //代表计算ORCA时的小球的半径，这个值不一定与小球实际显示的半径 一样，偏小有利于小球移动顺畅
-        5, // agent radius
-        //小球最大速度值
-        2);
-        let counts = 100;
-        for (let i = 0; i < counts; i++) {
-            let x = 30 * Math.round(i / 5) - 50;
-            if (i < counts >> 1) {
-                x -= 100;
-            }
-            else {
-                x += 100;
-            }
-            let y = 30 * (i % 10) - 50;
-            y += Laya.stage.height / 2;
-            simulator.addAgent();
-            simulator.setAgentPosition(i, x, y);
-        }
-        for (let i = 0; i < simulator.getNumAgents(); i++) {
-            let goal = simulator.getAgentPosition(i).clone(); //.scale(-1);
-            if (i < counts >> 1) {
-                goal.x += 300;
-            }
-            else {
-                goal.x -= 300;
-            }
-            // let goal = new Vector2D(100, 100);
-            simulator.setAgentGoal(i, goal.x, goal.y);
-        }
-        let obstacle1 = [];
-        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-10, 40));
-        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-80, 40));
-        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-80, 10));
-        obstacle1.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](-10, 10));
-        for (let i = 0; i < obstacle1.length; i++) {
-            let pos = obstacle1[i];
-            pos.x += 300;
-            pos.y += 500;
-        }
-        simulator.addObstacle(obstacle1);
-        // let obstacle2: Vector2D[] = [];
-        // obstacle2.push(new Vector2D(50.0, 60));
-        // obstacle2.push(new Vector2D(30.0, 30));
-        // obstacle2.push(new Vector2D(50.0, -10));
-        // obstacle2.push(new Vector2D(80.0, 20));
-        // obstacle2.push(new Vector2D(70.0, 60));
-        // for (let i = 0; i < obstacle2.length; i++) {
-        //     let pos = obstacle2[i];
-        //     pos.x += 300;
-        //     pos.y += 800
-        // }
-        // simulator.addObstacle(obstacle2);
-        Laya.timer.once(2000, this, () => {
-            let obstacle3 = [];
-            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](100.0, -60.0));
-            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](40.0, -60.0));
-            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](40.0, -100.0));
-            obstacle3.push(new _Vector2D__WEBPACK_IMPORTED_MODULE_3__["default"](100.0, -100.0));
-            for (let i = 0; i < obstacle3.length; i++) {
-                let pos = obstacle3[i];
-                pos.x += 300;
-                pos.y += 800;
-            }
-            simulator.addObstacle(obstacle3);
-            simulator.processObstacles();
-        });
-        // let obstacle4: Vector2D[] = [];
-        // obstacle4.push(new Vector2D(-100.0, -60.0));
-        // obstacle4.push(new Vector2D(-100.0, -100.0));
-        // obstacle4.push(new Vector2D(-40.0, -100.0));
-        // obstacle4.push(new Vector2D(-40.0, -60.0));
-        // simulator.addObstacle(obstacle4);
-        simulator.processObstacles();
-        console.log(simulator);
-        _RVODebug__WEBPACK_IMPORTED_MODULE_2__["default"].ins.start(simulator);
-        Laya.timer.frameLoop(1, this, this.step);
-    }
-    step() {
-        let simulator = this.simulator;
-        for (let i = 0; i < simulator.getNumAgents(); ++i) {
-            if (_RVOMath__WEBPACK_IMPORTED_MODULE_1__["default"].absSq(simulator.getGoal(i).minus(simulator.getAgentPosition(i))) < _RVOMath__WEBPACK_IMPORTED_MODULE_1__["default"].RVO_EPSILON) {
-                // Agent is within one radius of its goal, set preferred velocity to zero
-                simulator.setAgentPrefVelocity(i, 0.0, 0.0);
-                // console.log('finish ' + i);
-            }
-            else {
-                // Agent is far away from its goal, set preferred velocity as unit vector towards agent's goal.
-                let v = _RVOMath__WEBPACK_IMPORTED_MODULE_1__["default"].normalize(simulator.getGoal(i).minus(simulator.getAgentPosition(i))).scale(simulator.agents[i].maxSpeed);
-                // let v = RVOMath.normalize(simulator.getGoal(i).minus(simulator.getAgentPosition(i))).scale(2);
-                simulator.setAgentPrefVelocity(i, v.x, v.y);
-            }
-        }
-        simulator.run();
-        _RVODebug__WEBPACK_IMPORTED_MODULE_2__["default"].ins.Draw();
-        // console.log(simulator)
-        if (simulator.reachedGoal()) {
-            Laya.timer.clear(this, this.step);
-            console.log('finish');
-        }
-    }
-}
+RVOMath.RVO_EPSILON = 5;
 
 
 /***/ }),
@@ -19292,8 +19410,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Agent */ "./src/script/logic/rvo/Agent.ts");
 /* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
 /* harmony import */ var _KdTree__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./KdTree */ "./src/script/logic/rvo/KdTree.ts");
-/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
-
 
 
 
@@ -19301,11 +19417,12 @@ __webpack_require__.r(__webpack_exports__);
 
 class Simulator {
     constructor() {
+        this.cacheAgentId = 0;
         this.agents = [];
         this.obstacles = [];
-        this.goals = [];
+        // private goals: Vector2D[] = [];
         this.kdTree = new _KdTree__WEBPACK_IMPORTED_MODULE_4__["default"]();
-        this.timeStep = 0.25;
+        this.timeStep = 1;
         this.time = 0;
         this.kdTree.simulator = this;
         this.kdTree.MAXLEAF_SIZE = 1000;
@@ -19315,6 +19432,9 @@ class Simulator {
     }
     getNumAgents() {
         return this.agents.length;
+    }
+    getAgent(i) {
+        return this.agents[i];
     }
     getTimeStep() {
         return this.timeStep;
@@ -19326,7 +19446,8 @@ class Simulator {
         this.agents[i].position.setXY(x, y);
     }
     setAgentGoal(i, x, y) {
-        this.goals[i].setXY(x, y);
+        // this.goals[i].setXY(x, y);
+        this.getAgent(i).goal.setXY(x, y);
     }
     setTimeStep(timeStep) {
         this.timeStep = timeStep;
@@ -19352,7 +19473,7 @@ class Simulator {
     getAgentMoveSpeed(i) {
         return this.agents[i].maxSpeed;
     }
-    addAgent(position = new _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"]()) {
+    addAgent(position = new _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"](), radius = 1) {
         if (!this.defaultAgent) {
             throw new Error("no default agent");
         }
@@ -19360,33 +19481,31 @@ class Simulator {
         agent.prefVelocity = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO.clone();
         agent.position = position;
         agent.maxNeighbors = this.defaultAgent.maxNeighbors;
-        agent.radius = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(5, 10);
-        // agent.radius = this.defaultAgent.radius;
-        agent.maxSpeed = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_5__["default"].Random(2, 5);
-        // agent.maxSpeed = this.defaultAgent.maxSpeed;
+        agent.radius = radius;
+        // agent.radius = MathEx.Random(5, 10);
+        agent.maxSpeed = 2;
+        // agent.maxSpeed = MathEx.Random(2,5);
         agent.neighborDist = this.defaultAgent.neighborDist;
         agent.timeHorizon = this.defaultAgent.timeHorizon;
         agent.timeHorizonObst = this.defaultAgent.timeHorizonObst;
         agent.velocity = this.defaultAgent.velocity;
         agent.simulator = this;
-        agent.id = this.agents.length;
+        agent.goal = position.clone();
+        agent.id = this.cacheAgentId++;
         this.agents.push(agent);
-        this.goals.push(position.clone());
-        return this.agents.length - 1;
+        // return this.agents.length - 1;
+        return agent;
     }
     //  /** float */ neighborDist, /** int */ maxNeighbors, /** float */ timeHorizon, /** float */ timeHorizonObst, /** float */ radius, /** float*/ maxSpeed, /** Vector2 */ velocity)
-    setAgentDefaults(neighborDist, maxNeighbors, timeHorizon, timeHorizonObst, radius, maxSpeed, velocityX = 0, velocityY = 0) {
+    setAgentDefaults(neighborDist, maxNeighbors, timeHorizon, timeHorizonObst) {
         if (!this.defaultAgent) {
             this.defaultAgent = new _Agent__WEBPACK_IMPORTED_MODULE_2__["default"]();
         }
         this.defaultAgent.maxNeighbors = maxNeighbors;
-        // this.defaultAgent.maxSpeed = MathEx.Random(2,5);
-        this.defaultAgent.maxSpeed = maxSpeed;
         this.defaultAgent.neighborDist = neighborDist;
-        this.defaultAgent.radius = radius;
         this.defaultAgent.timeHorizon = timeHorizon;
         this.defaultAgent.timeHorizonObst = timeHorizonObst;
-        this.defaultAgent.velocity = new _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"](velocityX, velocityY);
+        this.defaultAgent.velocity = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO.clone();
         this.defaultAgent.simulator = this;
     }
     run() {
@@ -19399,20 +19518,17 @@ class Simulator {
         this.time += this.timeStep;
     }
     reachedGoal() {
-        let pos;
         for (var i = 0, len = this.getNumAgents(); i < len; ++i) {
-            pos = this.getAgentPosition(i);
-            if (_RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].absSq(this.goals[i].minus(pos)) > _RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].RVO_EPSILON) {
+            let agent = this.getAgent(i);
+            let pos = agent.position;
+            if (_RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].absSq(agent.goal.minus(pos)) > _RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].RVO_EPSILON) {
                 return false;
             }
         }
         return true;
     }
-    addGoals(goals) {
-        this.goals = goals;
-    }
-    getGoal(goalNo) {
-        return this.goals[goalNo];
+    getGoal(i) {
+        return this.getAgent(i).goal;
     }
     /** 添加障碍 */
     addObstacle(vertices) {
@@ -19508,6 +19624,7 @@ class Vector2D {
     }
 }
 Vector2D.ZERO = new Vector2D();
+Vector2D.cacheVec2 = new Vector2D();
 
 
 /***/ }),
@@ -19883,9 +20000,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _logic_level_ViewLevel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../logic/level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
 /* harmony import */ var _logic_MapControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../logic/MapControl */ "./src/script/logic/MapControl.ts");
 /* harmony import */ var _logic_player_ViewPlayer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../logic/player/ViewPlayer */ "./src/script/logic/player/ViewPlayer.ts");
-/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
-/* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
-/* harmony import */ var _LayerMgr__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./LayerMgr */ "./src/script/manager/LayerMgr.ts");
+/* harmony import */ var _logic_rvo_RVOHelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../logic/rvo/RVOHelper */ "./src/script/logic/rvo/RVOHelper.ts");
+/* harmony import */ var _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../ui/UI_FightMediator */ "./src/script/ui/UI_FightMediator.ts");
+/* harmony import */ var _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../ui/UI_MainMediator */ "./src/script/ui/UI_MainMediator.ts");
+/* harmony import */ var _LayerMgr__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./LayerMgr */ "./src/script/manager/LayerMgr.ts");
+
 
 
 
@@ -19920,24 +20039,29 @@ class GameManager {
     }
     CreateGame() {
         this.state = _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready;
-        _LayerMgr__WEBPACK_IMPORTED_MODULE_9__["default"].instance.InitLayer();
+        _logic_rvo_RVOHelper__WEBPACK_IMPORTED_MODULE_7__["default"].instance.InitRVO();
+        _LayerMgr__WEBPACK_IMPORTED_MODULE_10__["default"].instance.InitLayer();
         this.level.CreateLevel();
+        this.time = 0;
     }
     StartGame() {
-        _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_8__["UI_MainMediator"].instance.Hide();
-        _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_7__["UI_FightMediator"].instance.Show();
+        _ui_UI_MainMediator__WEBPACK_IMPORTED_MODULE_9__["UI_MainMediator"].instance.Hide();
+        _ui_UI_FightMediator__WEBPACK_IMPORTED_MODULE_8__["UI_FightMediator"].instance.Show();
         this.state = _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Fight;
     }
     _LogicUpdate(dt) {
         if (this.pause)
             return;
+        this.time += dt;
         switch (this.state) {
             case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Ready:
                 break;
             case _common_EGameState__WEBPACK_IMPORTED_MODULE_1__["EGameState"].Fight:
+                _logic_rvo_RVOHelper__WEBPACK_IMPORTED_MODULE_7__["default"].instance.Step(dt);
                 this.player.OnUpdate(dt);
-                _LayerMgr__WEBPACK_IMPORTED_MODULE_9__["default"].instance.OnUpdate(dt);
                 this.map.UpdateMap();
+                this.level.LogicUpdate(dt);
+                _LayerMgr__WEBPACK_IMPORTED_MODULE_10__["default"].instance.OnUpdate(dt);
                 break;
         }
     }
@@ -19984,14 +20108,17 @@ class LayerMgr {
         let array = this.list;
         let len = this.list.length;
         for (let i = 0; i < len - 1; ++i) {
-            for (let j = i + 1; j < len - 1 - i; j++) {
-                if (array[j].depth > array[j + 1].depth) {
+            for (let j = 0; j < len - 1 - i; j++) {
+                if (array[j].depth < array[j + 1].depth) {
                     let temp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = temp;
-                    array[j].layerIndex = j;
                 }
             }
+        }
+        for (let i = 0; i < len; ++i) {
+            array[i].layerIndex = i;
+            array[i].UpdateDepth();
         }
     }
     OnUpdate(dt) {

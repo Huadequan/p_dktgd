@@ -3,6 +3,7 @@ import { AnimFrameConfig } from "../config/AnimFrameConfig";
 import { AudioConfig } from "../config/AudioConfig";
 import { EffectConfig } from "../config/EffectConfig";
 import { EggConfig } from "../config/EggConfig";
+import { EnemyConfig } from "../config/EnemyConfig";
 import { GameConst } from "../config/GameConst";
 import { LevelConfig } from "../config/LevelConfig";
 import { PackConst } from "../config/PackConst";
@@ -22,6 +23,7 @@ export class AutoConfigSetter {
         ConfigManager.AddConfig(AudioConfig);
         ConfigManager.AddConfig(EffectConfig);
         ConfigManager.AddConfig(EggConfig);
+        ConfigManager.AddConfig(EnemyConfig);
         ConfigManager.AddConfig(GameConst);
         ConfigManager.AddConfig(LevelConfig);
         ConfigManager.AddConfig(PackConst);

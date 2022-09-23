@@ -2,8 +2,8 @@
 import Vector2D from "./Vector2D";
 
 export default class RVOMath {
-  static RVO_EPSILON = 0.2;
-
+  static RVO_EPSILON = 5;
+ 
   static absSq(v: Vector2D) {
     return v.multiply(v);
   }
@@ -12,7 +12,7 @@ export default class RVOMath {
     return v.scale(1 / RVOMath.abs(v)) // v / abs(v)
   }
 
-  static distSqPointLineSegment(a, b, c) {
+  static distSqPointLineSegment(a: Vector2D, b: Vector2D, c: Vector2D) {
     var aux1 = c.minus(a);
     var aux2 = b.minus(a);
 
@@ -28,6 +28,10 @@ export default class RVOMath {
     }
   }
 
+  static distance(a: Vector2D, b: Vector2D): number {
+    return RVOMath.absSq(a.minus(b));
+  }
+
   static sqr(p: number): number {
     return p * p;
   }
@@ -36,7 +40,7 @@ export default class RVOMath {
     return v1.x * v2.y - v1.y * v2.x;
   }
 
-  static abs(v): number {
+  static abs(v: Vector2D): number {
     return Math.sqrt(RVOMath.absSq(v));
   }
 

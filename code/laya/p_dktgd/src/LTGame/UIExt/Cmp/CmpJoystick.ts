@@ -58,8 +58,8 @@ export class CmpJoystick {
  
         this._isDragged = false;
 
-        this._imgHandleBg.visible = true;
-        this._imgHandleFront.visible = true;
+        // this._imgHandleBg.visible = true;
+        // this._imgHandleFront.visible = true;
     }
 
     private _OnMouseMove(event: Laya.Event) {

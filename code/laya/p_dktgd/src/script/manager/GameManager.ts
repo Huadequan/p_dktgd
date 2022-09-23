@@ -5,6 +5,7 @@ import CameraControl from "../logic/CameraControl";
 import ViewLevel from "../logic/level/ViewLevel";
 import MapControl from "../logic/MapControl";
 import ViewPlayer from "../logic/player/ViewPlayer";
+import RVOHelper from "../logic/rvo/RVOHelper";
 import RVO_test from "../logic/rvo/RVO_test";
 import { UI_FightMediator } from "../ui/UI_FightMediator";
 import { UI_MainMediator } from "../ui/UI_MainMediator";
@@ -17,7 +18,7 @@ export default class GameManager {
     public state: EGameState;
     public map: MapControl;
     private _pause: boolean = false;
-
+    public time: number;
     public get pause() : boolean {
         return this._pause;
     }
@@ -46,8 +47,10 @@ export default class GameManager {
 
     public CreateGame() {
         this.state = EGameState.Ready;
+        RVOHelper.instance.InitRVO();
         LayerMgr.instance.InitLayer();
         this.level.CreateLevel();
+        this.time = 0;
     }
 
     public StartGame() {
@@ -58,14 +61,16 @@ export default class GameManager {
 
     private _LogicUpdate(dt: number): void {
         if (this.pause) return;
+        this.time += dt;
         switch(this.state) {
             case EGameState.Ready:
                 break;
             case EGameState.Fight:
-
+                RVOHelper.instance.Step(dt);
                 this.player.OnUpdate(dt);
-                LayerMgr.instance.OnUpdate(dt);
                 this.map.UpdateMap();
+                this.level.LogicUpdate(dt);
+                LayerMgr.instance.OnUpdate(dt);
                 break;
         }
     }

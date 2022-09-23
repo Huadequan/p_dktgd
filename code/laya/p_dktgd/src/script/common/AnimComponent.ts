@@ -12,7 +12,7 @@ export default class AnimComponent extends Laya.Script{
     private _played: boolean;
     private _completeCallBack: Laya.Handler;
     protected config: AnimFrameConfig.config;
-    constructor (skin: Laya.Sprite3D, config: AnimFrameConfig.config) {
+    constructor (skin: Laya.MeshSprite3D, config: AnimFrameConfig.config) {
         super();
        
         this.config = config;
@@ -20,7 +20,7 @@ export default class AnimComponent extends Laya.Script{
 
         this._cacheFrameTime = 0;
         this._frameIndex = 0;
-        this._material = (skin as Laya.MeshSprite3D).meshRenderer.sharedMaterial as Laya.BlinnPhongMaterial;
+        this._material = skin.meshRenderer.sharedMaterial as Laya.BlinnPhongMaterial;
         this.play(0);
     }
 

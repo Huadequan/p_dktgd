@@ -1,7 +1,7 @@
 export default class Vector2D {
 
   static ZERO: Vector2D = new Vector2D();
-
+  static cacheVec2: Vector2D = new Vector2D();
   x = 0;
   y = 0;
 
@@ -10,40 +10,40 @@ export default class Vector2D {
     this.y = y;
   }
 
-  plus(vector: Vector2D): Vector2D {
+  public plus(vector: Vector2D): Vector2D {
     return new Vector2D(this.x + vector.x, this.y + vector.y);
   }
 
   //subtract
-  minus(vector: Vector2D): Vector2D {
+  public minus(vector: Vector2D): Vector2D {
     return new Vector2D(this.x - vector.x, this.y - vector.y);
   }
 
-  multiply(vector: Vector2D): number {
+  public multiply(vector: Vector2D): number {
     return this.x * vector.x + this.y * vector.y;
   }
 
-  scale(k: number): Vector2D {
+  public scale(k: number): Vector2D {
     return new Vector2D(this.x * k, this.y * k);
   }
 
-  normalize(): Vector2D {
+  public normalize(): Vector2D {
     return this.scale(1 / this.abs());
   }
 
-  absSq(): number {
+  public absSq(): number {
     return this.multiply(this);
   }
 
-  abs(): number {
+  public abs(): number {
     return Math.sqrt(this.absSq());
   }
 
-  clone(): Vector2D {
+  public clone(): Vector2D {
     return new Vector2D(this.x, this.y);
   }
 
-  setXY(x: number, y: number){
+  public setXY(x: number, y: number){
     this.x = x;
     this.y = y;
   }

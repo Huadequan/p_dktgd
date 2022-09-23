@@ -16,14 +16,12 @@ import PlayerStateMove from "./PlayerStateMove";
 
 export default class ViewPlayer extends ModelBase{
     protected config: PlayerConfig.config;
+    public dirVec: Laya.Vector2;
+    public linearVelocity: number;
     private _fsm: StateMachine<PlayerBaseState>;
     
     public get fsm() : StateMachine<PlayerBaseState> {
         return this._fsm;
-    }
-    
-    public get pos(): Laya.Vector3 {
-        return this.root.transform.position;
     }
     
     public SetPlayerId(id: number) {
@@ -36,15 +34,19 @@ export default class ViewPlayer extends ModelBase{
 
     public CreatePlayer(point: Laya.Sprite3D) {
         this.root = LTRes.Get(ResDefine.FixPath(this.config.model_path));
+        GlobalUnit.game.level.layerObj.addChild(this.root);
         this.skin = LTUtils.FindChild(this.root, this.config.skin_path) as Laya.MeshSprite3D;
-        this.layerObj = this.root.getChildByName("__layerSign__") as Laya.Sprite3D;  
+        this.colliderObj = this.root.getChildByName("colliders") as Laya.Sprite3D;
         TransformEx.CopyTrans(this.root.transform, point.transform);
-        this.Inited(this.config.id);
+        this.Inited(this.config.anim_id);
 
         this._InitState();
     }
 
     private _InitState() {
+        this.dirVec = new Laya.Vector2();
+        this.linearVelocity = 0;
+
         this._fsm = new StateMachine<PlayerBaseState>();
         this._fsm.Add(new PlayerStateIdle(this));
         this._fsm.Add(new PlayerStateMove(this));
@@ -57,10 +59,10 @@ export default class ViewPlayer extends ModelBase{
         let CmpJoy = UI_FightMediator.instance.CmpJoy;
         this.dirVec = CmpJoy.dirVec2;
         this.linearVelocity = this.config.move_speed * dt;
-        this.pos.x -= this.dirVec.x * this.linearVelocity;
-        this.pos.y -= this.dirVec.y * this.linearVelocity;
+        this.root.transform.position.x -= this.dirVec.x * this.linearVelocity;
+        this.root.transform.position.y -= this.dirVec.y * this.linearVelocity;
 
-        this.root.transform.position = this.pos;
+        this.root.transform.position = this.root.transform.position;
         this.UpdateActor();
     }
 

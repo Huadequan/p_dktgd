@@ -9,13 +9,13 @@ import MathEx from "../../../LTGame/LTUtils/MathEx";
 
 
 export default class Simulator {
+  public cacheAgentId: number = 0;
+  public agents: Agent[] = [];
+  public obstacles: Obstacle[] = [];
+  // private goals: Vector2D[] = [];
+  public kdTree: KdTree = new KdTree();
 
-  agents: Agent[] = [];
-  obstacles: Obstacle[] = [];
-  private goals: Vector2D[] = [];
-  kdTree: KdTree = new KdTree();
-
-  timeStep = 0.25;
+  public timeStep = 1;
 
   private defaultAgent: Agent; // Agent
 
@@ -34,6 +34,10 @@ export default class Simulator {
     return this.agents.length;
   }
 
+  getAgent(i: number): Agent {
+    return this.agents[i];
+  }
+
   getTimeStep(): number {
     return this.timeStep;
   }
@@ -47,7 +51,8 @@ export default class Simulator {
   }
 
   setAgentGoal(i: number, x: number, y: number) {
-    this.goals[i].setXY(x, y);
+    // this.goals[i].setXY(x, y);
+    this.getAgent(i).goal.setXY(x, y);
   }
 
   setTimeStep(timeStep: number) {
@@ -82,7 +87,7 @@ export default class Simulator {
     return this.agents[i].maxSpeed;
   }
 
-  addAgent(position: Vector2D = new Vector2D()) {
+  addAgent(position: Vector2D = new Vector2D(), radius: number = 1): Agent {
     if (!this.defaultAgent) {
       throw new Error("no default agent");
     }
@@ -92,43 +97,45 @@ export default class Simulator {
     agent.position = position;
     agent.maxNeighbors = this.defaultAgent.maxNeighbors;
 
-    agent.radius = MathEx.Random(5, 10);
-    // agent.radius = this.defaultAgent.radius;
-    agent.maxSpeed = MathEx.Random(2,5);
-    // agent.maxSpeed = this.defaultAgent.maxSpeed;
+    agent.radius = radius;
+    // agent.radius = MathEx.Random(5, 10);
+   
+    agent.maxSpeed = 2;
+    // agent.maxSpeed = MathEx.Random(2,5);
+   
     agent.neighborDist = this.defaultAgent.neighborDist;
     agent.timeHorizon = this.defaultAgent.timeHorizon;
     agent.timeHorizonObst = this.defaultAgent.timeHorizonObst;
     agent.velocity = this.defaultAgent.velocity;
     agent.simulator = this;
+    agent.goal = position.clone()
 
-    agent.id = this.agents.length;
+    agent.id = this.cacheAgentId++;
     this.agents.push(agent);
-    this.goals.push(position.clone());
 
-    return this.agents.length - 1;
+    // return this.agents.length - 1;
+    return agent;
   }
 
   //  /** float */ neighborDist, /** int */ maxNeighbors, /** float */ timeHorizon, /** float */ timeHorizonObst, /** float */ radius, /** float*/ maxSpeed, /** Vector2 */ velocity)
-  setAgentDefaults(neighborDist: number,
+  setAgentDefaults(
+    neighborDist: number,
     maxNeighbors: number,
     timeHorizon: number,
     timeHorizonObst: number,
-    radius: number,
-    maxSpeed: number,
-    velocityX: number = 0, velocityY: number = 0) {
+   ) {
     if (!this.defaultAgent) {
       this.defaultAgent = new Agent();
     }
 
     this.defaultAgent.maxNeighbors = maxNeighbors;
-    // this.defaultAgent.maxSpeed = MathEx.Random(2,5);
-    this.defaultAgent.maxSpeed = maxSpeed;
+   
     this.defaultAgent.neighborDist = neighborDist;
-    this.defaultAgent.radius = radius;
+
     this.defaultAgent.timeHorizon = timeHorizon;
     this.defaultAgent.timeHorizonObst = timeHorizonObst;
-    this.defaultAgent.velocity = new Vector2D(velocityX, velocityY);
+    
+    this.defaultAgent.velocity = Vector2D.ZERO.clone();
     this.defaultAgent.simulator = this;
   }
 
@@ -145,22 +152,19 @@ export default class Simulator {
   }
 
   reachedGoal(): boolean {
-    let pos: Vector2D;
+
     for (var i = 0, len = this.getNumAgents(); i < len; ++i) {
-      pos = this.getAgentPosition(i);
-      if (RVOMath.absSq(this.goals[i].minus(pos)) > RVOMath.RVO_EPSILON) {
+      let agent = this.getAgent(i);
+      let pos = agent.position;
+      if (RVOMath.absSq(agent.goal.minus(pos)) > RVOMath.RVO_EPSILON) {
         return false;
       }
     }
     return true;
   }
 
-  addGoals(goals: Vector2D[]) {
-    this.goals = goals;
-  }
-
-  getGoal(goalNo: number): Vector2D {
-    return this.goals[goalNo];
+  getGoal(i: number): Vector2D {
+    return this.getAgent(i).goal;
   }
 
   /** 添加障碍 */

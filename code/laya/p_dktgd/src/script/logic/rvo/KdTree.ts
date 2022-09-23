@@ -6,15 +6,15 @@ import Obstacle from "./Obstacle";
 import Vector2D from "./Vector2D";
 
 export default class KdTree {
-  simulator: Simulator;
+  public simulator: Simulator;
 
-  MAXLEAF_SIZE = 100;
+  public MAXLEAF_SIZE: number = 100;
 
   private agents: Agent[] = [];
   private agentTree: AgentTreeNode[] = [];
-  private obstacleTree: ObstacleTreeNode = new ObstacleTreeNode();
+  private obstacleTree: ObstacleTreeNode;
 
-  buildAgentTree() {
+  public buildAgentTree() {
     if (this.agents.length != this.simulator.getNumAgents()) {
       this.agents = this.simulator.agents;
 

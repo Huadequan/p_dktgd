@@ -6,28 +6,35 @@ import Line from "./Line";
 
 export default class Agent {
   public id = 0;
+  
   public simulator: Simulator;
-  public agentNeighbors = []; //  new List<KeyValuePair<float, Agent>>()
+  private _agentNeighbors = []; //  new List<KeyValuePair<float, Agent>>()
   public maxNeighbors = 0;
-  public maxSpeed = 0.0;
-  public neighborDist = 0.0;
+  public maxSpeed = 0;
+  public neighborDist = 0;
   private _newVelocity: Vector2D;
   public obstaclNeighbors: KeyValuePair[] = []; // new List<KeyValuePair<float, Obstacle>>()
   public orcaLines: Line[] = [];
   public position: Vector2D;
   public prefVelocity: Vector2D;
  
-  public radius = 0.0;
-  public timeHorizon = 0.0;
-  public timeHorizonObst = 0.0;
+  public radius = 0;
+  public timeHorizon = 0;
+  public timeHorizonObst = 0;
   public velocity: Vector2D;
+  
+  /** deprecated */
+  public goal: Vector2D;
 
-  computeNeighbors() {
+  public colliderGroup: number;
+  public colliderMask: number;
+
+  public computeNeighbors() {
     this.obstaclNeighbors = [];
     var rangeSq = RVOMath.sqr(this.timeHorizonObst * this.maxSpeed + this.radius);
     this.simulator.kdTree.computeObstacleNeighbors(this, rangeSq);
 
-    this.agentNeighbors = [];
+    this._agentNeighbors = [];
     if (this.maxNeighbors > 0) {
       rangeSq = RVOMath.sqr(this.neighborDist);
       this.simulator.kdTree.computeAgentNeighbors(this, rangeSq);
@@ -35,10 +42,11 @@ export default class Agent {
   }
 
   /* Search for the best new velocity. */
-  computeNewVelocity() {
-    this.orcaLines.length = 0;
-    let orcaLines = this.orcaLines;
-    const invTimeHorizonObst = 1.0 / this.timeHorizonObst;
+  public computeNewVelocity() {
+    // this.orcaLines.length = 0;
+    let orcaLines = this.orcaLines = [];
+    // const invTimeHorizonObst = this.timeHorizonObst;
+    const invTimeHorizonObst = 1 / this.timeHorizonObst;
 
     /* Create obstacle ORCA lines. */
     for (var i = 0; i < this.obstaclNeighbors.length; ++i) {
@@ -255,11 +263,12 @@ export default class Agent {
 
     var numObstLines = orcaLines.length
 
+    // var invTimeHorizon = this.timeHorizon
     var invTimeHorizon = 1.0 / this.timeHorizon
 
     /* Create agent ORCA lines. */
-    for (var i = 0; i < this.agentNeighbors.length; ++i) {
-      var other = this.agentNeighbors[i].value
+    for (var i = 0; i < this._agentNeighbors.length; ++i) {
+      var other = this._agentNeighbors[i].value
 
       let relativePosition = other.position.minus(this.position)
       let relativeVelocity = this.velocity.minus(other.velocity)
@@ -305,8 +314,8 @@ export default class Agent {
         }
       } else {
         /* Collision. Project on cut-off circle of time timeStep. */
-        let invTimeStep = 1.0 / this.simulator.timeStep
-
+        // let invTimeStep = 1.0 / this.simulator.timeStep;
+        let invTimeStep = this.simulator.timeStep
         /* Vector from cutoff center to relative velocity. */
         const w = relativeVelocity.minus(relativePosition.scale(invTimeStep))
 
@@ -328,29 +337,29 @@ export default class Agent {
     }
   }
 
-  insertAgentNeighbor(agent: Agent, rangeSq: number) {
+  public insertAgentNeighbor(agent: Agent, rangeSq: number) {
     if (this != agent) {
       var distSq = RVOMath.absSq(this.position.minus(agent.position))
 
       if (distSq < rangeSq) {
-        if (this.agentNeighbors.length < this.maxNeighbors) {
-          this.agentNeighbors.push(new KeyValuePair(distSq, agent))
+        if (this._agentNeighbors.length < this.maxNeighbors) {
+          this._agentNeighbors.push(new KeyValuePair(distSq, agent))
         }
-        var i = this.agentNeighbors.length - 1
-        while (i != 0 && distSq < this.agentNeighbors[i - 1].key) {
-          this.agentNeighbors[i] = this.agentNeighbors[i - 1]
+        var i = this._agentNeighbors.length - 1
+        while (i != 0 && distSq < this._agentNeighbors[i - 1].key) {
+          this._agentNeighbors[i] = this._agentNeighbors[i - 1]
           --i
         }
-        this.agentNeighbors[i] = new KeyValuePair(distSq, agent)
+        this._agentNeighbors[i] = new KeyValuePair(distSq, agent)
 
-        if (this.agentNeighbors.length == this.maxNeighbors) {
-          rangeSq = this.agentNeighbors[this.agentNeighbors.length - 1].key
+        if (this._agentNeighbors.length == this.maxNeighbors) {
+          rangeSq = this._agentNeighbors[this._agentNeighbors.length - 1].key
         }
       }
     }
   }
 
-  insertObstacleNeighbor(obstacle: Obstacle, rangeSq: number) {
+  public insertObstacleNeighbor(obstacle: Obstacle, rangeSq: number) {
     let nextObstacle = obstacle.next;
 
     let distSq = RVOMath.distSqPointLineSegment(obstacle.point, nextObstacle.point, this.position)
@@ -367,11 +376,13 @@ export default class Agent {
     }
   }
 
-  update() {
+  public update() {
     // var rnd = new Vector2D(Math.random() * 0.1 - 0.05, Math.random() * 0.1 - 0.05)
+    var rnd = new Vector2D(0,0);
     // this.velocity = this.newVelocity.plus(rnd)
-    this.velocity = this._newVelocity;
-    this.position = this.position.plus(this._newVelocity.scale(this.simulator.timeStep))
+    this.velocity = this._newVelocity.plus(rnd);
+    // this.position = this.position.plus(this.velocity.scale(this.maxSpeed * this.simulator.timeStep));
+    this.position = this.position.plus(this._newVelocity.scale(this.simulator.timeStep));
   }
 
   private _linearProgram1(lines: Line[],
@@ -449,10 +460,7 @@ export default class Agent {
     return true;
   }
 
-  private _linearProgram2(lines: Line[],
-    radius: number,
-    optVelocity: Vector2D,
-    directionOpt: boolean): number {
+  private _linearProgram2(lines: Line[], radius: number, optVelocity: Vector2D, directionOpt: boolean): number {
     if (directionOpt) {
       /*
        * Optimize direction. Note that the optimization velocity is of unit
@@ -500,7 +508,7 @@ export default class Agent {
 
           if (Math.abs(determinant) <= RVOMath.RVO_EPSILON) {
             /* Line i and line j are parallel. */
-            if (lines[i].direction.multiply(lines[j].direction) > 0.0) {
+            if (lines[i].direction.multiply(lines[j].direction) > 0) {
               /* Line i and line j point in the same direction. */
               continue;
             } else {
@@ -534,8 +542,8 @@ export default class Agent {
 
 
 class KeyValuePair {
-  key;
-  value;
+  public key;
+  public value;
 
   constructor(key, value) {
     this.key = key

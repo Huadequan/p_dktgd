@@ -18,4 +18,11 @@ export default class ResDefine {
         return "res/export/Conventional/" + scenePath + ".ls";
     }
 
+    static FixRefreshJson(jsonPath: string) {
+        if (StringEx.IsNullOrEmpty(jsonPath)) {
+            console.error("传入参数为空");
+            return null;
+        }
+        return "res/json/" + jsonPath + ".json";
+    }
 }

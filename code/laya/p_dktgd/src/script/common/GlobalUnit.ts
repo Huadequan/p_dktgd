@@ -37,7 +37,7 @@ export default class GlobalUnit {
     static async FirstCreate() {
         this.game.CreateGame();
 
-        new RVO_test();
+        // new RVO_test();
     }
 
 }

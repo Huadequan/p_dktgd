@@ -74,7 +74,7 @@ export default class MapControl {
     }
 
     private _GetMapPos(): number[] {
-        let pos = GlobalUnit.game.player.pos;
+        let pos = GlobalUnit.game.player.originPos;
         let x = Math.floor(Math.abs(pos.x) / this._rect.x) * (pos.x < 0 ? -1 : 1);
         let y = Math.floor(Math.abs(pos.y) / this._rect.y) * (pos.y < 0 ? -1 : 1);
         return [x, y];
