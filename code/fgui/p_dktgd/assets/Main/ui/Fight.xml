@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="750,1334">
   <displayList>
-    <graph id="n9_r0x7" name="img_bg" xy="0,0" size="750,1334" alpha="0" type="rect">
+    <graph id="n9_r0x7" name="img_bg" xy="0,0" size="750,1334" alpha="0" type="rect" lineSize="0" fillColor="#ff000000">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
-    <component id="n8_r0x7" name="com_joy" src="r0x75" fileName="cmp/com_joystick.xml" xy="375,949" pivot="0.5,0.5" anchor="true" touchable="false"/>
+    <component id="n11_uyn7" name="btn_start" src="qqmy2" fileName="cmp/btn_text_01.xml" xy="246,1364">
+      <relation target="" sidePair="center-center,middle-middle"/>
+      <Button title="开始游戏"/>
+    </component>
+    <component id="n12_uyn7" name="com_joy" src="r0x75" fileName="cmp/com_joystick.xml" xy="180,674" pivot="0.5,0.5" anchor="true" touchable="false"/>
   </displayList>
 </component>

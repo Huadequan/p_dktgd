@@ -1,6 +1,6 @@
 import ColorEx from "../../../LTGame/LTUtils/ColorEx";
 import { LTStart } from "../../../LTGame/Start/LTStart";
-import Simulator from "./Simulator";
+import { Simulator } from "./Simulator";
 
 export default class RVODebug{
     private static _ins: RVODebug;
@@ -55,11 +55,11 @@ export default class RVODebug{
     private ClickOver(event: Laya.Event) {
         console.log("松开");
 
-        for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
-            // this.simulaor.setAgentPrefVelocity(i, 0,0);
-            let goal = this.simulaor.getAgentPosition(i);
-            this.simulaor.setAgentGoal(i, goal.x, goal.y);
-        }
+        // for (let i = 0; i < this.simulaor.getNumAgents(); i++) {
+        //     // this.simulaor.setAgentPrefVelocity(i, 0,0);
+        //     let goal = this.simulaor.getAgentPosition(i);
+        //     this.simulaor.setAgentGoal(i, goal.x, goal.y);
+        // }
     }
 
     public Draw() {
@@ -70,23 +70,23 @@ export default class RVODebug{
             let pos = this.simulaor.getAgentPosition(i);
             let radius = this.simulaor.getAgentRadius(i);
             
-            this.graphics.drawCircle(pos.x, pos.y, radius,color,color, 2)
+            this.graphics.drawCircle(pos.x, pos.y, radius,color, "#231564", 2)
         }
 
-        let obstacles = this.simulaor.getObstacles();
+        let obstacles = this.simulaor.obstacles_;
         let convexs = [];
         let rect = [];
         for (let i = 0; i < obstacles.length; ++i) {
             
             let obstacle = obstacles[i];
-            rect.push(obstacle.point.x);
-            rect.push(obstacle.point.y);
+            rect.push(obstacle.point_.x);
+            rect.push(obstacle.point_.y);
 
-            let next = obstacle.next;
-            if (next.id < obstacle.id) {
+            let next = obstacle.nextObstacle_;
+            if (next.id_ < obstacle.id_) {
 
-                rect.push(next.point.x);
-                rect.push(next.point.y);
+                rect.push(next.point_.x);
+                rect.push(next.point_.y);
                 convexs.push(rect);
                 rect = [];
             }

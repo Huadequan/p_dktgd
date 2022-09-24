@@ -17350,25 +17350,6 @@ class GlobalUnit {
 
 /***/ }),
 
-/***/ "./src/script/common/LayerDefine.ts":
-/*!******************************************!*\
-  !*** ./src/script/common/LayerDefine.ts ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LayerDefine; });
-class LayerDefine {
-}
-LayerDefine.player = Math.pow(2, 1);
-LayerDefine.enemy = Math.pow(2, 2);
-LayerDefine.obstacle = Math.pow(2, 3);
-
-
-/***/ }),
-
 /***/ "./src/script/common/ResDefine.ts":
 /*!****************************************!*\
   !*** ./src/script/common/ResDefine.ts ***!
@@ -17915,7 +17896,7 @@ class ModelBase {
         this.agent = _rvo_RVOHelper__WEBPACK_IMPORTED_MODULE_3__["default"].instance.CreateAgent(this.colliderObj);
     }
     UpdateDepth() {
-        this.root.transform.localPositionZ = -0.1 * this.layerIndex;
+        this.root.transform.localPositionZ = -0.2 * this.layerIndex;
     }
     DoUpdate(dt) {
     }
@@ -17935,15 +17916,13 @@ class ModelBase {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return EnemyBase; });
 /* harmony import */ var _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../LTGame/LTUtils/LTUtils */ "./src/LTGame/LTUtils/LTUtils.ts");
-/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
-/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
-/* harmony import */ var _common_LayerDefine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/LayerDefine */ "./src/script/common/LayerDefine.ts");
+/* harmony import */ var _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../LTGame/LTUtils/MathEx */ "./src/LTGame/LTUtils/MathEx.ts");
+/* harmony import */ var _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../LTGame/Res/LTRes */ "./src/LTGame/Res/LTRes.ts");
+/* harmony import */ var _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/GlobalUnit */ "./src/script/common/GlobalUnit.ts");
 /* harmony import */ var _common_ResDefine__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../common/ResDefine */ "./src/script/common/ResDefine.ts");
 /* harmony import */ var _level_ViewLevel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../level/ViewLevel */ "./src/script/logic/level/ViewLevel.ts");
 /* harmony import */ var _ModelBase__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ModelBase */ "./src/script/logic/ModelBase.ts");
-/* harmony import */ var _rvo_RVOMath__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../rvo/RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
-/* harmony import */ var _rvo_Vector2D__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../rvo/Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
-
+/* harmony import */ var _rvo_Vector2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../rvo/Vector2 */ "./src/script/logic/rvo/Vector2.ts");
 
 
 
@@ -17962,37 +17941,46 @@ class EnemyBase extends _ModelBase__WEBPACK_IMPORTED_MODULE_6__["default"] {
     }
     InitAgent() {
         this.CreateAgent();
-        this.agent.maxSpeed = this.config.move_speed;
-        this.agent.colliderGroup = _common_LayerDefine__WEBPACK_IMPORTED_MODULE_3__["default"].enemy;
-        this.agent.colliderMask = _common_LayerDefine__WEBPACK_IMPORTED_MODULE_3__["default"].obstacle;
+        this.cachePos = new _rvo_Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"](0, 0);
     }
     CreateModel() {
-        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_1__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath(this.config.model_path));
-        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.level.layerObj.addChild(this.root);
+        this.root = _LTGame_Res_LTRes__WEBPACK_IMPORTED_MODULE_2__["default"].Get(_common_ResDefine__WEBPACK_IMPORTED_MODULE_4__["default"].FixPath(this.config.model_path));
+        _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].game.level.layerObj.addChild(this.root);
         this.colliderObj = this.root.getChildByName("colliders");
         this.skin = _LTGame_LTUtils_LTUtils__WEBPACK_IMPORTED_MODULE_0__["LTUtils"].FindChild(this.root, this.config.skin_path);
         this.Inited(this.config.anim_id);
     }
     SetPos(x, y) {
-        this.agent.position.setXY(x, y);
+        this.agent.position_.setXY(x, y);
         this.SyncPos();
     }
     UpdateMoveParames(dt) {
+        let sprite = new Laya.Sprite();
+        sprite.customRender;
         let type = this.refreshData.moveType;
+        this.agent.maxSpeed_ = this.config.move_speed * dt;
         switch (type) {
             case _level_ViewLevel__WEBPACK_IMPORTED_MODULE_5__["EMoveType"].ToPlayer:
-                let pos = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.player.originPos;
-                let goal = _rvo_Vector2D__WEBPACK_IMPORTED_MODULE_8__["default"].cacheVec2;
-                goal.setXY(pos.x, pos.y);
-                let v = _rvo_RVOMath__WEBPACK_IMPORTED_MODULE_7__["default"].normalize(goal.minus(this.agent.position));
-                this.agent.prefVelocity.setXY(v.x, v.y);
+                let pos = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_3__["default"].game.player.originPos;
+                this.cachePos.setXY(pos.x, pos.y);
+                let goal = this.cachePos.moins(this.agent.position_);
+                let dist = _rvo_Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].absSq(goal);
+                this.agent.maxSpeed_ *= _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_1__["default"].Clamp01(dist);
+                this.cachePos = _rvo_Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].normalize(goal);
+                this.agent.prefVelocity_.setXY(this.cachePos.x, this.cachePos.y);
+                break;
+            case _level_ViewLevel__WEBPACK_IMPORTED_MODULE_5__["EMoveType"].ToVec2:
+                let moveParams = this.refreshData.moveParams;
+                this.cachePos.setXY(moveParams[0], moveParams[1]);
+                this.cachePos = _rvo_Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].normalize(this.cachePos);
+                this.agent.prefVelocity_.setXY(this.cachePos.x, this.cachePos.y);
                 break;
         }
     }
     SyncPos() {
         let old = this.root.transform.position;
-        let newPos = this.agent.position;
-        this.root.transform.localScaleX = newPos.x > old.x ? -1 : 1;
+        let newPos = this.agent.position_;
+        this.root.transform.localScaleX = this.cachePos.x > 0 ? -1 : 1;
         old.x = newPos.x + this.colliderOffset.x;
         old.y = newPos.y - this.colliderOffset.y;
         this.root.transform.position = old;
@@ -18074,8 +18062,10 @@ __webpack_require__.r(__webpack_exports__);
 /** 刷新方式 */
 var ERefreshType;
 (function (ERefreshType) {
-    /** 以玩家为原心 范围内旋转 */
+    /** 以玩家为原心 圆形 指定半径范围内 */
     ERefreshType[ERefreshType["Player_Circle"] = 0] = "Player_Circle";
+    /** 指定位置  圆形刷新*/
+    ERefreshType[ERefreshType["Point_Circle"] = 1] = "Point_Circle";
 })(ERefreshType || (ERefreshType = {}));
 var EMoveType;
 (function (EMoveType) {
@@ -18140,9 +18130,14 @@ class ViewLevel {
         let origin = _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.player.originPos;
         if (data.refreshType == ERefreshType.Player_Circle) {
             let angle = _LTGame_LTUtils_MathEx__WEBPACK_IMPORTED_MODULE_0__["default"].Random(0, 360);
-            let radius = 3;
+            let radius = data.refreshParams[0];
             let x = origin.x + Math.cos(angle * Math.PI / 180) * radius;
-            let y = origin.z + Math.sin(angle * Math.PI / 180) * radius;
+            let y = origin.y + Math.sin(angle * Math.PI / 180) * radius;
+            enemy.SetPos(x, y);
+        }
+        else if (data.refreshType == ERefreshType.Point_Circle) {
+            let x = origin.x + data.refreshParams[0];
+            let y = origin.y + data.refreshParams[1];
             enemy.SetPos(x, y);
         }
         count++;
@@ -18393,60 +18388,73 @@ class ViewPlayer extends _ModelBase__WEBPACK_IMPORTED_MODULE_8__["default"] {
 /*!***************************************!*\
   !*** ./src/script/logic/rvo/Agent.ts ***!
   \***************************************/
-/*! exports provided: default */
+/*! exports provided: Agent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Agent; });
-/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
-/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
-/* harmony import */ var _Line__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Line */ "./src/script/logic/rvo/Line.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Agent", function() { return Agent; });
+/* harmony import */ var _KeyValuePair__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./KeyValuePair */ "./src/script/logic/rvo/KeyValuePair.ts");
+/* harmony import */ var _Line__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Line */ "./src/script/logic/rvo/Line.ts");
+/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
+/* harmony import */ var _Simulator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Simulator */ "./src/script/logic/rvo/Simulator.ts");
+/* harmony import */ var _Vector2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Vector2 */ "./src/script/logic/rvo/Vector2.ts");
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
+/// <reference path="KeyValuePair.ts" />
+/// <reference path="RVOMath.ts" />
+/// <reference path="Simulator.ts" />
+
+
 
 
 
 class Agent {
     constructor() {
-        this.id = 0;
-        this._agentNeighbors = []; //  new List<KeyValuePair<float, Agent>>()
-        this.maxNeighbors = 0;
-        this.maxSpeed = 0;
-        this.neighborDist = 0;
-        this.obstaclNeighbors = []; // new List<KeyValuePair<float, Obstacle>>()
-        this.orcaLines = [];
-        this.radius = 0;
-        this.timeHorizon = 0;
-        this.timeHorizonObst = 0;
+        this.agentNeighbors_ = [];
+        this.obstacleNeighbors_ = [];
+        this.orcaLines_ = [];
+        this.maxNeighbors_ = 0;
+        this.maxSpeed_ = 0;
+        this.neighborDist_ = 0;
+        this.orientation_ = 0;
+        this.position_ = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
+        this.positionScreen_ = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
+        this.prefVelocity_ = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
+        this.velocity_ = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
+        this.radius_ = 0;
+        this.timeHorizon_ = 0;
+        this.timeHorizonObst_ = 0;
+        this.id_ = 0;
+        this.test = [];
+        this.c = 0;
     }
     computeNeighbors() {
-        this.obstaclNeighbors = [];
-        var rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.timeHorizonObst * this.maxSpeed + this.radius);
-        this.simulator.kdTree.computeObstacleNeighbors(this, rangeSq);
-        this._agentNeighbors = [];
-        if (this.maxNeighbors > 0) {
-            rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.neighborDist);
-            this.simulator.kdTree.computeAgentNeighbors(this, rangeSq);
+        this.obstacleNeighbors_ = [];
+        var rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(this.timeHorizonObst_ * this.maxSpeed_ + this.radius_);
+        _Simulator__WEBPACK_IMPORTED_MODULE_3__["Simulator"].Instance().kdTree_.computeObstacleNeighbors(this, rangeSq);
+        this.agentNeighbors_ = [];
+        if (this.maxNeighbors_ > 0) {
+            Agent.rangeSq = _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(this.neighborDist_);
+            _Simulator__WEBPACK_IMPORTED_MODULE_3__["Simulator"].Instance().kdTree_.computeAgentNeighbors(this, Agent.rangeSq);
         }
     }
-    /* Search for the best new velocity. */
     computeNewVelocity() {
-        // this.orcaLines.length = 0;
-        let orcaLines = this.orcaLines = [];
-        // const invTimeHorizonObst = this.timeHorizonObst;
-        const invTimeHorizonObst = 1 / this.timeHorizonObst;
+        this.orcaLines_ = [];
+        var invTimeHorizonObst = 1 / this.timeHorizonObst_;
         /* Create obstacle ORCA lines. */
-        for (var i = 0; i < this.obstaclNeighbors.length; ++i) {
-            let obstacle1 = this.obstaclNeighbors[i].value;
-            let obstacle2 = obstacle1.next;
-            let relativePosition1 = obstacle1.point.minus(this.position);
-            let relativePosition2 = obstacle2.point.minus(this.position);
+        for (var i = 0; i < this.obstacleNeighbors_.length; ++i) {
+            var obstacle1 = this.obstacleNeighbors_[i].Value;
+            var obstacle2 = obstacle1.nextObstacle_;
+            var relativePosition1 = obstacle1.point_.moins(this.position_);
+            var relativePosition2 = obstacle2.point_.moins(this.position_);
             /*
-             * Check if velocity obstacle of obstacle is already taken care of by
-             * previously constructed obstacle ORCA lines.
-             */
-            let alreadyCovered = false;
-            for (var j = 0; j < orcaLines.length; ++j) {
-                if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition1.scale(invTimeHorizonObst).minus(orcaLines[j].point), orcaLines[j].direction) - invTimeHorizonObst * this.radius >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition2.scale(invTimeHorizonObst).minus(orcaLines[j].point), orcaLines[j].direction) - invTimeHorizonObst * this.radius >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+              * Check if velocity obstacle of obstacle is already taken care of by
+              * previously constructed obstacle ORCA lines.
+              */
+            var alreadyCovered = false;
+            for (var j = 0; j < this.orcaLines_.length; ++j) {
+                if (_Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(relativePosition1.mul_k(invTimeHorizonObst).moins(this.orcaLines_[j].point), this.orcaLines_[j].direction) - invTimeHorizonObst * this.radius_ >= -_RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].RVO_EPSILON && _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(relativePosition2.mul_k(invTimeHorizonObst).moins(this.orcaLines_[j].point), this.orcaLines_[j].direction) - invTimeHorizonObst * this.radius_ >= -_RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].RVO_EPSILON) {
                     alreadyCovered = true;
                     break;
                 }
@@ -18455,148 +18463,152 @@ class Agent {
                 continue;
             }
             /* Not yet covered. Check for collisions. */
-            let distSq1 = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition1);
-            let distSq2 = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition2);
-            let radiusSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(this.radius);
-            let obstacleVector = obstacle2.point.minus(obstacle1.point);
-            let s = relativePosition1.scale(-1).multiply(obstacleVector) / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(obstacleVector); //  (-relativePosition1 * obstacleVector) / RVOMath.absSq(obstacleVector)
-            let distSqLine = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition1.scale(-1).minus(obstacleVector.scale(s))); // RVOMath.absSq(-relativePosition1 - s * obstacleVector)
-            var line = new _Line__WEBPACK_IMPORTED_MODULE_2__["default"]();
+            var distSq1 = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(relativePosition1);
+            var distSq2 = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(relativePosition2);
+            var radiusSq = _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(this.radius_);
+            var obstacleVector = obstacle2.point_.moins(obstacle1.point_);
+            // var v1: Vector2 = relativePosition1.moinsSelf();
+            var s = relativePosition1.moinsSelf().mul(obstacleVector) / _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(obstacleVector);
+            //  var v2: Vector2 = obstacleVector.mul_k(-s); 
+            var distSqLine = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(relativePosition1.moinsSelf().plus(obstacleVector.mul_k(-s)));
+            var line = new _Line__WEBPACK_IMPORTED_MODULE_1__["Line"]();
             if (s < 0 && distSq1 <= radiusSq) {
                 /* Collision with left vertex. Ignore if non-convex. */
-                if (obstacle1.isConvex) {
-                    line.point = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
-                    line.direction = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-relativePosition1.y, relativePosition1.x));
-                    orcaLines.push(line);
+                if (obstacle1.isConvex_) {
+                    line.point = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
+                    line.direction = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].normalize(new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](-relativePosition1.y, relativePosition1.x));
+                    this.orcaLines_.push(line);
                 }
                 continue;
             }
             else if (s > 1 && distSq2 <= radiusSq) {
                 /* Collision with right vertex. Ignore if non-convex
-                 * or if it will be taken care of by neighoring obstace */
-                if (obstacle2.isConvex && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition2, obstacle2.unitDir) >= 0) {
-                    line.point = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
-                    line.direction = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-relativePosition2.y, relativePosition2.x));
-                    orcaLines.push(line);
+                  * or if it will be taken care of by neighoring obstace */
+                if (obstacle2.isConvex_ && _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(relativePosition2, obstacle2.unitDir_) >= 0) {
+                    line.point = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
+                    line.direction = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].normalize(new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](-relativePosition2.y, relativePosition2.x));
+                    this.orcaLines_.push(line);
                 }
                 continue;
             }
             else if (s >= 0 && s <= 1 && distSqLine <= radiusSq) {
                 /* Collision with obstacle segment. */
-                line.point = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
-                line.direction = obstacle1.unitDir.scale(-1);
-                orcaLines.push(line);
+                line.point = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
+                line.direction = obstacle1.unitDir_.moinsSelf();
+                this.orcaLines_.push(line);
                 continue;
             }
             /*
-             * No collision.
-             * Compute legs. When obliquely viewed, both legs can come from a single
-             * vertex. Legs extend cut-off line when nonconvex vertex.
-             */
-            var leftLegDirection, rightLegDirection;
+                  * No collision.
+                  * Compute legs. When obliquely viewed, both legs can come from a single
+                  * vertex. Legs extend cut-off line when nonconvex vertex.
+                  */
+            var leftLegDirection;
+            var rightLegDirection;
             if (s < 0 && distSqLine <= radiusSq) {
                 /*
-                 * Obstacle viewed obliquely so that left vertex
-                 * defines velocity obstacle.
-                 */
-                if (!obstacle1.isConvex) {
+                  * Obstacle viewed obliquely so that left vertex
+                  * defines velocity obstacle.
+                  */
+                if (!obstacle1.isConvex_) {
                     /* Ignore obstacle. */
                     continue;
                 }
                 obstacle2 = obstacle1;
-                let leg1 = Math.sqrt(distSq1 - radiusSq);
-                leftLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition1.x * leg1 - relativePosition1.y * this.radius, relativePosition1.x * this.radius + relativePosition1.y * leg1)).scale(1 / distSq1);
-                rightLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition1.x * leg1 + relativePosition1.y * this.radius, -relativePosition1.x * this.radius + relativePosition1.y * leg1)).scale(1 / distSq1);
+                var leg1 = Math.sqrt(distSq1 - radiusSq);
+                leftLegDirection = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition1.x * leg1 - relativePosition1.y * this.radius_, relativePosition1.x * this.radius_ + relativePosition1.y * leg1).div_k(distSq1);
+                rightLegDirection = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition1.x * leg1 + relativePosition1.y * this.radius_, -relativePosition1.x * this.radius_ + relativePosition1.y * leg1).div_k(distSq1);
             }
             else if (s > 1 && distSqLine <= radiusSq) {
                 /*
-                 * Obstacle viewed obliquely so that
-                 * right vertex defines velocity obstacle.
-                 */
-                if (!obstacle2.isConvex) {
+                  * Obstacle viewed obliquely so that
+                  * right vertex defines velocity obstacle.
+                  */
+                if (!obstacle2.isConvex_) {
                     /* Ignore obstacle. */
                     continue;
                 }
                 obstacle1 = obstacle2;
-                let leg2 = Math.sqrt(distSq2 - radiusSq);
-                leftLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition2.x * leg2 - relativePosition2.y * this.radius, relativePosition2.x * this.radius + relativePosition2.y * leg2)).scale(1 / distSq2);
-                rightLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition2.x * leg2 + relativePosition2.y * this.radius, -relativePosition2.x * this.radius + relativePosition2.y * leg2)).scale(1 / distSq2);
+                var leg2 = Math.sqrt(distSq2 - radiusSq);
+                leftLegDirection = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition2.x * leg2 - relativePosition2.y * this.radius_, relativePosition2.x * this.radius_ + relativePosition2.y * leg2).div_k(distSq2);
+                rightLegDirection = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition2.x * leg2 + relativePosition2.y * this.radius_, -relativePosition2.x * this.radius_ + relativePosition2.y * leg2).div_k(distSq2);
             }
             else {
                 /* Usual situation. */
-                if (obstacle1.isConvex) {
-                    let leg1 = Math.sqrt(distSq1 - radiusSq);
-                    leftLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition1.x * leg1 - relativePosition1.y * this.radius, relativePosition1.x * this.radius + relativePosition1.y * leg1)).scale(1 / distSq1);
+                if (obstacle1.isConvex_) {
+                    var leg1 = Math.sqrt(distSq1 - radiusSq);
+                    leftLegDirection = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition1.x * leg1 - relativePosition1.y * this.radius_, relativePosition1.x * this.radius_ + relativePosition1.y * leg1).div_k(distSq1);
                 }
                 else {
                     /* Left vertex non-convex; left leg extends cut-off line. */
-                    leftLegDirection = obstacle1.unitDir.scale(-1);
+                    leftLegDirection = obstacle1.unitDir_.moinsSelf();
                 }
-                if (obstacle2.isConvex) {
-                    let leg2 = Math.sqrt(distSq2 - radiusSq);
-                    rightLegDirection = (new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition2.x * leg2 + relativePosition2.y * this.radius, -relativePosition2.x * this.radius + relativePosition2.y * leg2)).scale(1 / distSq2);
+                if (obstacle2.isConvex_) {
+                    var leg2 = Math.sqrt(distSq2 - radiusSq);
+                    rightLegDirection = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition2.x * leg2 + relativePosition2.y * this.radius_, -relativePosition2.x * this.radius_ + relativePosition2.y * leg2).div_k(distSq2);
                 }
                 else {
                     /* Right vertex non-convex; right leg extends cut-off line. */
-                    rightLegDirection = obstacle1.unitDir;
+                    rightLegDirection = obstacle1.unitDir_;
                 }
             }
             /*
-             * Legs can never point into neighboring edge when convex vertex,
-             * take cutoff-line of neighboring edge instead. If velocity projected on
-             * "foreign" leg, no constraint is added.
-             */
-            let leftNeighbor = obstacle1.previous;
-            let isLeftLegForeign = false;
-            let isRightLegForeign = false;
-            if (obstacle1.isConvex && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(leftLegDirection, leftNeighbor.unitDir.scale(-1)) >= 0.0) {
+              * Legs can never point into neighboring edge when convex vertex,
+              * take cutoff-line of neighboring edge instead. If velocity projected on
+              * "foreign" leg, no constraint is added.
+              */
+            var leftNeighbor = obstacle1.prevObstacle_;
+            var isLeftLegForeign = false;
+            var isRightLegForeign = false;
+            if (obstacle1.isConvex_ && _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(leftLegDirection, leftNeighbor.unitDir_.moinsSelf()) >= 0) {
                 /* Left leg points into obstacle. */
-                leftLegDirection = leftNeighbor.unitDir.scale(-1);
+                leftLegDirection = leftNeighbor.unitDir_.moinsSelf();
                 isLeftLegForeign = true;
             }
-            if (obstacle2.isConvex && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(rightLegDirection, obstacle2.unitDir) <= 0.0) {
+            if (obstacle2.isConvex_ && _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(rightLegDirection, obstacle2.unitDir_) <= 0) {
                 /* Right leg points into obstacle. */
-                rightLegDirection = obstacle2.unitDir;
+                rightLegDirection = obstacle2.unitDir_;
                 isRightLegForeign = true;
             }
             /* Compute cut-off centers. */
-            let leftCutoff = obstacle1.point.minus(this.position).scale(invTimeHorizonObst);
-            let rightCutoff = obstacle2.point.minus(this.position).scale(invTimeHorizonObst);
-            let cutoffVec = rightCutoff.minus(leftCutoff);
+            var leftCutoff = obstacle1.point_.moins(this.position_).mul_k(invTimeHorizonObst);
+            var rightCutoff = obstacle2.point_.moins(this.position_).mul_k(invTimeHorizonObst);
+            var cutoffVec = rightCutoff.moins(leftCutoff);
+            //var cutoffVec = new Vector2(3, 3.3); 
             /* Project current velocity on velocity obstacle. */
             /* Check if current velocity is projected on cutoff circles. */
-            let t = obstacle1 == obstacle2 ? 0.5 : this.velocity.minus(leftCutoff).multiply(cutoffVec) / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(cutoffVec);
-            let tLeft = this.velocity.minus(leftCutoff).multiply(leftLegDirection);
-            let tRight = this.velocity.minus(rightCutoff).multiply(rightLegDirection);
-            if ((t < 0.0 && tLeft < 0.0) || (obstacle1 == obstacle2 && tLeft < 0.0 && tRight < 0.0)) {
+            var t = (obstacle1 == obstacle2 ? 0.5 : this.velocity_.moins(leftCutoff).mul(cutoffVec) / _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(cutoffVec));
+            // var  tLeft : number = ((velocity_ - leftCutoff) * leftLegDirection);
+            var tLeft = this.velocity_.moins(leftCutoff).mul(leftLegDirection);
+            var tRight = this.velocity_.moins(rightCutoff).mul(rightLegDirection);
+            if ((t < 0 && tLeft < 0) || (obstacle1 == obstacle2 && tLeft < 0 && tRight < 0)) {
                 /* Project on left cut-off circle. */
-                let unitW = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(this.velocity.minus(leftCutoff));
-                line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
-                line.point = leftCutoff.plus(unitW.scale(this.radius * invTimeHorizonObst));
-                orcaLines.push(line);
+                var unitW = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].normalize(this.velocity_.moins(leftCutoff));
+                line.direction = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](unitW.y, -unitW.x);
+                line.point = leftCutoff.plus(unitW.mul_k(this.radius_ * invTimeHorizonObst));
+                this.orcaLines_.push(line);
                 continue;
             }
-            else if (t > 1.0 && tRight < 0.0) {
+            else if (t > 1 && tRight < 0) {
                 /* Project on right cut-off circle. */
-                let unitW = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(this.velocity.minus(rightCutoff));
-                line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
-                line.point = rightCutoff.plus(unitW.scale(this.radius * invTimeHorizonObst));
-                orcaLines.push(line);
+                var unitW = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].normalize(this.velocity_.moins(rightCutoff));
+                line.direction = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](unitW.y, -unitW.x);
+                line.point = rightCutoff.plus(unitW.mul_k(this.radius_ * invTimeHorizonObst));
+                this.orcaLines_.push(line);
                 continue;
             }
             /*
-             * Project on left leg, right leg, or cut-off line, whichever is closest
-             * to velocity.
-             */
-            let distSqCutoff = ((t < 0.0 || t > 1.0 || obstacle1 == obstacle2) ? Infinity : _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.velocity.minus(cutoffVec.scale(t).plus(leftCutoff))));
-            let distSqLeft = ((tLeft < 0.0) ? Infinity : _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.velocity.minus(leftLegDirection.scale(tLeft).plus(leftCutoff))));
-            let distSqRight = ((tRight < 0.0) ? Infinity : _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.velocity.minus(rightLegDirection.scale(tRight).plus(rightCutoff))));
+              * Project on left leg, right leg, or cut-off line, whichever is closest
+              * to velocity.
+              */
+            var distSqCutoff = ((t < 0 || t > 1 || obstacle1 == obstacle2) ? Number.POSITIVE_INFINITY : _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(this.velocity_.moins(leftCutoff.plus(cutoffVec.mul_k(t)))));
+            var distSqLeft = ((tLeft < 0) ? Number.POSITIVE_INFINITY : _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(this.velocity_.moins(leftCutoff.plus(leftLegDirection.mul_k(tLeft)))));
+            var distSqRight = ((tRight < 0) ? Number.POSITIVE_INFINITY : _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(this.velocity_.moins(rightCutoff.plus(rightLegDirection.mul_k(tRight)))));
             if (distSqCutoff <= distSqLeft && distSqCutoff <= distSqRight) {
                 /* Project on cut-off line. */
-                line.direction = obstacle1.unitDir.scale(-1);
-                var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-line.direction.y, line.direction.x);
-                line.point = aux.scale(this.radius * invTimeHorizonObst).plus(leftCutoff);
-                orcaLines.push(line);
+                line.direction = obstacle1.unitDir_.moinsSelf();
+                line.point = leftCutoff.plus(new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](-line.direction.y, line.direction.x).mul_k(this.radius_ + invTimeHorizonObst));
+                this.orcaLines_.push(line);
                 continue;
             }
             else if (distSqLeft <= distSqRight) {
@@ -18605,9 +18617,8 @@ class Agent {
                     continue;
                 }
                 line.direction = leftLegDirection;
-                var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-line.direction.y, line.direction.x);
-                line.point = aux.scale(this.radius * invTimeHorizonObst).plus(leftCutoff);
-                orcaLines.push(line);
+                line.point = leftCutoff.plus(new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](-line.direction.y, line.direction.x).mul_k(this.radius_ + invTimeHorizonObst));
+                this.orcaLines_.push(line);
                 continue;
             }
             else {
@@ -18615,132 +18626,145 @@ class Agent {
                 if (isRightLegForeign) {
                     continue;
                 }
-                line.direction = rightLegDirection.scale(-1);
-                var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-line.direction.y, line.direction.x);
-                line.point = aux.scale(this.radius * invTimeHorizonObst).plus(leftCutoff);
-                orcaLines.push(line);
+                line.direction = rightLegDirection.moinsSelf();
+                line.point = rightCutoff.plus(new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](-line.direction.y, line.direction.x).mul_k(this.radius_ + invTimeHorizonObst));
+                this.orcaLines_.push(line);
                 continue;
             }
         }
-        var numObstLines = orcaLines.length;
-        // var invTimeHorizon = this.timeHorizon
-        var invTimeHorizon = 1.0 / this.timeHorizon;
+        //if (this.id_ == 0) console.log(this.orcaLines_.length);
+        var numObstLines = this.orcaLines_.length;
+        var invTimeHorizon = 1.0 / this.timeHorizon_;
         /* Create agent ORCA lines. */
-        for (var i = 0; i < this._agentNeighbors.length; ++i) {
-            var other = this._agentNeighbors[i].value;
-            let relativePosition = other.position.minus(this.position);
-            let relativeVelocity = this.velocity.minus(other.velocity);
-            let distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(relativePosition);
-            let combinedRadius = this.radius + other.radius;
-            let combinedRadiusSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(combinedRadius);
-            var line = new _Line__WEBPACK_IMPORTED_MODULE_2__["default"](); // Line
-            var u;
+        for (var i = 0; i < this.agentNeighbors_.length; ++i) {
+            var other = this.agentNeighbors_[i].Value;
+            var relativePosition = other.position_.moins(this.position_);
+            var relativeVelocity = this.velocity_.moins(other.velocity_);
+            var distSq = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(relativePosition);
+            var combinedRadius = this.radius_ + other.radius_;
+            var combinedRadiusSq = _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(combinedRadius);
+            var line = new _Line__WEBPACK_IMPORTED_MODULE_1__["Line"]();
+            var u = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](0, 0);
             if (distSq > combinedRadiusSq) {
                 /* No collision. */
-                let w = relativeVelocity.minus(relativePosition.scale(invTimeHorizon));
-                ; // Vector
+                var w = relativeVelocity.moins(relativePosition.mul_k(invTimeHorizon));
                 /* Vector from cutoff center to relative velocity. */
-                let wLengthSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(w);
-                let dotProduct1 = w.multiply(relativePosition);
-                if (dotProduct1 < 0.0 && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(dotProduct1) > combinedRadiusSq * wLengthSq) {
+                var wLengthSq = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(w);
+                var dotProduct1 = w.mul(relativePosition);
+                if (dotProduct1 < 0 && _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(dotProduct1) > combinedRadiusSq * wLengthSq) {
                     /* Project on cut-off circle. */
-                    let wLength = Math.sqrt(wLengthSq);
-                    let unitW = w.scale(1 / wLength);
-                    line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
-                    u = unitW.scale(combinedRadius * invTimeHorizon - wLength);
+                    var wLength = Math.sqrt(wLengthSq);
+                    var unitW = w.div_k(wLength);
+                    line.direction = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](unitW.y, -unitW.x);
+                    u = unitW.mul_k(combinedRadius * invTimeHorizon - wLength);
                 }
                 else {
                     /* Project on legs. */
-                    let leg = Math.sqrt(distSq - combinedRadiusSq);
-                    if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(relativePosition, w) > 0.0) {
+                    var leg = Math.sqrt(distSq - combinedRadiusSq);
+                    if (_Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(relativePosition, w) > 0) {
                         /* Project on left leg. */
-                        var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition.x * leg - relativePosition.y * combinedRadius, relativePosition.x * combinedRadius + relativePosition.y * leg);
-                        line.direction = aux.scale(1 / distSq);
+                        line.direction = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition.x * leg - relativePosition.y * combinedRadius, relativePosition.x * combinedRadius + relativePosition.y * leg).div_k(distSq);
                     }
                     else {
                         /* Project on right leg. */
-                        var aux = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](relativePosition.x * leg + relativePosition.y * combinedRadius, -relativePosition.x * combinedRadius + relativePosition.y * leg);
-                        line.direction = aux.scale(-1 / distSq);
+                        line.direction = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](relativePosition.x * leg + relativePosition.y * combinedRadius, -relativePosition.x * combinedRadius + relativePosition.y * leg).div_k(distSq).moinsSelf();
                     }
-                    let dotProduct2 = relativeVelocity.multiply(line.direction);
-                    u = line.direction.scale(dotProduct2).minus(relativeVelocity);
+                    var dotProduct2 = relativeVelocity.mul(line.direction);
+                    u = line.direction.mul_k(dotProduct2).moins(relativeVelocity);
                 }
             }
             else {
                 /* Collision. Project on cut-off circle of time timeStep. */
-                // let invTimeStep = 1.0 / this.simulator.timeStep;
-                let invTimeStep = this.simulator.timeStep;
+                var invTimeStep = 1 / _Simulator__WEBPACK_IMPORTED_MODULE_3__["Simulator"].Instance().timeStep_;
                 /* Vector from cutoff center to relative velocity. */
-                const w = relativeVelocity.minus(relativePosition.scale(invTimeStep));
-                let wLength = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].abs(w);
-                let unitW = w.scale(1 / wLength);
-                line.direction = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](unitW.y, -unitW.x);
-                u = unitW.scale(combinedRadius * invTimeStep - wLength);
+                // var w: Vector2 = Vector2.v_minus(relativeVelocity, Vector2.v_mul(relativePosition, invTimeStep ));
+                var w = relativeVelocity.moins(relativePosition.mul_k(invTimeStep));
+                var wLength = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].abs(w);
+                var unitW = w.div_k(wLength);
+                line.direction = new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](unitW.y, -unitW.x);
+                // u = Vector2.v_mul(unitW, (combinedRadius * invTimeStep - wLength));
+                u = unitW.mul_k(combinedRadius * invTimeStep - wLength);
             }
-            line.point = u.scale(0.5).plus(this.velocity);
-            orcaLines.push(line);
+            // line.point = Vector2.v_add(this.velocity_, Vector2.v_mul(u, 0.5)); 
+            ///  line.point = this.velocity_.plus(u.mul_k(.5));
+            line.point = u.mul_k(.5).plus(this.velocity_);
+            this.orcaLines_.push(line);
         }
-        let lineFail = this._linearProgram2(orcaLines, this.maxSpeed, this.prefVelocity, false);
-        if (lineFail < orcaLines.length) {
-            this._linearProgram3(orcaLines, numObstLines, lineFail, this.maxSpeed);
+        var lineFail = this.linearProgram2(this.orcaLines_, this.maxSpeed_, this.prefVelocity_, false, this.newVelocity_);
+        if (lineFail < this.orcaLines_.length) {
+            this.linearProgram3(this.orcaLines_, numObstLines, lineFail, this.maxSpeed_, this.newVelocity_);
         }
     }
     insertAgentNeighbor(agent, rangeSq) {
         if (this != agent) {
-            var distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(this.position.minus(agent.position));
-            if (distSq < rangeSq) {
-                if (this._agentNeighbors.length < this.maxNeighbors) {
-                    this._agentNeighbors.push(new KeyValuePair(distSq, agent));
+            var distSq = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(this.position_.moins(agent.position_));
+            //  console.log(distSq); 
+            if (distSq < Agent.rangeSq) {
+                if (this.agentNeighbors_.length < this.maxNeighbors_) {
+                    this.agentNeighbors_.push(new _KeyValuePair__WEBPACK_IMPORTED_MODULE_0__["KeyValuePair"](distSq, agent));
                 }
-                var i = this._agentNeighbors.length - 1;
-                while (i != 0 && distSq < this._agentNeighbors[i - 1].key) {
-                    this._agentNeighbors[i] = this._agentNeighbors[i - 1];
+                var i = this.agentNeighbors_.length - 1;
+                while (i != 0 && distSq < this.agentNeighbors_[i - 1].Key) {
+                    this.agentNeighbors_[i] = this.agentNeighbors_[i - 1];
                     --i;
                 }
-                this._agentNeighbors[i] = new KeyValuePair(distSq, agent);
-                if (this._agentNeighbors.length == this.maxNeighbors) {
-                    rangeSq = this._agentNeighbors[this._agentNeighbors.length - 1].key;
+                this.agentNeighbors_[i] = new _KeyValuePair__WEBPACK_IMPORTED_MODULE_0__["KeyValuePair"](distSq, agent);
+                if (this.agentNeighbors_.length == this.maxNeighbors_) {
+                    Agent.rangeSq = this.agentNeighbors_[this.agentNeighbors_.length - 1].Key;
                 }
             }
-        }
-    }
-    insertObstacleNeighbor(obstacle, rangeSq) {
-        let nextObstacle = obstacle.next;
-        let distSq = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].distSqPointLineSegment(obstacle.point, nextObstacle.point, this.position);
-        if (distSq < rangeSq) {
-            this.obstaclNeighbors.push(new KeyValuePair(distSq, obstacle));
-            let i = this.obstaclNeighbors.length - 1;
-            while (i != 0 && distSq < this.obstaclNeighbors[i - 1].key) {
-                this.obstaclNeighbors[i] = this.obstaclNeighbors[i - 1];
-                --i;
-            }
-            this.obstaclNeighbors[i] = new KeyValuePair(distSq, obstacle);
         }
     }
     update() {
-        // var rnd = new Vector2D(Math.random() * 0.1 - 0.05, Math.random() * 0.1 - 0.05)
-        var rnd = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](0, 0);
-        // this.velocity = this.newVelocity.plus(rnd)
-        this.velocity = this._newVelocity.plus(rnd);
-        // this.position = this.position.plus(this.velocity.scale(this.maxSpeed * this.simulator.timeStep));
-        this.position = this.position.plus(this._newVelocity.scale(this.simulator.timeStep));
+        this.velocity_ = this.newVelocity_;
+        this.position_ = this.position_.plus(this.velocity_.mul_k(_Simulator__WEBPACK_IMPORTED_MODULE_3__["Simulator"]._instance.timeStep_));
+        var v = 0;
+        if (this.c <= 30) {
+            this.orientation_ = Math.atan2(this.velocity_.y, this.velocity_.x) * 180 / 3.14 + 90;
+            this.test[this.c] = this.orientation_;
+            this.c++;
+        }
+        else {
+            this.test.shift();
+            this.test[this.c - 1] = Math.atan2(this.velocity_.y, this.velocity_.x) + Math.PI;
+            for (var i = 0; i < this.test.length; ++i) {
+                v += this.test[i];
+            }
+            v = v / this.c;
+            this.orientation_ = v * 180 / 3.14 + 270;
+            ;
+        }
     }
-    _linearProgram1(lines, lineNo, radius, optVelocity, directionOpt) {
-        var dotProduct = lines[lineNo].point.multiply(lines[lineNo].direction);
-        var discriminant = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(dotProduct) + _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius) - _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(lines[lineNo].point);
-        if (discriminant < 0.0) {
+    insertObstacleNeighbor(obstacle, rangeSq) {
+        var nextObstacle_ = obstacle.nextObstacle_;
+        var distSq = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].distSqPointLineSegment(obstacle.point_, nextObstacle_.point_, this.position_);
+        if (distSq < rangeSq) {
+            this.obstacleNeighbors_.push(new _KeyValuePair__WEBPACK_IMPORTED_MODULE_0__["KeyValuePair"](distSq, obstacle));
+            var i = this.obstacleNeighbors_.length - 1;
+            while (i != 0 && distSq < this.obstacleNeighbors_[i - 1].Key) {
+                this.obstacleNeighbors_[i] = this.obstacleNeighbors_[i - 1];
+                --i;
+            }
+            this.obstacleNeighbors_[i] = new _KeyValuePair__WEBPACK_IMPORTED_MODULE_0__["KeyValuePair"](distSq, obstacle);
+        }
+    }
+    linearProgram1(lines, lineNo, radius, optVelocity, directionOpt, result) {
+        // var dotProduct : number = Vector2.v_mul_v(lines[lineNo].point , lines[lineNo].direction);
+        var dotProduct = lines[lineNo].point.mul(lines[lineNo].direction);
+        var discriminant = _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(dotProduct) + _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(radius) - _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(lines[lineNo].point);
+        if (discriminant < 0) {
             /* Max speed circle fully invalidates line lineNo. */
             return false;
         }
-        var sqrtDiscriminant = Math.sqrt(discriminant);
+        var sqrtDiscriminant = Math.sqrt(discriminant); //RVOMath.sqrt(discriminant);
         var tLeft = -dotProduct - sqrtDiscriminant;
         var tRight = -dotProduct + sqrtDiscriminant;
         for (var i = 0; i < lineNo; ++i) {
-            var denominator = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[lineNo].direction, lines[i].direction);
-            var numerator = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[lineNo].point.minus(lines[i].point));
-            if (Math.abs(denominator) <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+            var denominator = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(lines[lineNo].direction, lines[i].direction);
+            var numerator = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(lines[i].direction, lines[lineNo].point.moins(lines[i].point));
+            if (Math.abs(denominator) <= _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].RVO_EPSILON) {
                 /* Lines lineNo and i are (almost) parallel. */
-                if (numerator < 0.0) {
+                if (numerator < 0) {
                     return false;
                 }
                 else {
@@ -18748,7 +18772,7 @@ class Agent {
                 }
             }
             var t = numerator / denominator;
-            if (denominator >= 0.0) {
+            if (denominator >= 0) {
                 /* Line i bounds line lineNo on the right. */
                 tRight = Math.min(tRight, t);
             }
@@ -18761,111 +18785,172 @@ class Agent {
             }
         }
         if (directionOpt) {
-            if (optVelocity.multiply(lines[lineNo].direction) > 0.0) {
-                // Take right extreme
-                this._newVelocity = lines[lineNo].direction.scale(tRight).plus(lines[lineNo].point);
+            /* Optimize direction. */
+            if (optVelocity.mul(lines[lineNo].direction) > 0) {
+                /* Take right extreme. */
+                // result = Vector2.v_add(lines[lineNo].point, Vector2.v_mul(lines[lineNo].direction, tRight));
+                this.newVelocity_ = lines[lineNo].point.plus(lines[lineNo].direction.mul_k(tRight));
             }
             else {
-                // Take left extreme.
-                this._newVelocity = lines[lineNo].direction.scale(tLeft).plus(lines[lineNo].point);
+                /* Take left extreme. */
+                // result = Vector2.v_add(lines[lineNo].point, Vector2.v_mul(lines[lineNo].direction, tLeft));
+                this.newVelocity_ = lines[lineNo].point.plus(lines[lineNo].direction.mul_k(tLeft));
             }
         }
         else {
-            // Optimize closest point
-            t = lines[lineNo].direction.multiply(optVelocity.minus(lines[lineNo].point));
-            if (t < tLeft) {
-                this._newVelocity = lines[lineNo].direction.scale(tLeft).plus(lines[lineNo].point);
+            /* Optimize closest point. */
+            // var t1: number = Vector2.v_mul_v(lines[lineNo].direction, Vector2.v_minus(optVelocity, lines[lineNo].point));
+            var t1 = lines[lineNo].direction.mul(optVelocity.moins(lines[lineNo].point));
+            if (t1 < tLeft) {
+                //  result = Vector2.v_add(lines[lineNo].point, Vector2.v_mul(lines[lineNo].direction, tLeft));
+                this.newVelocity_ = lines[lineNo].point.plus(lines[lineNo].direction.mul_k(tLeft));
             }
-            else if (t > tRight) {
-                this._newVelocity = lines[lineNo].direction.scale(tRight).plus(lines[lineNo].point);
+            else if (t1 > tRight) {
+                // result = Vector2.v_add(lines[lineNo].point, Vector2.v_mul(lines[lineNo].direction, tRight));
+                this.newVelocity_ = lines[lineNo].point.plus(lines[lineNo].direction.mul_k(tRight));
             }
             else {
-                this._newVelocity = lines[lineNo].direction.scale(t).plus(lines[lineNo].point);
+                //result = Vector2.v_add(lines[lineNo].point, Vector2.v_mul(lines[lineNo].direction, t));
+                this.newVelocity_ = lines[lineNo].point.plus(lines[lineNo].direction.mul_k(t1));
             }
-        }
-        // TODO ugly hack by palmerabollo
-        if (isNaN(this._newVelocity.x) || isNaN(this._newVelocity.y)) {
-            return false;
         }
         return true;
     }
-    _linearProgram2(lines, radius, optVelocity, directionOpt) {
+    linearProgram2(lines, radius, optVelocity, directionOpt, result) {
         if (directionOpt) {
             /*
-             * Optimize direction. Note that the optimization velocity is of unit
-             * length in this case.
-             */
-            this._newVelocity = optVelocity.scale(radius);
+              * Optimize direction. Note that the optimization velocity is of unit
+              * length in this case.
+              */
+            // result = optVelocity.mul_k(radius);
+            this.newVelocity_ = optVelocity.mul_k(radius);
+            ;
         }
-        else if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(optVelocity) > _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)) {
+        else if (_Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].absSq(optVelocity) > _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].sqr(radius)) {
             /* Optimize closest point and outside circle. */
-            this._newVelocity = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(optVelocity).scale(radius);
+            // result = 
+            this.newVelocity_ = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].normalize(optVelocity).mul_k(radius);
         }
         else {
             /* Optimize closest point and inside circle. */
-            this._newVelocity = optVelocity;
+            // result = optVelocity;
+            this.newVelocity_ = optVelocity;
         }
         for (var i = 0; i < lines.length; ++i) {
-            if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[i].point.minus(this._newVelocity)) > 0.0) {
+            if (_Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(lines[i].direction, lines[i].point.moins(this.newVelocity_)) > 0) {
                 /* Result does not satisfy constraint i. Compute new optimal result. */
-                var tempResult = this._newVelocity;
-                if (!this._linearProgram1(lines, i, this.radius, optVelocity, directionOpt)) {
-                    this._newVelocity = tempResult;
+                var tempResult = this.newVelocity_;
+                if (!this.linearProgram1(lines, i, radius, optVelocity, directionOpt, this.newVelocity_)) {
+                    // tempResult;
+                    this.newVelocity_ = tempResult;
                     return i;
                 }
             }
         }
+        //  console.log(lines.length); 
         return lines.length;
     }
-    _linearProgram3(lines, numObstLines, beginLine, radius) {
-        var distance = 0.0;
+    linearProgram3(lines, numObstLines, beginLine, radius, result) {
+        var distance = 0;
         for (var i = beginLine; i < lines.length; ++i) {
-            if (_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[i].point.minus(this._newVelocity)) > distance) {
+            if (_Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(lines[i].direction, lines[i].point.moins(this.velocity_)) > distance) {
                 /* Result does not satisfy constraint of line i. */
-                //std::vector<Line> projLines(lines.begin(), lines.begin() + numObstLines)
-                let projLines = []; // new List<Line>()
+                //std::vector<Line> projLines(lines.begin(), lines.begin() + numObstLines);
+                var projLines = [];
                 for (var ii = 0; ii < numObstLines; ++ii) {
                     projLines.push(lines[ii]);
                 }
+                // console.log("a", projLines.length); 
                 for (var j = numObstLines; j < i; ++j) {
-                    var line = new _Line__WEBPACK_IMPORTED_MODULE_2__["default"]();
-                    let determinant = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[j].direction);
-                    if (Math.abs(determinant) <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
+                    var line = new _Line__WEBPACK_IMPORTED_MODULE_1__["Line"]();
+                    var determinant = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(lines[i].direction, lines[j].direction);
+                    if (Math.abs(determinant) <= _RVOMath__WEBPACK_IMPORTED_MODULE_2__["RVOMath"].RVO_EPSILON) {
                         /* Line i and line j are parallel. */
-                        if (lines[i].direction.multiply(lines[j].direction) > 0) {
+                        if (lines[i].direction.mul(lines[j].direction) > 0) {
                             /* Line i and line j point in the same direction. */
                             continue;
                         }
                         else {
                             /* Line i and line j point in opposite direction. */
-                            line.point = lines[i].point.plus(lines[j].point).scale(0.5);
+                            line.point = lines[i].point.plus(lines[j].point).mul_k(.5);
                         }
                     }
                     else {
-                        var aux = lines[i].direction.scale(_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[j].direction, lines[i].point.minus(lines[j].point)) / determinant);
-                        line.point = lines[i].point.plus(aux);
+                        // line.point = Vector2.v_add(lines[i].point , Vector2.v_mul( lines[i].direction ,  (RVOMath.det(lines[j].direction, Vector2.v_minus(lines[i].point , lines[j].point)) / determinant))) ;
+                        // line.point = lines[i].point + (Vector2.det(lines[j].direction, lines[i].point.moins( lines[j].point)) / determinant) * lines[i].direction;
+                        var n = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(lines[j].direction, lines[i].point.moins(lines[j].point)) / determinant;
+                        var v = lines[i].direction.mul_k(n);
+                        line.point = lines[i].point.plus(v);
+                        // console.log("this case OO"); 
                     }
-                    line.direction = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].normalize(lines[j].direction.minus(lines[i].direction));
+                    line.direction = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].normalize(lines[j].direction.moins(lines[i].direction));
                     projLines.push(line);
                 }
-                var tempResult = this._newVelocity;
-                if (this._linearProgram2(projLines, radius, new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](-lines[i].direction.y, lines[i].direction.x), true) < projLines.length) {
+                // console.log("b", projLines.length);
+                var tempResult = this.newVelocity_;
+                if (this.linearProgram2(projLines, radius, new _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"](-lines[i].direction.y, lines[i].direction.x), true, this.newVelocity_) < projLines.length) {
                     /* This should in principle not happen.  The result is by definition
-                     * already in the feasible region of this linear program. If it fails,
-                     * it is due to small floating point error, and the current result is
-                     * kept.
-                     */
-                    this._newVelocity = tempResult;
+                      * already in the feasible region of this linear program. If it fails,
+                      * it is due to small floating point error, and the current result is
+                      * kept.
+                      */
+                    //  result = tempResult;
+                    // console.log("should not happen"); 
+                    this.newVelocity_ = tempResult;
                 }
-                distance = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(lines[i].direction, lines[i].point.minus(this._newVelocity));
+                distance = _Vector2__WEBPACK_IMPORTED_MODULE_4__["Vector2"].det(lines[i].direction, lines[i].point.moins(this.newVelocity_));
             }
         }
     }
 }
-class KeyValuePair {
-    constructor(key, value) {
-        this.key = key;
-        this.value = value;
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/AgentTreeNode.ts":
+/*!***********************************************!*\
+  !*** ./src/script/logic/rvo/AgentTreeNode.ts ***!
+  \***********************************************/
+/*! exports provided: AgentTreeNode */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AgentTreeNode", function() { return AgentTreeNode; });
+class AgentTreeNode {
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/FloatPair.ts":
+/*!*******************************************!*\
+  !*** ./src/script/logic/rvo/FloatPair.ts ***!
+  \*******************************************/
+/*! exports provided: FloatPair */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FloatPair", function() { return FloatPair; });
+class FloatPair {
+    constructor(a, b) {
+        this._a = a;
+        this._b = b;
+    }
+    static inf(lhs, rhs) {
+        return (lhs._a < rhs._a || !(rhs._a < lhs._a) && lhs._b < rhs._b);
+    }
+    static inf_equal(lhs, rhs) {
+        return (lhs._a == rhs._a && lhs._b == rhs._b) || lhs < rhs;
+    }
+    static sup(lhs, rhs) {
+        return !FloatPair.inf_equal(lhs, rhs);
+        // return !inf_equal(lhs, rhs);
+    }
+    static sup_equal(lhs, rhs) {
+        return !FloatPair.inf;
+        // return !inf(lhs, rhs); 
     }
 }
 
@@ -18876,328 +18961,325 @@ class KeyValuePair {
 /*!****************************************!*\
   !*** ./src/script/logic/rvo/KdTree.ts ***!
   \****************************************/
-/*! exports provided: default */
+/*! exports provided: KdTree */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return KdTree; });
-/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
-/* harmony import */ var _Obstacle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Obstacle */ "./src/script/logic/rvo/Obstacle.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KdTree", function() { return KdTree; });
+/* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Agent */ "./src/script/logic/rvo/Agent.ts");
+/* harmony import */ var _AgentTreeNode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AgentTreeNode */ "./src/script/logic/rvo/AgentTreeNode.ts");
+/* harmony import */ var _FloatPair__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FloatPair */ "./src/script/logic/rvo/FloatPair.ts");
+/* harmony import */ var _Obstacle__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Obstacle */ "./src/script/logic/rvo/Obstacle.ts");
+/* harmony import */ var _ObstacleTreeNode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ObstacleTreeNode */ "./src/script/logic/rvo/ObstacleTreeNode.ts");
+/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
+/* harmony import */ var _Simulator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Simulator */ "./src/script/logic/rvo/Simulator.ts");
+/* harmony import */ var _Vector2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Vector2 */ "./src/script/logic/rvo/Vector2.ts");
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
+/// <reference path="Agent.ts" />
+/// <reference path="Obstacle.ts" />
+/// <reference path="AgentTreeNode.ts" />
+/// <reference path="ObstacleTreeNode.ts" />
+/// <reference path="FloatPair.ts" />
+
+
+
+
+
+
 
 
 class KdTree {
     constructor() {
-        this.MAXLEAF_SIZE = 100;
-        this.agents = [];
-        this.agentTree = [];
+        this.MAX_LEAF_SIZE = 10;
+        this.agents_ = [];
+        this.agentTree_ = [];
     }
     buildAgentTree() {
-        if (this.agents.length != this.simulator.getNumAgents()) {
-            this.agents = this.simulator.agents;
-            for (var i = 0, len = 2 * this.agents.length; i < len; i++) {
-                this.agentTree.push(new AgentTreeNode());
-            }
+        //    this.agents_ = new Agent[Simulator.Instance().agents_.length];
+        for (var i = 0; i < _Simulator__WEBPACK_IMPORTED_MODULE_6__["Simulator"].Instance().agents_.length; ++i) {
+            this.agents_[i] = _Simulator__WEBPACK_IMPORTED_MODULE_6__["Simulator"].Instance().agents_[i];
         }
-        if (this.agents.length > 0) {
-            this._buildAgentTreeRecursive(0, this.agents.length, 0);
+        // this.agentTree_ = new AgentTreeNode[2 *this. agents_.length];
+        for (var i = 0; i < this.agents_.length * 2; ++i) {
+            this.agentTree_[i] = new _AgentTreeNode__WEBPACK_IMPORTED_MODULE_1__["AgentTreeNode"]();
+        }
+        if (this.agents_.length != 0) {
+            this.buildAgentTreeRecursive(0, this.agents_.length, 0);
         }
     }
-    _buildAgentTreeRecursive(begin, end, node) {
-        this.agentTree[node].begin = begin;
-        this.agentTree[node].end = end;
-        this.agentTree[node].minX = this.agentTree[node].maxX = this.agents[begin].position.x;
-        this.agentTree[node].minY = this.agentTree[node].maxY = this.agents[begin].position.y;
+    buildAgentTreeRecursive(begin, end, node) {
+        // console.log(node); 
+        this.agentTree_[node].begin = begin;
+        this.agentTree_[node].end = end;
+        this.agentTree_[node].minX = this.agentTree_[node].maxX = this.agents_[begin].position_.x;
+        this.agentTree_[node].minY = this.agentTree_[node].maxY = this.agents_[begin].position_.y;
         for (var i = begin + 1; i < end; ++i) {
-            this.agentTree[node].maxX = Math.max(this.agentTree[node].maxX, this.agents[i].position.x);
-            this.agentTree[node].minX = Math.max(this.agentTree[node].minX, this.agents[i].position.x);
-            this.agentTree[node].maxY = Math.max(this.agentTree[node].maxX, this.agents[i].position.y);
-            this.agentTree[node].minY = Math.max(this.agentTree[node].minY, this.agents[i].position.y);
+            this.agentTree_[node].maxX = Math.max(this.agentTree_[node].maxX, this.agents_[i].position_.x);
+            this.agentTree_[node].minX = Math.min(this.agentTree_[node].minX, this.agents_[i].position_.x);
+            this.agentTree_[node].maxY = Math.max(this.agentTree_[node].maxY, this.agents_[i].position_.y);
+            this.agentTree_[node].minY = Math.min(this.agentTree_[node].minY, this.agents_[i].position_.y);
         }
-        if (end - begin > this.MAXLEAF_SIZE) {
-            // no leaf node
-            var isVertical = this.agentTree[node].maxX - this.agentTree[node].minX > this.agentTree[node].maxY - this.agentTree[node].minY;
-            var splitValue = isVertical ? 0.5 * (this.agentTree[node].maxX + this.agentTree[node].minX) : 0.5 * (this.agentTree[node].maxY + this.agentTree[node].minY);
+        if (end - begin > this.MAX_LEAF_SIZE) {
+            var isVertical = (this.agentTree_[node].maxX - this.agentTree_[node].minX > this.agentTree_[node].maxY - this.agentTree_[node].minY);
+            var splitValue = (isVertical ? 0.5 * (this.agentTree_[node].maxX + this.agentTree_[node].minX) : 0.5 * (this.agentTree_[node].maxY + this.agentTree_[node].minY));
             var left = begin;
             var right = end;
             while (left < right) {
-                while (left < right && (isVertical ? this.agents[left].position.x : this.agents[left].position.y) < splitValue) {
+                while (left < right && (isVertical ? this.agents_[left].position_.x : this.agents_[left].position_.y) < splitValue) {
                     ++left;
                 }
-                while (right > left && (isVertical ? this.agents[right - 1].position.x : this.agents[right - 1].position.y) >= splitValue) {
+                while (right > left && (isVertical ? this.agents_[right - 1].position_.x : this.agents_[right - 1].position_.y) >= splitValue) {
                     --right;
                 }
                 if (left < right) {
-                    var tmp = this.agents[left];
-                    this.agents[left] = this.agents[right - 1];
-                    this.agents[right - 1] = tmp;
+                    // std::swap in c++ to JS
+                    var tmp = this.agents_[left];
+                    this.agents_[left] = this.agents_[right - 1];
+                    this.agents_[right - 1] = tmp;
                     ++left;
                     --right;
                 }
             }
-            var leftSize = left - begin;
-            if (leftSize == 0) {
-                ++leftSize;
+            //   var leftSize: number = left - begin;
+            if (left == begin) {
                 ++left;
                 ++right;
             }
-            this.agentTree[node].left = node + 1;
-            this.agentTree[node].right = node + 1 + (2 * leftSize - 1);
-            this._buildAgentTreeRecursive(begin, left, this.agentTree[node].left);
-            this._buildAgentTreeRecursive(left, end, this.agentTree[node].right);
-        }
-    }
-    buildObstacleTree() {
-        var obstacles = this.simulator.obstacles;
-        this.obstacleTree = this._buildObstacleTreeRecursive(obstacles);
-    }
-    _buildObstacleTreeRecursive(obstacles) {
-        if (obstacles.length == 0) {
-            return null;
-        }
-        else {
-            var node = new ObstacleTreeNode();
-            var optimalSplit = 0;
-            let minLeft = obstacles.length;
-            let minRight = obstacles.length;
-            for (let i = 0, len = obstacles.length; i < len; ++i) {
-                let leftSize = 0;
-                let rightSize = 0;
-                let obstacleI1 = obstacles[i];
-                let obstacleI2 = obstacleI1.next;
-                for (let j = 0; j < obstacles.length; j++) {
-                    if (i == j) {
-                        continue;
-                    }
-                    let obstacleJ1 = obstacles[j];
-                    let obstacleJ2 = obstacleJ1.next;
-                    let j1LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ1.point);
-                    let j2LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ2.point);
-                    if (j1LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
-                        ++leftSize;
-                    }
-                    else if (j1LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
-                        ++rightSize;
-                    }
-                    else {
-                        ++leftSize;
-                        ++rightSize;
-                    }
-                    var fp1 = new FloatPair(Math.max(leftSize, rightSize), Math.min(leftSize, rightSize));
-                    var fp2 = new FloatPair(Math.max(minLeft, minRight), Math.min(minLeft, minRight));
-                    if (fp1._get(fp2)) {
-                        break;
-                    }
-                }
-                var fp1 = new FloatPair(Math.max(leftSize, rightSize), Math.min(leftSize, rightSize));
-                var fp2 = new FloatPair(Math.max(minLeft, minRight), Math.min(minLeft, minRight));
-                if (fp1._mt(fp2)) {
-                    minLeft = leftSize;
-                    minRight = rightSize;
-                    optimalSplit = i;
-                }
-            }
-            {
-                /* Build split node. */
-                let leftObstacles = [];
-                for (var n = 0; n < minLeft; ++n)
-                    leftObstacles.push(null);
-                let rightObstacles = [];
-                for (var n = 0; n < minRight; ++n)
-                    rightObstacles.push(null);
-                let leftCounter = 0;
-                let rightCounter = 0;
-                let i = optimalSplit;
-                let obstacleI1 = obstacles[i];
-                let obstacleI2 = obstacleI1.next;
-                for (var j = 0; j < obstacles.length; ++j) {
-                    if (i == j) {
-                        continue;
-                    }
-                    let obstacleJ1 = obstacles[j];
-                    let obstacleJ2 = obstacleJ1.next;
-                    let j1LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ1.point);
-                    let j2LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacleI1.point, obstacleI2.point, obstacleJ2.point);
-                    if (j1LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
-                        leftObstacles[leftCounter++] = obstacles[j];
-                    }
-                    else if (j1LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON && j2LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].RVO_EPSILON) {
-                        rightObstacles[rightCounter++] = obstacles[j];
-                    }
-                    else {
-                        /* Split obstacle j. */
-                        let t = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(obstacleI2.point.minus(obstacleI1.point), obstacleJ1.point.minus(obstacleI1.point)) /
-                            _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].det(obstacleI2.point.minus(obstacleI1.point), obstacleJ1.point.minus(obstacleJ2.point));
-                        var splitpoint = obstacleJ1.point.plus((obstacleJ2.point.minus(obstacleJ1.point)).scale(t));
-                        var newObstacle = new _Obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]();
-                        newObstacle.point = splitpoint;
-                        newObstacle.previous = obstacleJ1;
-                        newObstacle.next = obstacleJ2;
-                        newObstacle.isConvex = true;
-                        newObstacle.unitDir = obstacleJ1.unitDir;
-                        newObstacle.id = this.simulator.obstacles.length;
-                        this.simulator.obstacles.push(newObstacle);
-                        obstacleJ1.next = newObstacle;
-                        obstacleJ2.previous = newObstacle;
-                        if (j1LeftOfI > 0.0) {
-                            leftObstacles[leftCounter++] = obstacleJ1;
-                            rightObstacles[rightCounter++] = newObstacle;
-                        }
-                        else {
-                            rightObstacles[rightCounter++] = obstacleJ1;
-                            leftObstacles[leftCounter++] = newObstacle;
-                        }
-                    }
-                }
-                node.obstacle = obstacleI1;
-                node.left = this._buildObstacleTreeRecursive(leftObstacles);
-                node.right = this._buildObstacleTreeRecursive(rightObstacles);
-                return node;
-            }
+            this.agentTree_[node].left = node + 1;
+            this.agentTree_[node].right = node + 2 * (left - begin);
+            this.buildAgentTreeRecursive(begin, left, this.agentTree_[node].left);
+            this.buildAgentTreeRecursive(left, end, this.agentTree_[node].right);
         }
     }
     computeAgentNeighbors(agent, rangeSq) {
-        this._queryAgentTreeRecursive(agent, rangeSq, 0);
+        this.queryAgentTreeRecursive(agent, rangeSq, 0);
     }
-    computeObstacleNeighbors(agent, rangeSq) {
-        this._queryObstacleTreeRecursive(agent, rangeSq, this.obstacleTree);
-    }
-    _queryAgentTreeRecursive(agent, rangeSq, node) {
-        let agentTree = this.agentTree;
-        if (agentTree[node].end - agentTree[node].begin <= this.MAXLEAF_SIZE) {
-            for (var i = agentTree[node].begin; i < agentTree[node].end; ++i) {
-                agent.insertAgentNeighbor(this.agents[i], rangeSq);
+    queryAgentTreeRecursive(agent, rangeSq, node) {
+        if (this.agentTree_[node].end - this.agentTree_[node].begin <= this.MAX_LEAF_SIZE) {
+            for (var i = this.agentTree_[node].begin; i < this.agentTree_[node].end; ++i) {
+                agent.insertAgentNeighbor(this.agents_[i], _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq);
             }
         }
         else {
-            let distSqLeft = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].left].minX - agent.position.x)) +
-                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.x - agentTree[agentTree[node].left].maxX)) +
-                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].left].minY - agent.position.y)) +
-                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.y - agentTree[agentTree[node].left].maxY));
-            let distSqRight = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].right].minX - agent.position.x)) +
-                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.x - agentTree[agentTree[node].right].maxX)) +
-                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agentTree[agentTree[node].right].minY - agent.position.y)) +
-                _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(Math.max(0, agent.position.y - agentTree[agentTree[node].right].maxY));
+            var distSqLeft = _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, this.agentTree_[this.agentTree_[node].left].minX - agent.position_.x)) + _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, agent.position_.x - this.agentTree_[this.agentTree_[node].left].maxX)) + _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, this.agentTree_[this.agentTree_[node].left].minY - agent.position_.y)) + _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, agent.position_.y - this.agentTree_[this.agentTree_[node].left].maxY));
+            var distSqRight = _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, this.agentTree_[this.agentTree_[node].right].minX - agent.position_.x)) + _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, agent.position_.x - this.agentTree_[this.agentTree_[node].right].maxX)) + _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, this.agentTree_[this.agentTree_[node].right].minY - agent.position_.y)) + _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(Math.max(0, agent.position_.y - this.agentTree_[this.agentTree_[node].right].maxY));
             if (distSqLeft < distSqRight) {
-                if (distSqLeft < rangeSq) {
-                    this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].left);
-                    if (distSqRight < rangeSq) {
-                        this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].right);
+                if (distSqLeft < _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq) {
+                    this.queryAgentTreeRecursive(agent, _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq, this.agentTree_[node].left);
+                    if (distSqRight < _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq) {
+                        this.queryAgentTreeRecursive(agent, _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq, this.agentTree_[node].right);
                     }
                 }
             }
             else {
-                if (distSqRight < rangeSq) {
-                    this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].right);
-                    if (distSqLeft < rangeSq) {
-                        this._queryAgentTreeRecursive(agent, rangeSq, agentTree[node].left);
+                if (distSqRight < _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq) {
+                    this.queryAgentTreeRecursive(agent, _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq, this.agentTree_[node].right);
+                    if (distSqLeft < _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq) {
+                        this.queryAgentTreeRecursive(agent, _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"].rangeSq, this.agentTree_[node].left);
                     }
                 }
             }
         }
     }
-    // pass ref range
-    _queryObstacleTreeRecursive(agent, rangeSq, node) {
+    buildObstacleTree() {
+        this.obstacleTree_ = new _ObstacleTreeNode__WEBPACK_IMPORTED_MODULE_4__["ObstacleTreeNode"]();
+        var obstacles = [];
+        for (var i = 0; i < _Simulator__WEBPACK_IMPORTED_MODULE_6__["Simulator"].Instance().obstacles_.length; ++i) {
+            obstacles[i] = _Simulator__WEBPACK_IMPORTED_MODULE_6__["Simulator"].Instance().obstacles_[i];
+        }
+        this.obstacleTree_ = this.buildObstacleTreeRecursive(obstacles);
+    }
+    buildObstacleTreeRecursive(obstacles) {
+        // console.log("buildObstacleTreeRecursive"); 
+        if (obstacles.length == 0) {
+            return null;
+        }
+        var node = new _ObstacleTreeNode__WEBPACK_IMPORTED_MODULE_4__["ObstacleTreeNode"]();
+        var optimalSplit = 0;
+        var minLeft = obstacles.length;
+        var minRight = obstacles.length;
+        for (var i = 0; i < obstacles.length; ++i) {
+            var leftSize = 0;
+            var rightSize = 0;
+            var obstacleI1 = obstacles[i];
+            var obstacleI2 = obstacleI1.nextObstacle_;
+            /* Compute optimal split node. */
+            for (var j = 0; j < obstacles.length; ++j) {
+                if (i == j) {
+                    continue;
+                }
+                var obstacleJ1 = obstacles[j];
+                var obstacleJ2 = obstacleJ1.nextObstacle_;
+                var j1LeftOfI = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(obstacleI1.point_, obstacleI2.point_, obstacleJ1.point_);
+                var j2LeftOfI = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(obstacleI1.point_, obstacleI2.point_, obstacleJ2.point_);
+                if (j1LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON && j2LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON) {
+                    ++leftSize;
+                }
+                else if (j1LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON && j2LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON) {
+                    ++rightSize;
+                }
+                else {
+                    ++leftSize;
+                    ++rightSize;
+                }
+                var l = new _FloatPair__WEBPACK_IMPORTED_MODULE_2__["FloatPair"](Math.max(leftSize, rightSize), Math.min(leftSize, rightSize));
+                var r = new _FloatPair__WEBPACK_IMPORTED_MODULE_2__["FloatPair"](Math.max(minLeft, minRight), Math.min(minLeft, minRight));
+                if (_FloatPair__WEBPACK_IMPORTED_MODULE_2__["FloatPair"].sup_equal(l, r)) {
+                    break;
+                }
+            }
+            var l = new _FloatPair__WEBPACK_IMPORTED_MODULE_2__["FloatPair"](Math.max(leftSize, rightSize), Math.min(leftSize, rightSize));
+            var r = new _FloatPair__WEBPACK_IMPORTED_MODULE_2__["FloatPair"](Math.max(minLeft, minRight), Math.min(minLeft, minRight));
+            if (_FloatPair__WEBPACK_IMPORTED_MODULE_2__["FloatPair"].inf(l, r)) {
+                minLeft = leftSize;
+                minRight = rightSize;
+                optimalSplit = i;
+            }
+        }
+        /* Build split node. */
+        var leftObstacles = [];
+        for (var n = 0; n < minLeft; ++n)
+            leftObstacles[n] = null;
+        var rightObstacles = [];
+        for (var n = 0; n < minRight; ++n)
+            rightObstacles[n] = null;
+        var leftCounter = 0;
+        var rightCounter = 0;
+        var i = optimalSplit;
+        var obstacleI1 = obstacles[i];
+        var obstacleI2 = obstacleI1.nextObstacle_;
+        for (var j = 0; j < obstacles.length; ++j) {
+            if (i == j) {
+                continue;
+            }
+            var obstacleJ1 = obstacles[j];
+            var obstacleJ2 = obstacleJ1.nextObstacle_;
+            var j1LeftOfI = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(obstacleI1.point_, obstacleI2.point_, obstacleJ1.point_);
+            var j2LeftOfI = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(obstacleI1.point_, obstacleI2.point_, obstacleJ2.point_);
+            if (j1LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON && j2LeftOfI >= -_RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON) {
+                leftObstacles[leftCounter++] = obstacles[j];
+            }
+            else if (j1LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON && j2LeftOfI <= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].RVO_EPSILON) {
+                rightObstacles[rightCounter++] = obstacles[j];
+            }
+            else {
+                /* Split obstacle j. */
+                //  float t = RVOMath.det(obstacleI2.point_ - obstacleI1.point_, obstacleJ1.point_ - obstacleI1.point_) / RVOMath.det(obstacleI2.point_ - obstacleI1.point_, obstacleJ1.point_ - obstacleJ2.point_);
+                var t1 = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].det(obstacleI2.point_.moins(obstacleI1.point_), obstacleJ1.point_.moins(obstacleI1.point_));
+                var t2 = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].det(obstacleI2.point_.moins(obstacleI1.point_), obstacleJ1.point_.moins(obstacleJ2.point_));
+                var t = t1 / t2;
+                //Vector2 splitpoint = obstacleJ1.point_ + t * (obstacleJ2.point_ - obstacleJ1.point_);
+                var vMinus = obstacleJ2.point_.moins(obstacleJ1.point_);
+                var vMul = vMinus.mul_k(t);
+                var splitpoint = obstacleJ1.point_.plus(vMul);
+                var newObstacle = new _Obstacle__WEBPACK_IMPORTED_MODULE_3__["Obstacle"]();
+                newObstacle.point_ = splitpoint;
+                newObstacle.prevObstacle_ = obstacleJ1;
+                newObstacle.nextObstacle_ = obstacleJ2;
+                newObstacle.isConvex_ = true;
+                newObstacle.unitDir_ = obstacleJ1.unitDir_;
+                newObstacle.id_ = _Simulator__WEBPACK_IMPORTED_MODULE_6__["Simulator"].Instance().obstacles_.length;
+                _Simulator__WEBPACK_IMPORTED_MODULE_6__["Simulator"].Instance().obstacles_.push(newObstacle);
+                obstacleJ1.nextObstacle_ = newObstacle;
+                obstacleJ2.prevObstacle_ = newObstacle;
+                if (j1LeftOfI > 0) {
+                    leftObstacles[leftCounter++] = obstacleJ1;
+                    rightObstacles[rightCounter++] = newObstacle;
+                }
+                else {
+                    rightObstacles[rightCounter++] = obstacleJ1;
+                    leftObstacles[leftCounter++] = newObstacle;
+                }
+            }
+        }
+        node.obstacle = obstacleI1;
+        node.left = this.buildObstacleTreeRecursive(leftObstacles);
+        node.right = this.buildObstacleTreeRecursive(rightObstacles);
+        return node;
+    }
+    computeObstacleNeighbors(agent, rangeSq) {
+        // console.log("compute"); 
+        this.queryObstacleTreeRecursive(agent, rangeSq, this.obstacleTree_);
+    }
+    queryObstacleTreeRecursive(agent, rangeSq, node) {
         if (node == null) {
             return;
         }
-        else {
-            let obstacle1 = node.obstacle;
-            let obstacle2 = obstacle1.next;
-            let agentLeftOfLine = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacle1.point, obstacle2.point, agent.position);
-            this._queryObstacleTreeRecursive(agent, rangeSq, (agentLeftOfLine >= 0 ? node.left : node.right));
-            let distSqLine = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(agentLeftOfLine) / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(obstacle2.point.minus(obstacle1.point));
-            if (distSqLine < rangeSq) {
-                if (agentLeftOfLine < 0) {
-                    /*
-                     * Try obstacle at this node only if is on right side of
-                     * obstacle (and can see obstacle).
-                     */
-                    agent.insertObstacleNeighbor(node.obstacle, rangeSq);
-                }
-                /* Try other side of line. */
-                this._queryObstacleTreeRecursive(agent, rangeSq, (agentLeftOfLine >= 0 ? node.right : node.left));
+        var obstacle1 = node.obstacle;
+        var obstacle2 = obstacle1.nextObstacle_;
+        var agentLeftOfLine = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(obstacle1.point_, obstacle2.point_, agent.position_);
+        this.queryObstacleTreeRecursive(agent, rangeSq, (agentLeftOfLine >= 0 ? node.left : node.right));
+        var distSqLine = _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(agentLeftOfLine) / _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].absSq(obstacle2.point_.moins(obstacle1.point_));
+        if (distSqLine < rangeSq) {
+            if (agentLeftOfLine < 0) {
+                /*
+                 * Try obstacle at this node only if agent is on right side of
+                 * obstacle (and can see obstacle).
+                 */
+                agent.insertObstacleNeighbor(node.obstacle, rangeSq);
             }
+            /* Try other side of line. */
+            this.queryObstacleTreeRecursive(agent, rangeSq, (agentLeftOfLine >= 0 ? node.right : node.left));
         }
     }
     queryVisibility(q1, q2, radius) {
-        return this._queryVisibilityRecursive(q1, q2, radius, this.obstacleTree);
+        return this.queryVisibilityRecursive(q1, q2, radius, this.obstacleTree_);
     }
-    _queryVisibilityRecursive(q1, q2, radius, node) {
+    queryVisibilityRecursive(q1, q2, radius, node) {
         if (node == null) {
             return true;
         }
         else {
             var obstacle1 = node.obstacle;
-            var obstacle2 = obstacle1.next;
-            var q1LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacle1.point, obstacle2.point, q1);
-            var q2LeftOfI = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(obstacle1.point, obstacle2.point, q2);
-            var invLengthI = 1.0 / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(obstacle2.point.minus(obstacle1.point));
+            var obstacle2 = obstacle1.nextObstacle_;
+            var q1LeftOfI = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(obstacle1.point_, obstacle2.point_, q1);
+            var q2LeftOfI = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(obstacle1.point_, obstacle2.point_, q2);
+            var invLengthI = 1 / _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].absSq(obstacle2.point_.moins(obstacle1.point_));
             if (q1LeftOfI >= 0 && q2LeftOfI >= 0) {
-                return this._queryVisibilityRecursive(q1, q2, radius, node.left)
-                    && ((_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q1LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
-                        && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q2LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius))
-                        || this._queryVisibilityRecursive(q1, q2, radius, node.right));
+                return this.queryVisibilityRecursive(q1, q2, radius, node.left) && ((_RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(q1LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(radius) && _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(q2LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(radius)) || this.queryVisibilityRecursive(q1, q2, radius, node.right));
             }
             else if (q1LeftOfI <= 0 && q2LeftOfI <= 0) {
-                return this._queryVisibilityRecursive(q1, q2, radius, node.right)
-                    && ((_RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q1LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
-                        && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(q2LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius))
-                        || this._queryVisibilityRecursive(q1, q2, radius, node.left));
+                return this.queryVisibilityRecursive(q1, q2, radius, node.right) && ((_RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(q1LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(radius) && _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(q2LeftOfI) * invLengthI >= _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(radius)) || this.queryVisibilityRecursive(q1, q2, radius, node.left));
             }
             else if (q1LeftOfI >= 0 && q2LeftOfI <= 0) {
                 /* One can see through obstacle from left to right. */
-                return this._queryVisibilityRecursive(q1, q2, radius, node.left)
-                    && this._queryVisibilityRecursive(q1, q2, radius, node.right);
+                return this.queryVisibilityRecursive(q1, q2, radius, node.left) && this.queryVisibilityRecursive(q1, q2, radius, node.right);
             }
             else {
-                var point1LeftOfQ = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(q1, q2, obstacle1.point);
-                var point2LeftOfQ = _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].leftOf(q1, q2, obstacle2.point);
-                var invLengthQ = 1.0 / _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].absSq(q2.minus(q1));
-                return (point1LeftOfQ * point2LeftOfQ >= 0
-                    && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(point1LeftOfQ) * invLengthQ > _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
-                    && _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(point2LeftOfQ) * invLengthQ > _RVOMath__WEBPACK_IMPORTED_MODULE_0__["default"].sqr(radius)
-                    && this._queryVisibilityRecursive(q1, q2, radius, node.left)
-                    && this._queryVisibilityRecursive(q1, q2, radius, node.right));
+                var point1LeftOfQ = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(q1, q2, obstacle1.point_);
+                var point2LeftOfQ = _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].leftOf(q1, q2, obstacle2.point_);
+                var invLengthQ = 1 / _Vector2__WEBPACK_IMPORTED_MODULE_7__["Vector2"].absSq(q2.moins(q1));
+                return (point1LeftOfQ * point2LeftOfQ >= 0 && _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(point1LeftOfQ) * invLengthQ > _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(radius) && _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(point2LeftOfQ) * invLengthQ > _RVOMath__WEBPACK_IMPORTED_MODULE_5__["RVOMath"].sqr(radius) && this.queryVisibilityRecursive(q1, q2, radius, node.left) && this.queryVisibilityRecursive(q1, q2, radius, node.right));
             }
         }
     }
 }
-class FloatPair {
-    constructor(a = 0, b = 0) {
-        this.a = 0;
-        this.b = 0;
-        this.a = a;
-        this.b = b;
+;
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/KeyValuePair.ts":
+/*!**********************************************!*\
+  !*** ./src/script/logic/rvo/KeyValuePair.ts ***!
+  \**********************************************/
+/*! exports provided: KeyValuePair */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeyValuePair", function() { return KeyValuePair; });
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
+/// <reference path="Agent.ts" />
+/// <reference path="Obstacle.ts" />
+class KeyValuePair {
+    constructor(key_, value_) {
+        this.Key = key_;
+        this.Value = value_;
     }
-    _mt(rhs) {
-        return this.a < rhs.a || !(rhs.a < this.a) && this.b < rhs.b;
-    }
-    _met(rhs) {
-        return (this.a == rhs.a && this.b == rhs.b) || this._mt(rhs);
-    }
-    //greater-than
-    _gt(rhs) {
-        return !this._met(rhs);
-    }
-    //greater-or-equal-than
-    _get(rhs) {
-        return !this._mt(rhs);
-    }
-}
-class AgentTreeNode {
-    constructor() {
-        this.begin = 0;
-        this.end = 0;
-        this.left = 0;
-        this.maxX = 0;
-        this.maxY = 0;
-        this.minX = 0;
-        this.minY = 0;
-        this.right = 0;
-    }
-}
-class ObstacleTreeNode {
 }
 
 
@@ -19207,34 +19289,14 @@ class ObstacleTreeNode {
 /*!**************************************!*\
   !*** ./src/script/logic/rvo/Line.ts ***!
   \**************************************/
-/*! exports provided: default */
+/*! exports provided: Line */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Line; });
-/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Line", function() { return Line; });
+// / <reference path="Vector2.ts" />
 class Line {
-    /**
-     * Constructs and initializes a directed line with the specified point and
-     * direction.
-     *
-     * @param point     A point on the directed line.
-     * @param direction The direction of the directed line.
-     */
-    constructor(point = null, direction = null) {
-        /**
-         * The direction of this directed line.
-         */
-        this.direction = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
-        /**
-         * A point on this directed line.
-         */
-        this.point = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
-        this.direction = direction;
-        this.point = point;
-    }
 }
 
 
@@ -19244,21 +19306,32 @@ class Line {
 /*!******************************************!*\
   !*** ./src/script/logic/rvo/Obstacle.ts ***!
   \******************************************/
-/*! exports provided: default */
+/*! exports provided: Obstacle */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Obstacle; });
-/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Obstacle", function() { return Obstacle; });
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
 class Obstacle {
-    constructor() {
-        this.point = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
-        this.unitDir = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO;
-        this.isConvex = false;
-        this.id = 0;
-    }
+}
+
+
+/***/ }),
+
+/***/ "./src/script/logic/rvo/ObstacleTreeNode.ts":
+/*!**************************************************!*\
+  !*** ./src/script/logic/rvo/ObstacleTreeNode.ts ***!
+  \**************************************************/
+/*! exports provided: ObstacleTreeNode */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObstacleTreeNode", function() { return ObstacleTreeNode; });
+/// <reference path="Obstacle.ts" />
+class ObstacleTreeNode {
 }
 
 
@@ -19275,7 +19348,7 @@ class Obstacle {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVOHelper; });
 /* harmony import */ var _Simulator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Simulator */ "./src/script/logic/rvo/Simulator.ts");
-/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
+/* harmony import */ var _Vector2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Vector2 */ "./src/script/logic/rvo/Vector2.ts");
 
 
 class RVOHelper {
@@ -19286,17 +19359,21 @@ class RVOHelper {
         return this._instance;
     }
     InitRVO() {
-        this._simulator = new _Simulator__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        this._simulator = new _Simulator__WEBPACK_IMPORTED_MODULE_0__["Simulator"]();
         this._simulator.setTimeStep(1);
         this._simulator.setAgentDefaults(
         //在寻找周围邻居的搜索距离，这个值设置越大，会让小球在越远距离做出避障行为
         0.6, // neighbor distance (min = radius * radius)
         //寻找周围邻居的最大数目，这个值设置越大，最终计算的速度越 精确，但会加大计算量
-        100, // max neighbors
+        5, // max neighbors
         //计算动态的物体时的时间窗口
-        1, // time horizon
+        100, // time horizon
         //代表计算静态的物体时的时间窗口，比如在RTS游戏中，小兵 向城墙移动时，没必要做出避障，这个值需要设置的很
-        1);
+        1, // time horizon obstacles
+        //半径
+        0.3, 
+        //最大速度
+        0.5);
     }
     CreateAgent(colliderObj) {
         let cmp = colliderObj.getComponent(Laya.PhysicsCollider);
@@ -19307,35 +19384,14 @@ class RVOHelper {
         let shape = cmp.colliderShape;
         let radius = colliderObj.transform.localScale.x * shape.radius;
         let pos = colliderObj.transform.position;
-        let vec2 = new _Vector2D__WEBPACK_IMPORTED_MODULE_1__["default"](pos.x, pos.z);
+        let vec2 = new _Vector2__WEBPACK_IMPORTED_MODULE_1__["Vector2"](pos.x, pos.z);
         return this._simulator.addAgent(vec2, radius);
     }
     CreateObstacle() {
     }
     Step(dt) {
         let simulator = this._simulator;
-        simulator.timeStep = dt;
-        for (let i = 0; i < simulator.getNumAgents(); ++i) {
-            let agent = simulator.getAgent(i);
-        }
-        // for (let i = 0; i < simulator.getNumAgents(); ++i) {
-        //     let agent = simulator.getAgent(i);
-        //     let goal = agent.goal;
-        //     if (RVOMath.distance(goal, agent.position) < RVOMath.RVO_EPSILON) {
-        //         // Agent is within one radius of its goal, set preferred velocity to zero
-        //         // simulator.setAgentPrefVelocity(i, 0, 0);
-        //         agent.prefVelocity.setXY(0,0);
-        //     } else {
-        //         // Agent is far away from its goal, set preferred velocity as unit vector towards agent's goal.
-        //         let v = RVOMath.normalize(goal.minus(agent.position)).scale(agent.maxSpeed);
-        //         // simulator.setAgentPrefVelocity(i, v.x, v.y);
-        //         agent.prefVelocity.setXY(v.x , v.y);
-        //     }
-        // }
-        simulator.run();
-        // if (simulator.reachedGoal()) {
-        //     console.log('finish')
-        // }
+        simulator.doStep();
     }
 }
 
@@ -19346,51 +19402,26 @@ class RVOHelper {
 /*!*****************************************!*\
   !*** ./src/script/logic/rvo/RVOMath.ts ***!
   \*****************************************/
-/*! exports provided: default */
+/*! exports provided: RVOMath */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RVOMath; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RVOMath", function() { return RVOMath; });
+/// <reference path="KdTree.ts" />
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
+/// <reference path="Agent.ts" />
+/// <reference path="Obstacle.ts" />
+/// <reference path="AgentTreeNode.ts" />
+/// <reference path="ObstacleTreeNode.ts" />
 class RVOMath {
-    static absSq(v) {
-        return v.multiply(v);
-    }
-    static normalize(v) {
-        return v.scale(1 / RVOMath.abs(v)); // v / abs(v)
-    }
-    static distSqPointLineSegment(a, b, c) {
-        var aux1 = c.minus(a);
-        var aux2 = b.minus(a);
-        // r = ((c - a) * (b - a)) / absSq(b - a)
-        var r = aux1.multiply(aux2) / RVOMath.absSq(aux2);
-        if (r < 0) {
-            return RVOMath.absSq(aux1); // absSq(c - a)
-        }
-        else if (r > 1) {
-            return RVOMath.absSq(aux2); // absSq(c - b)
-        }
-        else {
-            return RVOMath.absSq(c.minus(a.plus(aux2.scale(r)))); // absSq(c - (a + r * (b - a)))
-        }
-    }
-    static distance(a, b) {
-        return RVOMath.absSq(a.minus(b));
-    }
     static sqr(p) {
         return p * p;
-    }
-    static det(v1, v2) {
-        return v1.x * v2.y - v1.y * v2.x;
-    }
-    static abs(v) {
-        return Math.sqrt(RVOMath.absSq(v));
-    }
-    static leftOf(a, b, c) {
-        return RVOMath.det(a.minus(c), b.minus(a));
+        // return Math.pow(p, 2); 
     }
 }
-RVOMath.RVO_EPSILON = 5;
+RVOMath.RVO_EPSILON = 0.0001;
 
 
 /***/ }),
@@ -19399,232 +19430,242 @@ RVOMath.RVO_EPSILON = 5;
 /*!*******************************************!*\
   !*** ./src/script/logic/rvo/Simulator.ts ***!
   \*******************************************/
-/*! exports provided: default */
+/*! exports provided: Simulator */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Simulator; });
-/* harmony import */ var _Vector2D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Vector2D */ "./src/script/logic/rvo/Vector2D.ts");
-/* harmony import */ var _Obstacle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Obstacle */ "./src/script/logic/rvo/Obstacle.ts");
-/* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Agent */ "./src/script/logic/rvo/Agent.ts");
-/* harmony import */ var _RVOMath__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RVOMath */ "./src/script/logic/rvo/RVOMath.ts");
-/* harmony import */ var _KdTree__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./KdTree */ "./src/script/logic/rvo/KdTree.ts");
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Simulator", function() { return Simulator; });
+/* harmony import */ var _Agent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Agent */ "./src/script/logic/rvo/Agent.ts");
+/* harmony import */ var _KdTree__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./KdTree */ "./src/script/logic/rvo/KdTree.ts");
+/* harmony import */ var _Obstacle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Obstacle */ "./src/script/logic/rvo/Obstacle.ts");
+/* harmony import */ var _Vector2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Vector2 */ "./src/script/logic/rvo/Vector2.ts");
+/// <reference path="KdTree.ts" />
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
+/// <reference path="Agent.ts" />
+/// <reference path="Obstacle.ts" />
+/// <reference path="AgentTreeNode.ts" />
+/// <reference path="ObstacleTreeNode.ts" />
 
 
 
 
 class Simulator {
     constructor() {
-        this.cacheAgentId = 0;
-        this.agents = [];
-        this.obstacles = [];
-        // private goals: Vector2D[] = [];
-        this.kdTree = new _KdTree__WEBPACK_IMPORTED_MODULE_4__["default"]();
-        this.timeStep = 1;
-        this.time = 0;
-        this.kdTree.simulator = this;
-        this.kdTree.MAXLEAF_SIZE = 1000;
+        this.time_ = 0;
+        this.agents_ = [];
+        this.obstacles_ = [];
+        this.time_ = 0;
+        this.defaultAgent_ = null;
+        this.kdTree_ = new _KdTree__WEBPACK_IMPORTED_MODULE_1__["KdTree"]();
+        this.timeStep_ = 1;
+        this.goals = [];
+        Simulator._instance = this;
     }
-    getGlobalTime() {
-        return this.time;
+    static Instance() {
+        return Simulator._instance;
     }
-    getNumAgents() {
-        return this.agents.length;
+    clear() {
     }
-    getAgent(i) {
-        return this.agents[i];
-    }
-    getTimeStep() {
-        return this.timeStep;
-    }
-    setAgentPrefVelocity(i, vx, vy) {
-        this.agents[i].prefVelocity.setXY(vx, vy);
-    }
-    setAgentPosition(i, x, y) {
-        this.agents[i].position.setXY(x, y);
-    }
-    setAgentGoal(i, x, y) {
-        // this.goals[i].setXY(x, y);
-        this.getAgent(i).goal.setXY(x, y);
-    }
-    setTimeStep(timeStep) {
-        this.timeStep = timeStep;
-    }
-    setAgentMoveSpeed(i, speed) {
-        this.agents[i].maxSpeed = speed;
-    }
-    getAgentPosition(i) {
-        return this.agents[i].position;
-    }
-    getAgentPrefVelocity(i) {
-        return this.agents[i].prefVelocity;
-    }
-    getAgentVelocity(i) {
-        return this.agents[i].velocity;
-    }
-    getAgentRadius(i) {
-        return this.agents[i].radius;
-    }
-    getAgentOrcaLines(i) {
-        return this.agents[i].orcaLines;
-    }
-    getAgentMoveSpeed(i) {
-        return this.agents[i].maxSpeed;
-    }
-    addAgent(position = new _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"](), radius = 1) {
-        if (!this.defaultAgent) {
-            throw new Error("no default agent");
+    doStep() {
+        // console.log("ds la simu"); 
+        this.kdTree_.buildAgentTree();
+        for (var i = 0; i < this.getNumAgents(); ++i) {
+            this.agents_[i].computeNeighbors();
+            this.agents_[i].computeNewVelocity();
         }
-        var agent = new _Agent__WEBPACK_IMPORTED_MODULE_2__["default"]();
-        agent.prefVelocity = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO.clone();
-        agent.position = position;
-        agent.maxNeighbors = this.defaultAgent.maxNeighbors;
-        agent.radius = radius;
-        // agent.radius = MathEx.Random(5, 10);
-        agent.maxSpeed = 2;
-        // agent.maxSpeed = MathEx.Random(2,5);
-        agent.neighborDist = this.defaultAgent.neighborDist;
-        agent.timeHorizon = this.defaultAgent.timeHorizon;
-        agent.timeHorizonObst = this.defaultAgent.timeHorizonObst;
-        agent.velocity = this.defaultAgent.velocity;
-        agent.simulator = this;
-        agent.goal = position.clone();
-        agent.id = this.cacheAgentId++;
-        this.agents.push(agent);
-        // return this.agents.length - 1;
-        return agent;
-    }
-    //  /** float */ neighborDist, /** int */ maxNeighbors, /** float */ timeHorizon, /** float */ timeHorizonObst, /** float */ radius, /** float*/ maxSpeed, /** Vector2 */ velocity)
-    setAgentDefaults(neighborDist, maxNeighbors, timeHorizon, timeHorizonObst) {
-        if (!this.defaultAgent) {
-            this.defaultAgent = new _Agent__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        for (var i = 0; i < this.getNumAgents(); ++i) {
+            this.agents_[i].update();
         }
-        this.defaultAgent.maxNeighbors = maxNeighbors;
-        this.defaultAgent.neighborDist = neighborDist;
-        this.defaultAgent.timeHorizon = timeHorizon;
-        this.defaultAgent.timeHorizonObst = timeHorizonObst;
-        this.defaultAgent.velocity = _Vector2D__WEBPACK_IMPORTED_MODULE_0__["default"].ZERO.clone();
-        this.defaultAgent.simulator = this;
+        this.time_ += this.timeStep_;
     }
-    run() {
-        this.kdTree.buildAgentTree();
-        for (var i = 0; i < this.getNumAgents(); i++) {
-            this.agents[i].computeNeighbors();
-            this.agents[i].computeNewVelocity();
-            this.agents[i].update();
-        }
-        this.time += this.timeStep;
+    processObstacles() {
+        this.kdTree_.buildObstacleTree();
     }
-    reachedGoal() {
-        for (var i = 0, len = this.getNumAgents(); i < len; ++i) {
-            let agent = this.getAgent(i);
-            let pos = agent.position;
-            if (_RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].absSq(agent.goal.minus(pos)) > _RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].RVO_EPSILON) {
-                return false;
-            }
-        }
-        return true;
+    queryVisibility(point1, point2, radius) {
+        return this.kdTree_.queryVisibility(point1, point2, radius);
     }
-    getGoal(i) {
-        return this.getAgent(i).goal;
-    }
-    /** 添加障碍 */
     addObstacle(vertices) {
         if (vertices.length < 2) {
             return -1;
         }
-        var obstacleNo = this.obstacles.length;
-        for (var i = 0, len = vertices.length; i < len; ++i) {
-            var obstacle = new _Obstacle__WEBPACK_IMPORTED_MODULE_1__["default"]();
-            obstacle.point = vertices[i];
+        var obstacleNo = this.obstacles_.length;
+        for (var i = 0; i < vertices.length; ++i) {
+            var obstacle = new _Obstacle__WEBPACK_IMPORTED_MODULE_2__["Obstacle"]();
+            obstacle.point_ = vertices[i];
             if (i != 0) {
-                obstacle.previous = this.obstacles[this.obstacles.length - 1];
-                obstacle.previous.next = obstacle;
+                obstacle.prevObstacle_ = this.obstacles_[this.obstacles_.length - 1];
+                obstacle.prevObstacle_.nextObstacle_ = obstacle;
             }
             if (i == vertices.length - 1) {
-                obstacle.next = this.obstacles[obstacleNo];
-                obstacle.next.previous = obstacle;
+                obstacle.nextObstacle_ = this.obstacles_[obstacleNo];
+                obstacle.nextObstacle_.prevObstacle_ = obstacle;
             }
-            obstacle.unitDir = _RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].normalize(vertices[(i == vertices.length - 1 ? 0 : i + 1)].minus(vertices[i]));
+            obstacle.unitDir_ = _Vector2__WEBPACK_IMPORTED_MODULE_3__["Vector2"].normalize(vertices[(i == vertices.length - 1 ? 0 : i + 1)].moins(vertices[i]));
             if (vertices.length == 2) {
-                obstacle.isConvex = true;
+                obstacle.isConvex_ = true;
             }
             else {
-                obstacle.isConvex = (_RVOMath__WEBPACK_IMPORTED_MODULE_3__["default"].leftOf(vertices[(i == 0 ? vertices.length - 1 : i - 1)], vertices[i], vertices[(i == vertices.length - 1 ? 0 : i + 1)]) >= 0);
+                obstacle.isConvex_ = (_Vector2__WEBPACK_IMPORTED_MODULE_3__["Vector2"].leftOf(vertices[(i == 0 ? vertices.length - 1 : i - 1)], vertices[i], vertices[(i == vertices.length - 1 ? 0 : i + 1)]) >= 0);
             }
-            obstacle.id = this.obstacles.length;
-            this.obstacles.push(obstacle);
+            obstacle.id_ = this.obstacles_.length;
+            this.obstacles_.push(obstacle);
         }
         return obstacleNo;
     }
-    removeObstacle(obstacleNo) {
+    addAgent(position, radius) {
+        if (this.defaultAgent_ == null) {
+            // return -1;
+            return null;
+        }
+        var agent = new _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"]();
+        agent.position_ = position;
+        agent.maxNeighbors_ = this.defaultAgent_.maxNeighbors_;
+        agent.maxSpeed_ = this.defaultAgent_.maxSpeed_;
+        agent.neighborDist_ = radius * 3;
+        // agent.neighborDist_ =this. defaultAgent_.neighborDist_;
+        agent.radius_ = this.defaultAgent_.radius_;
+        agent.radius_ = radius || this.defaultAgent_.radius_;
+        agent.timeHorizon_ = this.defaultAgent_.timeHorizon_;
+        agent.timeHorizonObst_ = this.defaultAgent_.timeHorizonObst_;
+        agent.velocity_ = this.defaultAgent_.velocity_;
+        agent.id_ = this.agents_.length;
+        this.agents_.push(agent);
+        this.goals.push(agent.position_.clone());
+        // return this.agents_.length - 1;
+        return agent;
     }
-    /** 更新障碍树 */
-    processObstacles() {
-        this.kdTree.buildObstacleTree();
+    setAgentDefaults(neighborDist, maxNeighbors, timeHorizon, timeHorizonObst, radius, maxSpeed, velocity = new _Vector2__WEBPACK_IMPORTED_MODULE_3__["Vector2"](0, 0)) {
+        if (this.defaultAgent_ == null) {
+            this.defaultAgent_ = new _Agent__WEBPACK_IMPORTED_MODULE_0__["Agent"]();
+        }
+        this.defaultAgent_.maxNeighbors_ = maxNeighbors;
+        this.defaultAgent_.maxSpeed_ = maxSpeed;
+        this.defaultAgent_.neighborDist_ = neighborDist;
+        this.defaultAgent_.radius_ = radius;
+        this.defaultAgent_.timeHorizon_ = timeHorizon;
+        this.defaultAgent_.timeHorizonObst_ = timeHorizonObst;
+        this.defaultAgent_.velocity_ = velocity;
     }
-    queryVisibility(point1, point2, radius) {
-        return this.kdTree.queryVisibility(point1, point2, radius);
+    setAgentPrefVelocity(agentNo, prefVelocity) {
+        this.agents_[agentNo].prefVelocity_ = prefVelocity;
     }
-    getObstacles() {
-        return this.obstacles;
+    setTimeStep(v) {
+        this.timeStep_ = v;
+    }
+    setAgentMaxSpeed(agentNo, maxSpeed) {
+        this.agents_[agentNo].maxSpeed_ = maxSpeed;
+    }
+    setAgentGoal(i, x, y) {
+        this.goals[i].x = x;
+        this.goals[i].y = y;
+    }
+    getAgentGoal(i) {
+        return this.goals[i];
+    }
+    setAgentRadius(agentNo, radius) {
+        this.agents_[agentNo].radius_ = radius;
+    }
+    getAgentOrientation(agentNo) {
+        return this.agents_[agentNo].orientation_;
+    }
+    getOrca(agentNo) {
+        return this.agents_[agentNo].orcaLines_;
+    }
+    getAgentPositionScreen(agentNo) {
+        return this.agents_[agentNo].positionScreen_;
+    }
+    getAgentPosition(agentNo) {
+        return this.agents_[agentNo].position_;
+    }
+    getNumAgents() {
+        return this.agents_.length;
+    }
+    getAgentRadius(agentNo) {
+        return this.agents_[agentNo].radius_;
     }
 }
 
 
 /***/ }),
 
-/***/ "./src/script/logic/rvo/Vector2D.ts":
-/*!******************************************!*\
-  !*** ./src/script/logic/rvo/Vector2D.ts ***!
-  \******************************************/
-/*! exports provided: default */
+/***/ "./src/script/logic/rvo/Vector2.ts":
+/*!*****************************************!*\
+  !*** ./src/script/logic/rvo/Vector2.ts ***!
+  \*****************************************/
+/*! exports provided: Vector2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Vector2D; });
-class Vector2D {
-    constructor(x = 0, y = 0) {
-        this.x = 0;
-        this.y = 0;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Vector2", function() { return Vector2; });
+/// <reference path="RVOMath.ts" />
+/// <reference path="KdTree.ts" />
+/// <reference path="Line.ts" />
+/// <reference path="Agent.ts" />
+/// <reference path="Obstacle.ts" />
+/// <reference path="AgentTreeNode.ts" />
+/// <reference path="ObstacleTreeNode.ts" />
+class Vector2 {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    plus(vector) {
-        return new Vector2D(this.x + vector.x, this.y + vector.y);
+    moins(v) {
+        return new Vector2(this.x - v.x, this.y - v.y);
     }
-    //subtract
-    minus(vector) {
-        return new Vector2D(this.x - vector.x, this.y - vector.y);
+    moinsSelf() {
+        return new Vector2(-this.x, -this.y);
     }
-    multiply(vector) {
-        return this.x * vector.x + this.y * vector.y;
+    plus(v) {
+        return new Vector2(this.x + v.x, this.y + v.y);
     }
-    scale(k) {
-        return new Vector2D(this.x * k, this.y * k);
+    mul(v) {
+        return this.x * v.x + this.y * v.y;
     }
-    normalize() {
-        return this.scale(1 / this.abs());
+    mul_k(k) {
+        return new Vector2(this.x * k, this.y * k);
     }
-    absSq() {
-        return this.multiply(this);
+    div_k(k) {
+        var s = 1 / k;
+        return new Vector2(this.x * s, this.y * s);
     }
-    abs() {
-        return Math.sqrt(this.absSq());
+    static absSq(v) {
+        return v.mul(v);
     }
-    clone() {
-        return new Vector2D(this.x, this.y);
+    static abs(v) {
+        return Math.sqrt(v.mul(v));
+    }
+    static det(v1, v2) {
+        return v1.x * v2.y - v1.y * v2.x;
+    }
+    static normalize(v) {
+        return v.div_k(Vector2.abs(v));
+    }
+    static leftOf(a, b, c) {
+        return Vector2.det(a.moins(c), b.moins(a));
+    }
+    static distSqPointLineSegment(a, b, c) {
+        var r = c.moins(a).mul(b.moins(a)) / Vector2.absSq(b.moins(a));
+        if (r < 0) {
+            return Vector2.absSq(c.moins(a));
+        }
+        else if (r > 1) {
+            return Vector2.absSq(c.moins(b));
+        }
+        else {
+            return Vector2.absSq(c.moins(a.plus(b.moins(a).mul_k(r))));
+        }
     }
     setXY(x, y) {
         this.x = x;
         this.y = y;
     }
+    clone() {
+        return new Vector2(this.x, this.y);
+    }
 }
-Vector2D.ZERO = new Vector2D();
-Vector2D.cacheVec2 = new Vector2D();
 
 
 /***/ }),
@@ -20252,6 +20293,9 @@ class UI_FightMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORT
         super._OnShow();
         this.CmpJoy = new _LTGame_UIExt_Cmp_CmpJoystick__WEBPACK_IMPORTED_MODULE_0__["CmpJoystick"](this.ui.m_img_bg, this.ui.m_com_joy, this.ui.m_com_joy.m_handle);
     }
+    _OnHide() {
+        this.CmpJoy.Dispose();
+    }
 }
 
 
@@ -20286,6 +20330,7 @@ class UI_MainMediator extends _LTGame_UIExt_FGui_BaseUIMediator__WEBPACK_IMPORTE
         this.ui.m_btn_start.onClick(this, this.StartGame);
     }
     StartGame() {
+        // this.Hide();
         _common_GlobalUnit__WEBPACK_IMPORTED_MODULE_2__["default"].game.StartGame();
     }
 }
@@ -20391,7 +20436,8 @@ class UI_Fight extends fgui.GComponent {
     }
     onConstruct() {
         this.m_img_bg = (this.getChildAt(0));
-        this.m_com_joy = (this.getChildAt(1));
+        this.m_btn_start = (this.getChildAt(1));
+        this.m_com_joy = (this.getChildAt(2));
     }
 }
 UI_Fight.URL = "ui://c6t3i6k8r0x74";

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="300,300">
+  <displayList>
+    <graph id="n0_uyn7" name="bg" xy="0,0" size="300,300" type="rect"/>
+    <graph id="n1_uyn7" name="handle" xy="-21,66" size="100,100" type="rect" fillColor="#ff000000"/>
+  </displayList>
+</component>

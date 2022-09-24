@@ -1,224 +1,231 @@
 
-import Vector2D from "./Vector2D";
-import Obstacle from "./Obstacle";
-import Agent from "./Agent";
-import RVOMath from "./RVOMath";
-import KdTree from "./KdTree";
-import Line from "./Line";
-import MathEx from "../../../LTGame/LTUtils/MathEx";
+/// <reference path="KdTree.ts" />
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
+/// <reference path="Agent.ts" />
+/// <reference path="Obstacle.ts" />
+/// <reference path="AgentTreeNode.ts" />
+/// <reference path="ObstacleTreeNode.ts" />
+
+import { Agent } from "./Agent";
+import { KdTree } from "./KdTree";
+import { Line } from "./Line";
+import { Obstacle } from "./Obstacle";
+import { Vector2 } from "./Vector2";
 
 
-export default class Simulator {
-  public cacheAgentId: number = 0;
-  public agents: Agent[] = [];
-  public obstacles: Obstacle[] = [];
-  // private goals: Vector2D[] = [];
-  public kdTree: KdTree = new KdTree();
+export class Simulator {
 
-  public timeStep = 1;
+   
+    defaultAgent_: Agent;
+    agents_: Agent[];
 
-  private defaultAgent: Agent; // Agent
-
-  private time = 0;
-
-  constructor() {
-    this.kdTree.simulator = this;
-    this.kdTree.MAXLEAF_SIZE = 1000;
-  }
-
-  getGlobalTime(): number {
-    return this.time;
-  }
-
-  getNumAgents(): number {
-    return this.agents.length;
-  }
-
-  getAgent(i: number): Agent {
-    return this.agents[i];
-  }
-
-  getTimeStep(): number {
-    return this.timeStep;
-  }
-
-  setAgentPrefVelocity(i: number, vx: number, vy: number) {
-    this.agents[i].prefVelocity.setXY(vx, vy);
-  }
-
-  setAgentPosition(i: number, x: number, y: number) {
-    this.agents[i].position.setXY(x, y);
-  }
-
-  setAgentGoal(i: number, x: number, y: number) {
-    // this.goals[i].setXY(x, y);
-    this.getAgent(i).goal.setXY(x, y);
-  }
-
-  setTimeStep(timeStep: number) {
-    this.timeStep = timeStep;
-  } 
+    time_: number = 0;
+    timeStep_: number;
+   
+    obstacles_:Obstacle[];
+    kdTree_: KdTree;
   
-  setAgentMoveSpeed(i: number, speed: number) {
-    this.agents[i].maxSpeed = speed;
-  }
+    goals: Vector2[];
+    static _instance: Simulator;
+  
 
-  getAgentPosition(i: number): Vector2D {
-    return this.agents[i].position;
-  }
+    constructor() {
 
-  getAgentPrefVelocity(i: number): Vector2D {
-    return this.agents[i].prefVelocity;
-  }
-
-  getAgentVelocity(i: number): Vector2D {
-    return this.agents[i].velocity;
-  }
-
-  getAgentRadius(i: number): number {
-    return this.agents[i].radius;
-  }
-
-  getAgentOrcaLines(i: number): Line[] {
-    return this.agents[i].orcaLines;
-  }
-
-  getAgentMoveSpeed(i: number): number {
-    return this.agents[i].maxSpeed;
-  }
-
-  addAgent(position: Vector2D = new Vector2D(), radius: number = 1): Agent {
-    if (!this.defaultAgent) {
-      throw new Error("no default agent");
+        this.agents_ = [];
+        this.obstacles_ = [];
+        this.time_ = 0;
+        this.defaultAgent_ = null;
+        this.kdTree_ = new KdTree();
+        this.timeStep_ = 1;
+        this.goals = [];
+        Simulator._instance = this; 
     }
 
-    var agent = new Agent();
-    agent.prefVelocity = Vector2D.ZERO.clone();
-    agent.position = position;
-    agent.maxNeighbors = this.defaultAgent.maxNeighbors;
-
-    agent.radius = radius;
-    // agent.radius = MathEx.Random(5, 10);
-   
-    agent.maxSpeed = 2;
-    // agent.maxSpeed = MathEx.Random(2,5);
-   
-    agent.neighborDist = this.defaultAgent.neighborDist;
-    agent.timeHorizon = this.defaultAgent.timeHorizon;
-    agent.timeHorizonObst = this.defaultAgent.timeHorizonObst;
-    agent.velocity = this.defaultAgent.velocity;
-    agent.simulator = this;
-    agent.goal = position.clone()
-
-    agent.id = this.cacheAgentId++;
-    this.agents.push(agent);
-
-    // return this.agents.length - 1;
-    return agent;
-  }
-
-  //  /** float */ neighborDist, /** int */ maxNeighbors, /** float */ timeHorizon, /** float */ timeHorizonObst, /** float */ radius, /** float*/ maxSpeed, /** Vector2 */ velocity)
-  setAgentDefaults(
-    neighborDist: number,
-    maxNeighbors: number,
-    timeHorizon: number,
-    timeHorizonObst: number,
-   ) {
-    if (!this.defaultAgent) {
-      this.defaultAgent = new Agent();
+    public static Instance(): Simulator {
+       
+        return Simulator._instance;
     }
 
-    this.defaultAgent.maxNeighbors = maxNeighbors;
-   
-    this.defaultAgent.neighborDist = neighborDist;
+    public clear() {
 
-    this.defaultAgent.timeHorizon = timeHorizon;
-    this.defaultAgent.timeHorizonObst = timeHorizonObst;
+    }
+
+    public doStep() {
+
+
+       // console.log("ds la simu"); 
+
+        this.kdTree_.buildAgentTree();
+
+        
+
+        for (var i = 0; i < this.getNumAgents(); ++i) {
+            this.agents_[i].computeNeighbors();
+            this.agents_[i].computeNewVelocity();
+        }
+        for (var i = 0; i < this.getNumAgents(); ++i) {
+            this.agents_[i].update();
+        }
+
+        
+        this.time_ += this.timeStep_;
+    }
+
+    public processObstacles() {
+
+        this.kdTree_.buildObstacleTree();
+    }
+
+    public queryVisibility(point1 : Vector2 , point2:Vector2, radius:number) 
+        {
+            return this.kdTree_.queryVisibility(point1, point2, radius);
+        }
+
+    public addObstacle(vertices: Vector2[]): number {
+
+        if (vertices.length < 2) {
+            return -1;
+        }
+
+        var obstacleNo = this.obstacles_.length; 
+
+        for (var i = 0; i < vertices.length; ++i) {
+            var obstacle:Obstacle = new Obstacle();
+            obstacle.point_ = vertices[i];
+
+            if (i != 0) {
+                obstacle.prevObstacle_ = this.obstacles_[this.obstacles_.length - 1]; 
+                obstacle.prevObstacle_.nextObstacle_ = obstacle;
+            }
+
+            if (i == vertices.length - 1) {
+                obstacle.nextObstacle_ = this.obstacles_[obstacleNo];
+                obstacle.nextObstacle_ .prevObstacle_ = obstacle;
+            }
+
+            obstacle.unitDir_ = Vector2.normalize(vertices[(i == vertices.length - 1 ? 0 : i + 1)].moins( vertices[i]));
+
+            if (vertices.length == 2) {
+                obstacle.isConvex_ = true;
+            }
+            else {
+                obstacle.isConvex_ = (Vector2.leftOf(vertices[(i == 0 ? vertices.length - 1 : i - 1)], vertices[i], vertices[(i == vertices.length - 1 ? 0 : i + 1)]) >= 0);
+            }
+
+            obstacle.id_ = this.obstacles_.length;
+
+            this.obstacles_.push(obstacle);
+        }
+
+        return obstacleNo;
+    }
+
+
     
-    this.defaultAgent.velocity = Vector2D.ZERO.clone();
-    this.defaultAgent.simulator = this;
-  }
 
-  run() {
-    this.kdTree.buildAgentTree();
+    public addAgent(position:Vector2, radius?: number): Agent{
+        if (this.defaultAgent_ == null) {
+            // return -1;
+            return null;
+        }
 
-    for (var i = 0; i < this.getNumAgents(); i++) {
-      this.agents[i].computeNeighbors();
-      this.agents[i].computeNewVelocity();
-      this.agents[i].update();
+        var  agent:Agent = new Agent();
+
+        agent.position_ = position;
+        agent.maxNeighbors_ = this.defaultAgent_.maxNeighbors_;
+        agent.maxSpeed_ = this.defaultAgent_.maxSpeed_;
+        agent.neighborDist_ = radius * 3;
+        // agent.neighborDist_ =this. defaultAgent_.neighborDist_;
+        agent.radius_ = this.defaultAgent_.radius_;
+        agent.radius_ = radius || this.defaultAgent_.radius_;
+        agent.timeHorizon_ = this.defaultAgent_.timeHorizon_;
+        agent.timeHorizonObst_ =this. defaultAgent_.timeHorizonObst_;
+        agent.velocity_ = this.defaultAgent_.velocity_;
+
+        agent.id_ = this.agents_.length;
+
+        this.agents_.push(agent);
+        this.goals.push(agent.position_.clone());
+        // return this.agents_.length - 1;
+        return agent;
+
     }
 
-    this.time += this.timeStep;
-  }
+    public setAgentDefaults(neighborDist:number,  maxNeighbors:number,  timeHorizon:number, timeHorizonObst:number, radius:number,  maxSpeed:number, velocity:Vector2 = new Vector2(0,0)):void
+    {
+        if (this.defaultAgent_ == null) {
+            this.defaultAgent_ = new Agent();
+        }
 
-  reachedGoal(): boolean {
-
-    for (var i = 0, len = this.getNumAgents(); i < len; ++i) {
-      let agent = this.getAgent(i);
-      let pos = agent.position;
-      if (RVOMath.absSq(agent.goal.minus(pos)) > RVOMath.RVO_EPSILON) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  getGoal(i: number): Vector2D {
-    return this.getAgent(i).goal;
-  }
-
-  /** 添加障碍 */
-  addObstacle(vertices: Vector2D[]): number {
-    if (vertices.length < 2) {
-      return -1;
+        this.defaultAgent_.maxNeighbors_ = maxNeighbors;
+        this.defaultAgent_.maxSpeed_ = maxSpeed;
+        this.defaultAgent_.neighborDist_ = neighborDist;
+        this.defaultAgent_.radius_ = radius;
+        this.defaultAgent_.timeHorizon_ = timeHorizon;
+        this.defaultAgent_.timeHorizonObst_ = timeHorizonObst;
+        this.defaultAgent_.velocity_ = velocity;
     }
 
-    var obstacleNo = this.obstacles.length;
-
-    for (var i = 0, len = vertices.length; i < len; ++i) {
-      var obstacle = new Obstacle();
-      obstacle.point = vertices[i];
-      if (i != 0) {
-        obstacle.previous = this.obstacles[this.obstacles.length - 1];
-        obstacle.previous.next = obstacle;
-      }
-      if (i == vertices.length - 1) {
-        obstacle.next = this.obstacles[obstacleNo];
-        obstacle.next.previous = obstacle;
-      }
-      obstacle.unitDir = RVOMath.normalize(vertices[(i == vertices.length - 1 ? 0 : i + 1)].minus(vertices[i]))
-
-      if (vertices.length == 2) {
-        obstacle.isConvex = true;
-      } else {
-        obstacle.isConvex = (
-          RVOMath.leftOf(vertices[(i == 0 ? vertices.length - 1 : i - 1)],
-            vertices[i], vertices[(i == vertices.length - 1 ? 0 : i + 1)]) >= 0);
-      }
-
-      obstacle.id = this.obstacles.length;
-
-      this.obstacles.push(obstacle);
+    public setAgentPrefVelocity(agentNo : number, prefVelocity:Vector2)
+    {
+        this.agents_[agentNo].prefVelocity_ = prefVelocity;
     }
 
-    return obstacleNo;
-  }
+    public setTimeStep(v: number): void
+    {
+        this.timeStep_ = v; 
+    }
 
-  removeObstacle(obstacleNo: number) {
-      
-  }
+    public setAgentMaxSpeed(agentNo:number, maxSpeed:number)
+    {
+        this.agents_[agentNo].maxSpeed_ = maxSpeed;
+    }
 
-  /** 更新障碍树 */
-  processObstacles() {
-    this.kdTree.buildObstacleTree();
-  }
+    public setAgentGoal(i: number, x: number, y: number) {
+        this.goals[i].x = x;
+        this.goals[i].y = y;
+    }
 
-  queryVisibility(point1: Vector2D, point2: Vector2D, radius: number): boolean {
-    return this.kdTree.queryVisibility(point1, point2, radius);
-  }
+    public getAgentGoal(i: number) {
+        return this.goals[i];
+    }
 
-  getObstacles(): Obstacle[] {
-    return this.obstacles;
-  }
+    public setAgentRadius(agentNo: number, radius: number) {
+        this.agents_[agentNo].radius_= radius;
+    }
+
+    public getAgentOrientation(agentNo: number): number {
+
+        return this.agents_[agentNo].orientation_; 
+    }
+
+    public getOrca(agentNo: number): Line[] {
+
+        return this.agents_[agentNo].orcaLines_; 
+    }
+
+
+    public getAgentPositionScreen(agentNo:number):Vector2
+    {
+        return this.agents_[agentNo].positionScreen_;
+    }
+
+    public getAgentPosition(agentNo: number): Vector2 {
+
+        return this.agents_[agentNo].position_;
+    }
+
+    public getNumAgents():number
+    {
+        return this.agents_.length; 
+    }
+
+    public getAgentRadius(agentNo:number):number
+    {
+        return this.agents_[agentNo].radius_;
+    }
+     
+    
 
 }

@@ -7,6 +7,7 @@
     <image id="k05e3" name="btn_yinsishengming.png" path="/img/"/>
     <component id="r0x74" name="Fight.xml" path="/ui/" exported="true"/>
     <component id="r0x75" name="com_joystick.xml" path="/cmp/"/>
+    <component id="uyn78" name="com_joy.xml" path="/cmp/"/>
   </resources>
   <publish name="" genCode="true"/>
 </packageDescription>

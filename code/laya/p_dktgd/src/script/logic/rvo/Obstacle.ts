@@ -1,12 +1,16 @@
+/// <reference path="Vector2.ts" />
+/// <reference path="Line.ts" />
 
-import Vector2D from "./Vector2D";
+import { Vector2 } from "./Vector2";
 
 
-export default class Obstacle {
-  point: Vector2D = Vector2D.ZERO;
-  unitDir: Vector2D = Vector2D.ZERO;
-  isConvex: boolean = false;
-  id = 0;
-  previous: Obstacle;
-  next: Obstacle;
+export class Obstacle {
+
+    point_:Vector2;
+    unitDir_:Vector2;
+    isConvex_:boolean;
+    id_:number;
+    prevObstacle_ : Obstacle;
+    nextObstacle_ : Obstacle;
+
 }

@@ -10,8 +10,10 @@ import Enemy_1 from "../enemy/Enemy_1";
 
 /** 刷新方式 */
 export enum ERefreshType {
-    /** 以玩家为原心 范围内旋转 */
+    /** 以玩家为原心 圆形 指定半径范围内 */
     Player_Circle = 0,
+    /** 指定位置  圆形刷新*/
+    Point_Circle
 }
 
 export enum EMoveType {
@@ -97,11 +99,17 @@ export default class ViewLevel{
         }
         this._enemyList.push(enemy);
         let origin = GlobalUnit.game.player.originPos;
+    
         if (data.refreshType == ERefreshType.Player_Circle) {
             let angle = MathEx.Random(0,360);
-            let radius = 3;
+            let radius = data.refreshParams[0];
             let x = origin.x + Math.cos(angle * Math.PI / 180) * radius;
-            let y = origin.z + Math.sin(angle * Math.PI / 180) * radius;
+            let y = origin.y + Math.sin(angle * Math.PI / 180) * radius;
+            
+            enemy.SetPos(x, y);
+        } else if (data.refreshType == ERefreshType.Point_Circle) {
+            let x = origin.x + data.refreshParams[0];
+            let y = origin.y + data.refreshParams[1];
 
             enemy.SetPos(x, y);
         }
@@ -123,6 +131,4 @@ export default class ViewLevel{
             this._enemyList[i].OnUpdate(dt);
         }
     }
-
-    
 }

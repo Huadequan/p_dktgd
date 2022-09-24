@@ -122,7 +122,7 @@
 				]
 			},
 			{
-				"type":"MeshSprite3D",
+				"type":"Sprite3D",
 				"instanceID":4,
 				"props":{
 					"name":"colliders",
@@ -130,7 +130,7 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						0,
+						0.002,
 						0.301,
 						0
 					],
@@ -141,19 +141,9 @@
 						-1
 					],
 					"scale":[
-						0.5,
-						0.5,
-						0.5
-					],
-					"meshPath":"Library/unity default resources-Sphere.lm",
-					"enableRender":true,
-					"receiveShadows":true,
-					"castShadow":true,
-					"materials":[
-						{
-							"type":"Laya.BlinnPhongMaterial",
-							"path":"Resources/unity_builtin_extra.lmat"
-						}
+						0.3882886,
+						0.3882886,
+						0.3882886
 					]
 				},
 				"components":[

@@ -34,6 +34,7 @@ export class CmpJoystick {
         this._isDragged = false;
         this.radius = this._imgHandleBg.width / 2;
 
+
         this._imgBg.on(Laya.Event.MOUSE_DOWN, this, this._OnMouseDown);
         Laya.stage.on(Laya.Event.MOUSE_MOVE, this, this._OnMouseMove);
         Laya.stage.on(Laya.Event.MOUSE_UP, this, this._OnMouseUp);

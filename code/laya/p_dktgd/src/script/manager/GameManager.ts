@@ -6,7 +6,6 @@ import ViewLevel from "../logic/level/ViewLevel";
 import MapControl from "../logic/MapControl";
 import ViewPlayer from "../logic/player/ViewPlayer";
 import RVOHelper from "../logic/rvo/RVOHelper";
-import RVO_test from "../logic/rvo/RVO_test";
 import { UI_FightMediator } from "../ui/UI_FightMediator";
 import { UI_MainMediator } from "../ui/UI_MainMediator";
 import LayerMgr from "./LayerMgr";

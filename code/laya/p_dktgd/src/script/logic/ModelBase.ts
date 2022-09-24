@@ -2,7 +2,8 @@ import AnimComponent from "../common/AnimComponent";
 import GlobalUnit from "../common/GlobalUnit";
 import { AnimFrameConfig } from "../config/AnimFrameConfig";
 import LayerMgr from "../manager/LayerMgr";
-import Agent from "./rvo/Agent";
+import { Agent } from "./rvo/Agent";
+
 import RVOHelper from "./rvo/RVOHelper";
 
 export default class ModelBase {
@@ -48,7 +49,7 @@ export default class ModelBase {
     }
 
     public UpdateDepth() {
-        this.root.transform.localPositionZ = -0.1 * this.layerIndex;
+        this.root.transform.localPositionZ = -0.2 * this.layerIndex;
     }
 
     protected DoUpdate(dt: number) {

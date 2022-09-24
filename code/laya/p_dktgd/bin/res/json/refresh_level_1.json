@@ -2,31 +2,31 @@
     {
         "refreshTime": 0,
         "refreshType": 0,
-        "refreshParams": [10,12],
+        "refreshParams": [5],
         "moveType": 0,
         "moveParams": [],
-        "enemyIds": [1],
-        "enemyCount": 30,
+        "enemyIds": [1,2],
+        "enemyCount": 50,
         "duration": 2
     },
     {
-        "refreshTime": 100,
+        "refreshTime": 5,
+        "refreshType": 1,
+        "refreshParams": [5, 5],
+        "moveType": 1,
+        "moveParams": [-0.45, -0.45],
+        "enemyIds": [1],
+        "enemyCount": 40,
+        "duration": 2
+    },
+    {
+        "refreshTime": 10,
         "refreshType": 0,
         "refreshParams": [10,12],
         "moveType": 0,
         "moveParams": [],
         "enemyIds": [1],
-        "enemyCount": 30,
-        "duration": 2
-    },
-    {
-        "refreshTime": 200,
-        "refreshType": 0,
-        "refreshParams": [10,12],
-        "moveType": 0,
-        "moveParams": [],
-        "enemyIds": [1],
-        "enemyCount": 30,
+        "enemyCount": 40,
         "duration": 2
     }
 ]

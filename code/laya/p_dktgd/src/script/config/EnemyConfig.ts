@@ -3,7 +3,8 @@ export namespace EnemyConfig {
         /** 序号 */ readonly id: number;
         /** 敌人模型 */ readonly model_path: string;
         /** 敌人类型
-1==普通敌人 */ readonly enemy_type: number;
+1==普通敌人
+2==普通敌人 */ readonly enemy_type: number;
         /** 皮肤挂点 */ readonly skin_path: string;
         /** 帧动画配置 */ readonly anim_id: number;
         /** 血量 */ readonly hp: number;

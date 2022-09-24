@@ -1,1 +1,1 @@
-{"1":{"id":1,"model_path":"player_02","enemy_type":1,"skin_path":"guaiwu_01/Quad","anim_id":2,"hp":100,"move_speed":2.0}}
+{"1":{"id":1,"model_path":"player_02","enemy_type":1,"skin_path":"guaiwu_01/Quad","anim_id":2,"hp":100,"move_speed":2.0},"2":{"id":2,"model_path":"enemy_1","enemy_type":1,"skin_path":"BOSS_03/Quad","anim_id":3,"hp":100,"move_speed":1.5}}

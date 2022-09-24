@@ -31,6 +31,53 @@
 				"type":"Sprite3D",
 				"instanceID":6,
 				"props":{
+					"name":"colliders",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0.006,
+						0.301,
+						0
+					],
+					"rotation":[
+						0,
+						0,
+						0,
+						-1
+					],
+					"scale":[
+						0.3964988,
+						0.3964988,
+						0.3964988
+					]
+				},
+				"components":[
+					{
+						"type":"PhysicsCollider",
+						"restitution":0,
+						"friction":0.5,
+						"rollingFriction":0,
+						"shapes":[
+							{
+								"type":"SphereColliderShape",
+								"center":[
+									0,
+									0,
+									0
+								],
+								"radius":0.5
+							}
+						],
+						"isTrigger":false
+					}
+				],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":7,
+				"props":{
 					"name":"guaiwu_01",
 					"active":true,
 					"isStatic":false,
@@ -56,7 +103,7 @@
 				"child":[
 					{
 						"type":"MeshSprite3D",
-						"instanceID":7,
+						"instanceID":8,
 						"props":{
 							"name":"Quad",
 							"active":true,
@@ -92,63 +139,6 @@
 						"child":[]
 					}
 				]
-			},
-			{
-				"type":"MeshSprite3D",
-				"instanceID":8,
-				"props":{
-					"name":"colliders",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0,
-						0.301,
-						0
-					],
-					"rotation":[
-						0,
-						0,
-						0,
-						-1
-					],
-					"scale":[
-						0.5,
-						0.5,
-						0.5
-					],
-					"meshPath":"Library/unity default resources-Sphere.lm",
-					"enableRender":true,
-					"receiveShadows":true,
-					"castShadow":true,
-					"materials":[
-						{
-							"type":"Laya.BlinnPhongMaterial",
-							"path":"Resources/unity_builtin_extra.lmat"
-						}
-					]
-				},
-				"components":[
-					{
-						"type":"PhysicsCollider",
-						"restitution":0,
-						"friction":0.5,
-						"rollingFriction":0,
-						"shapes":[
-							{
-								"type":"SphereColliderShape",
-								"center":[
-									0,
-									0,
-									0
-								],
-								"radius":0.5
-							}
-						],
-						"isTrigger":false
-					}
-				],
-				"child":[]
 			}
 		]
 	}
